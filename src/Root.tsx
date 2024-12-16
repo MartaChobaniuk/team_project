@@ -9,6 +9,7 @@ import { Path } from './utils/constants';
 import { NotFoundPage } from './pages/NotFoundPage';
 import { HomeAIPage } from './pages/HomeAIPage';
 import { ResponsePage } from './pages/ResponsePage';
+import { MenuPage } from './pages/MenuPage';
 
 export const Root = () => (
   <Router>
@@ -22,6 +23,8 @@ export const Root = () => (
         <Route path={`${Path.About}`} element={<AboutUsPage />} />
         <Route path={`${Path.Contact}`} element={<ContactPage />} />
         <Route path={`${Path.SignIn}`} element={<SignInPage />} />
+
+        <Route path={`${Path.Menu}`} element={<MenuPage />} />
 
         <Route path="*" element={<NotFoundPage />} />
       </Route>

@@ -11,13 +11,13 @@
 }
 
 @mixin on-tablet-2 {
-  @media (min-width: 768px) {
+  @media (min-width: 907px) {
     @content;
   }
 }
 
 @mixin on-desktop {
-  @media (min-width: 1200px) {
+  @media (min-width: 1350px) {
     @content;
   }
 }
@@ -82,10 +82,22 @@
   line-height: 110%;
 }
 
+@mixin h1-mobile {
+  font-weight: 500;
+  font-size: 40px;
+  line-height: 100%;
+}
+
 @mixin h2-desktop-tablet {
   font-weight: 500;
   font-size: 40px;
   line-height: 110%;
+}
+
+@mixin h2-mobile {
+  font-weight: 500;
+  font-size: 32px;
+  line-height: 100%;
 }
 
 @mixin h3-desktop-tablet {
@@ -144,4 +156,3 @@
   letter-spacing: 0;
   text-decoration: underline;
 }
-

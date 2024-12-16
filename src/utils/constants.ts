@@ -6,4 +6,5 @@ export enum Path {
   About = '/about-us',
   Contact = '/contact',
   SignIn = '/sign-in',
+  Menu = '/menu',
 }

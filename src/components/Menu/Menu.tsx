@@ -1,16 +1,9 @@
-import React from 'react';
-import cn from 'classnames';
 import { NavLink, useLocation } from 'react-router-dom';
-import styles from './Navbar.module.scss';
+import cn from 'classnames';
+import styles from './Menu.module.scss';
 import { Path } from '../../utils/constants';
-import user_white from '../../images/icons/account_white.svg';
-import user_black from '../../images/icons/account_black.svg';
 
-type Props = {
-  className?: string;
-};
-
-export const Navbar: React.FC<Props> = ({ className }) => {
+export const Menu = () => {
   const { pathname } = useLocation();
   const isHomeAI = pathname === Path.HomeAI;
 
@@ -26,7 +19,6 @@ export const Navbar: React.FC<Props> = ({ className }) => {
       { [styles['navbar__item--light']]: isHomeAI },
       { [styles['navbar__item--active']]: isActive },
       { [styles['navbar__item--light--active']]: isHomeAI && isActive },
-      className,
     );
 
   return (
@@ -65,47 +57,7 @@ export const Navbar: React.FC<Props> = ({ className }) => {
           </NavLink>
         ))}
       </div>
-
-      <div className={styles.navbar__right}>
-        <button
-          className={cn(styles.navbar__lang, {
-            [styles['navbar__lang--light']]: isHomeAI,
-          })}
-        >
-          <span
-            className={cn(styles['navbar__lang-name'], {
-              [styles['navbar__lang-name--light']]: isHomeAI,
-            })}
-          >
-            ENG
-          </span>
-        </button>
-        <NavLink
-          to={Path.SignIn}
-          className={({ isActive }: { isActive: boolean }) =>
-            cn(styles.navbar__sign, {
-              [styles['navbar__sign--light']]: isHomeAI,
-              [styles['navbar__sign--active']]: isActive,
-            })
-          }
-          end
-        >
-          <img
-            src={isHomeAI ? user_black : user_white}
-            alt="user"
-            className={cn(styles.navbar__img, {
-              [styles['navbar__img--light']]: isHomeAI,
-            })}
-          />
-          <span
-            className={cn(styles.navbar__name, {
-              [styles['navbar__name--light']]: isHomeAI,
-            })}
-          >
-            Sign Up
-          </span>
-        </NavLink>
-      </div>
+      <div className={styles.navbar__right}></div>
     </section>
   );
 };

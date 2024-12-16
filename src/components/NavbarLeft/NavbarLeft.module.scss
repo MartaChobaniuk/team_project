@@ -1,0 +1,91 @@
+@use "../../utils/mixins" as mixin;
+@use "../../utils/variables" as var;
+
+.navbar {
+  width: 100%;
+
+  @include mixin.flex(flex, false, space-between, row);
+
+  &__left {
+    @include mixin.on-mobile {
+      display: none;
+    }
+
+    @include mixin.on-tablet {
+      display: none;
+    }
+
+    @include mixin.on-tablet-2 {
+      @include mixin.flex(flex, center, center, row);
+    }
+
+    @include mixin.on-desktop {
+      @include mixin.flex(flex, center, center, row);
+    }
+  }
+
+  &__right {
+    @include mixin.flex(flex, center, center, row);
+  }
+
+  &__item {
+    position: relative;
+    width: max-content;
+    height: 38px;
+    border-radius: 80px;
+    padding: 8px 16px;
+    border: solid 0.5px var.$white;
+    background-color: transparent;
+    cursor: pointer;
+    color: var.$white;
+    text-transform: uppercase;
+
+    overflow: hidden;
+    transition: all 0.5s ease;
+
+    @include mixin.flex(flex, center, center, false);
+
+    &::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 50%;
+      width: 0;
+      height: 100%;
+      background: var.$orange-red;
+      transform: translateY(-50%);
+      z-index: 0;
+      transition: width 0.5s ease;
+    }
+
+    &:hover::before {
+      width: 100%;
+    }
+
+    &--active {
+      background: var.$orange-red;
+    }
+
+    &--light {
+      border: solid 0.5px var.$black;
+      background-color: transparent;
+      color: var.$black;
+
+      &--active {
+        background: var.$yellow-green;
+      }
+    }
+  }
+
+  &__name {
+    @include mixin.button-text-desktop-tablet;
+
+    color: var.$white;
+    text-transform: uppercase;
+    z-index: 10;
+
+    &--light {
+      color: var.$black;
+    }
+  }
+}

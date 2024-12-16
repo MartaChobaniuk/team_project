@@ -1,6 +1,6 @@
+import React from 'react';
 import styles from './Home.module.scss';
 import arrow from '../../images/icons/arrow_r.svg';
-import React from 'react';
 
 type Props = {
   handleHomeAI: () => void;
@@ -21,8 +21,8 @@ export const Home: React.FC<Props> = ({ handleHomeAI }) => {
             <p className={styles.home__text}>
               Use our search filters to explore opportunities to fulfill wishes,
               donate to fundraisers, and volunteer in ways that align with your
-              passions. Every small step contributes to making the world a
-              better place.
+              passions. <br /> Every small step contributes to making the world
+              a better place.
             </p>
           </div>
           <div className={styles.home__footer}>

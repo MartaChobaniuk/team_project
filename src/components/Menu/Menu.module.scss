@@ -1,0 +1,98 @@
+@use "../../utils/mixins" as mixin;
+@use "../../utils/variables" as var;
+
+.navbar {
+  width: 100%;
+  height: 100vh;
+  background-color: var.$black;
+
+  @include mixin.flex(flex, false, space-between, column);
+
+  &__left {
+    @include mixin.on-mobile {
+      margin-top: 100px;
+      gap: 15px;
+
+      @include mixin.flex(flex, center, center, column);
+    }
+
+    @include mixin.on-tablet {
+      margin-top: 100px;
+      gap: 15px;
+
+      @include mixin.flex(flex, center, center, column);
+    }
+
+    @include mixin.on-tablet-2 {
+      display: none;
+    }
+
+    @include mixin.on-desktop {
+      display: none;
+    }
+  }
+
+  &__right {
+    @include mixin.flex(flex, center, center, row);
+  }
+
+  &__item {
+    position: relative;
+    width: max-content;
+    height: 38px;
+    border-radius: 80px;
+    padding: 8px 16px;
+    background-color: transparent;
+    cursor: pointer;
+    color: var.$white;
+    text-transform: uppercase;
+
+    overflow: hidden;
+    transition: all 0.5s ease;
+
+    @include mixin.flex(flex, center, center, false);
+
+    &::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 50%;
+      width: 0;
+      height: 100%;
+      background: var.$orange-red;
+      transform: translateY(-50%);
+      z-index: 0;
+      transition: width 0.5s ease;
+    }
+
+    &:hover::before {
+      width: 100%;
+    }
+
+    &--active {
+      background: var.$orange-red;
+    }
+
+    &--light {
+      border: solid 0.5px var.$black;
+      background-color: transparent;
+      color: var.$black;
+
+      &--active {
+        background: var.$yellow-green;
+      }
+    }
+  }
+
+  &__name {
+    @include mixin.button-text-desktop-tablet;
+
+    color: var.$white;
+    text-transform: uppercase;
+    z-index: 10;
+
+    &--light {
+      color: var.$black;
+    }
+  }
+}

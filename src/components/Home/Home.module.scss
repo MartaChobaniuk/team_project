@@ -8,13 +8,29 @@
     height: 100vh;
     width: 100%;
     display: flex;
-    background: url("../../images/wallpaper/background.jpg") right no-repeat;
+    background-image: url("../../images/wallpaper/background.jpg");
     color: var.$white;
+
+    @include mixin.on-mobile {
+      flex-direction: column;
+      background-position: center;
+      background-size: cover;
+    }
+
+    @include mixin.on-tablet {
+      flex-direction: column;
+      background-position: center;
+      background-size: cover;
+    }
+
+    @include mixin.on-desktop {
+      flex-direction: row;
+      background-position: right;
+    }
   }
 
   &__right-side {
     flex: 1;
-    border-radius: 0 20px 20px 0;
 
     @include mixin.flex(flex, false, space-between, column);
   }
@@ -24,35 +40,85 @@
   }
 
   &__footer-right {
-    height: 192px;
     background-color: transparent;
     backdrop-filter: blur(34px);
-    padding: 40px 50px;
     color: var.$black;
 
     @include mixin.flex(flex, center, space-between, false);
     @include mixin.h3-desktop-tablet;
+
+    @include mixin.on-mobile {
+      height: 130px;
+      padding: 20px 30px;
+    }
+
+    @include mixin.on-tablet {
+      height: 150px;
+      padding: 30px 40px;
+    }
+
+    @include mixin.on-tablet-2 {
+      height: 192px;
+      padding: 40px 50px;
+    }
+
+    @include mixin.on-desktop {
+      height: 192px;
+      padding: 40px 50px;
+    }
   }
 
   &__arrow-button {
-    max-width: 120px;
-    height: 64px;
     border: solid 0.5px var.$black;
     border-radius: 120px;
+    transition: all 0.5s;
 
     @include mixin.flex(flex, center, center, false);
 
-    transition: all 0.5s;
+    @include mixin.on-mobile {
+      max-width: 100px;
+      height: 54px;
+    }
+
+    @include mixin.on-tablet {
+      max-width: 120px;
+      height: 54px;
+    }
+
+    @include mixin.on-tablet-2 {
+      max-width: 120px;
+      height: 64px;
+    }
+
+    @include mixin.on-desktop {
+      max-width: 120px;
+      height: 64px;
+    }
 
     &:hover {
-      transform: translateX(18px);
+      transform: translateX(20px);
     }
   }
 
   &__img {
-    padding: 25px;
     cursor: pointer;
     transition: transform 0.5s;
+
+    @include mixin.on-mobile {
+      padding: 5px;
+    }
+
+    @include mixin.on-tablet {
+      padding: 15px;
+    }
+
+    @include mixin.on-tablet-2 {
+      padding: 25px;
+    }
+
+    @include mixin.on-desktop {
+      padding: 25px;
+    }
 
     &:hover {
       transform: scale(1.05);
@@ -62,28 +128,76 @@
   &__left-side {
     flex: 1;
     background-color: var.$black;
-    border-radius: 0 20px 20px 0;
-    padding: 40px 50px;
 
     @include mixin.flex(flex, false, space-between, column);
+
+    @include mixin.on-mobile {
+      padding: 20px 30px;
+      border-radius: 0 0 15px 15px;
+    }
+
+    @include mixin.on-tablet {
+      padding: 30px 40px;
+      border-radius: 0 0 20px 20px;
+    }
+
+    @include mixin.on-tablet-2 {
+      padding: 40px 50px;
+      border-radius: 0 0 20px 20px;
+    }
+
+    @include mixin.on-desktop {
+      padding: 40px 50px;
+      border-radius: 0 20px 20px 0;
+    }
   }
 
   &__content {
-    max-width: 600px;
-    margin-top: 100px;
     flex-grow: 1;
+
+    @include mixin.on-mobile {
+      margin-top: 60px;
+    }
+
+    @include mixin.on-tablet {
+      margin-top: 60px;
+    }
+
+    @include mixin.on-tablet-2 {
+      margin-top: 80px;
+    }
+
+    @include mixin.on-desktop {
+      max-width: 600px;
+      margin-top: 100px;
+    }
   }
 
   &__title {
-    @include mixin.h1-desktop-tablet;
-
     margin-bottom: 20px;
+
+    @include mixin.on-mobile {
+      @include mixin.h1-mobile;
+    }
+
+    @include mixin.on-tablet {
+      @include mixin.h1-mobile;
+    }
+
+    @include mixin.on-tablet-2 {
+      @include mixin.h1-desktop-tablet;
+    }
+
+    @include mixin.on-desktop {
+      @include mixin.h1-desktop-tablet;
+    }
   }
 
   &__text {
     @include mixin.body-text-desktop-tablet;
 
     text-align: left;
+    margin-bottom: 20px;
   }
 
   &__question {
