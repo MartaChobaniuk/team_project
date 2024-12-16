@@ -1,0 +1,20 @@
+@use "../../utils/mixins" as mixin;
+@use "../../utils/variables" as var;
+
+.logo {
+  &__text {
+    width: max-content;
+    font-family: Poppins;
+    font-size: 24px;
+    font-weight: 900;
+    line-height: 33.6px;
+    text-align: left;
+    color: var.$white;
+    text-transform: uppercase;
+    transition: transform 0.5s;
+
+    &:hover {
+      transform: scale(1.1);
+    }
+  }
+}
