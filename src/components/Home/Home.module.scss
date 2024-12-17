@@ -35,6 +35,33 @@
     @include mixin.flex(flex, false, space-between, column);
   }
 
+  &__left-side {
+    flex: 1;
+    background-color: var.$black;
+
+    @include mixin.flex(flex, false, space-between, column);
+
+    @include mixin.on-mobile {
+      padding: 20px 30px;
+      border-radius: 0 0 15px 15px;
+    }
+
+    @include mixin.on-tablet {
+      padding: 30px 40px;
+      border-radius: 0 0 20px 20px;
+    }
+
+    @include mixin.on-tablet-2 {
+      padding: 40px 50px;
+      border-radius: 0 0 20px 20px;
+    }
+
+    @include mixin.on-desktop {
+      padding: 40px 50px;
+      border-radius: 0 20px 20px 0;
+    }
+  }
+
   &__empty {
     flex-grow: 1;
   }
@@ -125,33 +152,6 @@
     }
   }
 
-  &__left-side {
-    flex: 1;
-    background-color: var.$black;
-
-    @include mixin.flex(flex, false, space-between, column);
-
-    @include mixin.on-mobile {
-      padding: 20px 30px;
-      border-radius: 0 0 15px 15px;
-    }
-
-    @include mixin.on-tablet {
-      padding: 30px 40px;
-      border-radius: 0 0 20px 20px;
-    }
-
-    @include mixin.on-tablet-2 {
-      padding: 40px 50px;
-      border-radius: 0 0 20px 20px;
-    }
-
-    @include mixin.on-desktop {
-      padding: 40px 50px;
-      border-radius: 0 20px 20px 0;
-    }
-  }
-
   &__content {
     flex-grow: 1;
 
@@ -164,7 +164,7 @@
     }
 
     @include mixin.on-tablet-2 {
-      margin-top: 80px;
+      margin-top: 60px;
     }
 
     @include mixin.on-desktop {
@@ -185,7 +185,7 @@
     }
 
     @include mixin.on-tablet-2 {
-      @include mixin.h1-desktop-tablet;
+      @include mixin.h1-mobile;
     }
 
     @include mixin.on-desktop {

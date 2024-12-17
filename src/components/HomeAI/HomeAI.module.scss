@@ -159,7 +159,7 @@
 
     @include mixin.on-tablet-2 {
       flex: 1;
-      padding: 40px 50px;
+      padding: 30px 40px;
       border-radius: 20px 20px 0 0;
     }
 
@@ -174,20 +174,20 @@
     flex-grow: 1;
 
     @include mixin.on-mobile {
-      margin-top: 60px;
+      margin-top: 30px;
     }
 
     @include mixin.on-tablet {
-      margin-top: 60px;
+      margin-top: 30px;
     }
 
     @include mixin.on-tablet-2 {
-      margin-top: 60px;
+      margin-top: 30px;
     }
 
     @include mixin.on-desktop {
       max-width: 600px;
-      margin-top: 100px;
+      margin-top: 80px;
     }
   }
 
@@ -204,7 +204,7 @@
     }
 
     @include mixin.on-tablet-2 {
-      @include mixin.h2-desktop-tablet;
+      @include mixin.h2-mobile;
     }
 
     @include mixin.on-desktop {
