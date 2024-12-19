@@ -81,12 +81,12 @@
 
     @include mixin.on-tablet {
       height: 150px;
-      padding: 30px 40px;
+      padding: 20px 30px;
     }
 
     @include mixin.on-tablet-2 {
-      height: 192px;
-      padding: 40px 50px;
+      height: 150px;
+      padding: 20px 30px;
     }
 
     @include mixin.on-desktop {

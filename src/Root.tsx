@@ -4,12 +4,13 @@ import { HomePage } from './pages/HomePage';
 import { StoriesPage } from './pages/StoriesPage';
 import { AboutUsPage } from './pages/AboutUsPage';
 import { ContactPage } from './pages/ContactPage';
-import { SignInPage } from './pages/SignInPage';
+import { SignUpPage } from './pages/SignUpPage';
 import { Path } from './utils/constants';
 import { NotFoundPage } from './pages/NotFoundPage';
 import { HomeAIPage } from './pages/HomeAIPage';
 import { ResponsePage } from './pages/ResponsePage';
 import { MenuPage } from './pages/MenuPage';
+import { LogInPage } from './pages/LogInPage';
 
 export const Root = () => (
   <Router>
@@ -22,7 +23,9 @@ export const Root = () => (
         <Route path={`${Path.Stories}`} element={<StoriesPage />} />
         <Route path={`${Path.About}`} element={<AboutUsPage />} />
         <Route path={`${Path.Contact}`} element={<ContactPage />} />
-        <Route path={`${Path.SignIn}`} element={<SignInPage />} />
+
+        <Route path={`${Path.SignUp}`} element={<SignUpPage />} />
+        <Route path={`${Path.LogIn}`} element={<LogInPage />} />
 
         <Route path={`${Path.Menu}`} element={<MenuPage />} />
 

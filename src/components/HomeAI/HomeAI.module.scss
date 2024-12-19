@@ -153,13 +153,13 @@
 
     @include mixin.on-tablet {
       flex: 1;
-      padding: 30px 40px;
+      padding: 20px 30px;
       border-radius: 20px 20px 0 0;
     }
 
     @include mixin.on-tablet-2 {
       flex: 1;
-      padding: 30px 40px;
+      padding: 20px 30px;
       border-radius: 20px 20px 0 0;
     }
 
@@ -192,23 +192,30 @@
   }
 
   &__title {
-    margin-bottom: 20px;
     text-align: left;
 
     @include mixin.on-mobile {
       @include mixin.h2-mobile;
+
+      margin-bottom: 10px;
     }
 
     @include mixin.on-tablet {
       @include mixin.h2-mobile;
+
+      margin-bottom: 10px;
     }
 
     @include mixin.on-tablet-2 {
       @include mixin.h2-mobile;
+
+      margin-bottom: 10px;
     }
 
     @include mixin.on-desktop {
       @include mixin.h2-desktop-tablet;
+
+      margin-bottom: 20px;
     }
   }
 
@@ -229,7 +236,7 @@
 
     &:placeholder-shown {
       color: var.$light-gray;
-      margin-bottom: 20px;
+      margin-bottom: 15px;
     }
   }
 
@@ -237,7 +244,7 @@
     width: 100%;
     height: 1px;
     background-color: var.$light-gray;
-    margin-bottom: 20px;
+    margin-bottom: 15px;
   }
 
   &__button-shell {

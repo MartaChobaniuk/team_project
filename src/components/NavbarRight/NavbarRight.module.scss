@@ -155,7 +155,7 @@
       top: 50%;
       width: 0;
       height: 100%;
-      background: var.$orange-red;
+      background: var.$white;
       transform: translateY(-50%);
       z-index: 0;
       transition: width 0.5s ease;
@@ -182,7 +182,8 @@
       }
     }
 
-    &--resp {
+    &--resp,
+    &--sign {
       border: solid 0.5px var.$white;
     }
   }
@@ -191,6 +192,7 @@
     color: var.$black;
     text-transform: uppercase;
     z-index: 5;
+    transition: all 0.5s ease;
 
     @include mixin.on-mobile {
       color: var.$white;
@@ -206,6 +208,23 @@
 
     @include mixin.on-desktop {
       color: var.$black;
+    }
+
+    &:hover {
+      @include mixin.on-mobile {
+        color: var.$black;
+      }
+
+      @include mixin.on-tablet {
+        color: var.$black;
+      }
+
+      @include mixin.on-tablet-2 {
+        color: var.$black;
+      }
+      @include mixin.on-desktop {
+        color: var.$black;
+      }
     }
 
     &--light {
@@ -226,7 +245,8 @@
       }
     }
 
-    &--resp {
+    &--resp,
+    &--sign {
       @include mixin.on-mobile {
         color: var.$white;
       }

@@ -5,6 +5,8 @@ export enum Path {
   Stories = '/stories',
   About = '/about-us',
   Contact = '/contact',
-  SignIn = '/sign-in',
+  SignUp = '/sign-up',
+  LogIn = '/log-in',
+  Profile = '/profile',
   Menu = '/menu',
 }

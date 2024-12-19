@@ -52,7 +52,7 @@
       top: 50%;
       width: 0;
       height: 100%;
-      background: var.$orange-red;
+      background: var.$white;
       transform: translateY(-50%);
       z-index: 0;
       transition: width 0.5s ease;
@@ -75,6 +75,12 @@
         background: var.$yellow-green;
       }
     }
+
+    &--sign {
+      border: solid 0.5px var.$black;
+      background-color: transparent;
+      color: var.$black;
+    }
   }
 
   &__name {
@@ -84,7 +90,15 @@
     text-transform: uppercase;
     z-index: 10;
 
+    &:hover {
+      color: var.$black;
+    }
+
     &--light {
+      color: var.$black;
+    }
+
+    &--sign {
       color: var.$black;
     }
   }

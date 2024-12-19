@@ -64,11 +64,15 @@
   transform: scale(110%);
 }
 
-@mixin responsive-property($property, $mobile, $tablet, $desktop) {
+@mixin responsive-property($property, $mobile, $tablet, $tablet-2, $desktop) {
   #{$property}: $mobile;
 
   @include on-tablet {
     #{$property}: $tablet;
+  }
+
+  @include on-tablet-2 {
+    #{$property}: $tablet-2;
   }
 
   @include on-desktop {

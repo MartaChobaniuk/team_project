@@ -11,6 +11,7 @@ type Props = {
 export const NavbarLeft: React.FC<Props> = ({ className }) => {
   const { pathname } = useLocation();
   const isHomeAI = pathname === Path.HomeAI;
+  const isSignUp = pathname === Path.SignUp;
 
   const navLinks = [
     { path: Path.Stories, label: 'Success Stories' },
@@ -24,30 +25,33 @@ export const NavbarLeft: React.FC<Props> = ({ className }) => {
       { [styles['navbar__item--light']]: isHomeAI },
       { [styles['navbar__item--active']]: isActive },
       { [styles['navbar__item--light--active']]: isHomeAI && isActive },
+      { [styles['navbar__item--sign']]: isSignUp },
       className,
     );
 
   return (
     <section className={styles.navbar}>
       <div className={styles.navbar__left}>
-        {pathname === Path.Home ? (
-          <NavLink to={Path.Home} className={getActiveLink}>
-            <span
-              className={cn(styles.navbar__name, {
-                [styles['navbar__name--light']]: isHomeAI,
-              })}
-            >
-              Home
-            </span>
-          </NavLink>
-        ) : (
+        {pathname === Path.HomeAI ? (
           <NavLink to={Path.HomeAI} className={getActiveLink}>
             <span
               className={cn(styles.navbar__name, {
                 [styles['navbar__name--light']]: isHomeAI,
+                [styles['navbar__name--sign']]: isSignUp,
               })}
             >
               HomeAI
+            </span>
+          </NavLink>
+        ) : (
+          <NavLink to={Path.Home} className={getActiveLink}>
+            <span
+              className={cn(styles.navbar__name, {
+                [styles['navbar__name--light']]: isHomeAI,
+                [styles['navbar__name--sign']]: isSignUp,
+              })}
+            >
+              Home
             </span>
           </NavLink>
         )}
@@ -56,6 +60,7 @@ export const NavbarLeft: React.FC<Props> = ({ className }) => {
             <span
               className={cn(styles.navbar__name, {
                 [styles['navbar__name--light']]: isHomeAI,
+                [styles['navbar__name--sign']]: isSignUp,
               })}
             >
               {label}
