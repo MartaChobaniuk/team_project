@@ -28,42 +28,18 @@
     @include mixin.flex(flex, center, center, row);
   }
 
-  &__sign {
+  &__item {
     position: relative;
     width: max-content;
-    border: solid 0.5px var.$white;
-    background-color: var.$black;
+    height: 38px;
     cursor: pointer;
-    color: var.$white;
     text-transform: uppercase;
     overflow: hidden;
     transition: all 0.5s ease;
 
     @include mixin.flex(flex, center, center, false);
-
-    @include mixin.on-mobile {
-      height: 38px;
-      border-radius: 60px;
-      padding: 8px;
-    }
-
-    @include mixin.on-tablet {
-      height: 38px;
-      border-radius: 60px;
-      padding: 8px;
-    }
-
-    @include mixin.on-tablet-2 {
-      height: 38px;
-      border-radius: 80px;
-      padding: 8px 16px;
-    }
-
-    @include mixin.on-desktop {
-      height: 38px;
-      border-radius: 80px;
-      padding: 8px 16px;
-    }
+    @include mixin.responsive-property(border-radius, 60px, 60px, 80px, 80px);
+    @include mixin.responsive-property(padding, 8px, 8px, 8px 16px, 8px 16px);
 
     &::before {
       content: "";
@@ -72,7 +48,6 @@
       top: 50%;
       width: 0;
       height: 100%;
-      background: var.$orange-red;
       transform: translateY(-50%);
       z-index: 0;
       transition: width 0.5s ease;
@@ -82,10 +57,36 @@
       width: 100%;
     }
 
-    &--light {
-      border: solid 0.5px var.$black;
+    &--light-bg {
+      background-color: var.$black;
+      color: var.$white;
+      border: 0.5 solid var.$white;
+
+      &--active {
+        background: var.$orange-red;
+        color: var.$white;
+      }
+
+      &:hover {
+        background: var.$orange-red;
+        color: var.$white;
+      }
+    }
+
+    &--dark-bg {
       background-color: var.$white;
+      border: 0.5 solid var.$black;
       color: var.$black;
+
+      &--active {
+        background: var.$yellow-green;
+        color: var.$black;
+      }
+
+      &:hover {
+        background: var.$yellow-green;
+        color: var.$black;
+      }
     }
   }
 
@@ -95,7 +96,7 @@
     z-index: 5;
     margin-right: 6px;
 
-    &--light {
+    &--dark {
       @include mixin.sizes(18px, 18px);
     }
   }
@@ -103,50 +104,23 @@
   &__name {
     @include mixin.button-text-desktop-tablet;
 
-    color: var.$white;
     text-transform: uppercase;
     z-index: 10;
-
-    &--light {
-      color: var.$black;
-    }
+    transition: color 0.5s;
   }
 
   &__lang {
     position: relative;
     width: max-content;
     height: 38px;
-    border: solid 0.5px var.$black;
     background-color: transparent;
     cursor: pointer;
     overflow: hidden;
     transition: all 0.5s ease;
 
     @include mixin.flex(flex, center, center, false);
-
-    @include mixin.on-mobile {
-      border-radius: 60px;
-      padding: 8px;
-      border: solid 0.5px var.$white;
-    }
-
-    @include mixin.on-tablet {
-      border-radius: 60px;
-      padding: 8px;
-      border: solid 0.5px var.$white;
-    }
-
-    @include mixin.on-tablet-2 {
-      border-radius: 80px;
-      padding: 8px 16px;
-      border: solid 0.5px var.$white;
-    }
-
-    @include mixin.on-desktop {
-      border-radius: 80px;
-      padding: 8px 16px;
-      border: solid 0.5px var.$black;
-    }
+    @include mixin.responsive-property(border-radius, 60px, 60px, 80px, 80px);
+    @include mixin.responsive-property(padding, 8px, 8px, 8px 16px, 8px 16px);
 
     &::before {
       content: "";
@@ -155,7 +129,6 @@
       top: 50%;
       width: 0;
       height: 100%;
-      background: var.$white;
       transform: translateY(-50%);
       z-index: 0;
       transition: width 0.5s ease;
@@ -165,103 +138,42 @@
       width: 100%;
     }
 
-    &--light {
-      @include mixin.on-mobile {
-        border: solid 0.5px var.$black;
-      }
-      @include mixin.on-tablet {
-        border: solid 0.5px var.$black;
+    &--dark-bg {
+      border: solid 0.5px var.$white;
+      background-color: transparent;
+      color: var.$white;
+
+      &--active {
+        background: var.$orange-red;
+        color: var.$white;
       }
 
-      @include mixin.on-tablet-2 {
-        border: solid 0.5px var.$black;
-      }
-
-      @include mixin.on-desktop {
-        border: solid 0.5px var.$white;
+      &:hover {
+        background-color: var.$white;
+        color: var.$black;
       }
     }
 
-    &--resp,
-    &--sign {
-      border: solid 0.5px var.$white;
+    &--light-bg {
+      border: solid 0.5px var.$black;
+      background-color: transparent;
+      color: var.$black;
+
+      &--active {
+        background: var.$yellow-green;
+        color: var.$black;
+      }
+
+      &:hover {
+        background-color: var.$black;
+        color: var.$white;
+      }
     }
   }
 
   &__lang-name {
-    color: var.$black;
     text-transform: uppercase;
     z-index: 5;
     transition: all 0.5s ease;
-
-    @include mixin.on-mobile {
-      color: var.$white;
-    }
-
-    @include mixin.on-tablet {
-      color: var.$white;
-    }
-
-    @include mixin.on-tablet-2 {
-      color: var.$white;
-    }
-
-    @include mixin.on-desktop {
-      color: var.$black;
-    }
-
-    &:hover {
-      @include mixin.on-mobile {
-        color: var.$black;
-      }
-
-      @include mixin.on-tablet {
-        color: var.$black;
-      }
-
-      @include mixin.on-tablet-2 {
-        color: var.$black;
-      }
-      @include mixin.on-desktop {
-        color: var.$black;
-      }
-    }
-
-    &--light {
-      @include mixin.on-mobile {
-        color: var.$black;
-      }
-
-      @include mixin.on-tablet {
-        color: var.$black;
-      }
-
-      @include mixin.on-tablet-2 {
-        color: var.$black;
-      }
-
-      @include mixin.on-desktop {
-        color: var.$white;
-      }
-    }
-
-    &--resp,
-    &--sign {
-      @include mixin.on-mobile {
-        color: var.$white;
-      }
-
-      @include mixin.on-tablet {
-        color: var.$white;
-      }
-
-      @include mixin.on-tablet-2 {
-        color: var.$white;
-      }
-
-      @include mixin.on-desktop {
-        color: var.$white;
-      }
-    }
   }
 }

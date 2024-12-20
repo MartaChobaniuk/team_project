@@ -34,10 +34,8 @@
     height: 38px;
     border-radius: 80px;
     padding: 8px 16px;
-    border: solid 0.5px var.$white;
     background-color: transparent;
     cursor: pointer;
-    color: var.$white;
     text-transform: uppercase;
 
     overflow: hidden;
@@ -52,7 +50,6 @@
       top: 50%;
       width: 0;
       height: 100%;
-      background: var.$white;
       transform: translateY(-50%);
       z-index: 0;
       transition: width 0.5s ease;
@@ -62,44 +59,44 @@
       width: 100%;
     }
 
-    &--active {
-      background: var.$orange-red;
+    &--dark-bg {
+      border: solid 0.5px var.$white;
+      background-color: transparent;
+      color: var.$white;
+
+      &--active {
+        background: var.$orange-red;
+        color: var.$white;
+      }
+
+      &:hover {
+        background-color: var.$white;
+        color: var.$black;
+      }
     }
 
-    &--light {
+    &--light-bg {
       border: solid 0.5px var.$black;
       background-color: transparent;
       color: var.$black;
 
       &--active {
         background: var.$yellow-green;
+        color: var.$black;
       }
-    }
 
-    &--sign {
-      border: solid 0.5px var.$black;
-      background-color: transparent;
-      color: var.$black;
+      &:hover {
+        background-color: var.$black;
+        color: var.$white;
+      }
     }
   }
 
   &__name {
     @include mixin.button-text-desktop-tablet;
 
-    color: var.$white;
     text-transform: uppercase;
     z-index: 10;
-
-    &:hover {
-      color: var.$black;
-    }
-
-    &--light {
-      color: var.$black;
-    }
-
-    &--sign {
-      color: var.$black;
-    }
+    transition: color 0.3s;
   }
 }

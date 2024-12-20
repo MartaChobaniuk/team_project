@@ -10,7 +10,9 @@ type Props = {
 
 export const NavbarLeft: React.FC<Props> = ({ className }) => {
   const { pathname } = useLocation();
+  const isHome = pathname === Path.Home;
   const isHomeAI = pathname === Path.HomeAI;
+  const isResponse = pathname === Path.Response;
   const isSignUp = pathname === Path.SignUp;
 
   const navLinks = [
@@ -22,10 +24,17 @@ export const NavbarLeft: React.FC<Props> = ({ className }) => {
   const getActiveLink = ({ isActive }: { isActive: boolean }) =>
     cn(
       styles.navbar__item,
-      { [styles['navbar__item--light']]: isHomeAI },
       { [styles['navbar__item--active']]: isActive },
-      { [styles['navbar__item--light--active']]: isHomeAI && isActive },
-      { [styles['navbar__item--sign']]: isSignUp },
+      { [styles['navbar__item--light-bg']]: isHomeAI || isSignUp },
+      {
+        [styles['navbar__item--light-bg--active']]:
+          (isActive && isHomeAI) || (isSignUp && isActive),
+      },
+      { [styles['navbar__item--dark-bg']]: isHome || isResponse },
+      {
+        [styles['navbar__item--dark-bg--active']]:
+          (isActive && isHome) || (isActive && isResponse),
+      },
       className,
     );
 
@@ -34,37 +43,16 @@ export const NavbarLeft: React.FC<Props> = ({ className }) => {
       <div className={styles.navbar__left}>
         {pathname === Path.HomeAI ? (
           <NavLink to={Path.HomeAI} className={getActiveLink}>
-            <span
-              className={cn(styles.navbar__name, {
-                [styles['navbar__name--light']]: isHomeAI,
-                [styles['navbar__name--sign']]: isSignUp,
-              })}
-            >
-              HomeAI
-            </span>
+            <span className={styles.navbar__name}>HomeAI</span>
           </NavLink>
         ) : (
           <NavLink to={Path.Home} className={getActiveLink}>
-            <span
-              className={cn(styles.navbar__name, {
-                [styles['navbar__name--light']]: isHomeAI,
-                [styles['navbar__name--sign']]: isSignUp,
-              })}
-            >
-              Home
-            </span>
+            <span className={styles.navbar__name}>Home</span>
           </NavLink>
         )}
         {navLinks.map(({ path, label }) => (
           <NavLink key={path} to={path} className={getActiveLink}>
-            <span
-              className={cn(styles.navbar__name, {
-                [styles['navbar__name--light']]: isHomeAI,
-                [styles['navbar__name--sign']]: isSignUp,
-              })}
-            >
-              {label}
-            </span>
+            <span className={styles.navbar__name}>{label}</span>
           </NavLink>
         ))}
       </div>

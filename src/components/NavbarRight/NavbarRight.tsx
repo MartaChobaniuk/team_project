@@ -10,12 +10,29 @@ type Props = {
   className?: string;
 };
 
-export const NavbarRight: React.FC<Props> = () => {
+export const NavbarRight: React.FC<Props> = ({ className }) => {
   const { pathname } = useLocation();
+  const isHome = pathname === Path.Home;
   const isHomeAI = pathname === Path.HomeAI;
   const isResponse = pathname === Path.Response;
   const isSignUp = pathname === Path.SignUp;
   const [userExists, setUserExists] = useState<boolean | null>(null);
+
+  const getActiveLink = ({ isActive }: { isActive: boolean }) =>
+    cn(
+      styles.navbar__item,
+      { [styles['navbar__item--active']]: isActive },
+      { [styles['navbar__item--light-bg']]: isHome },
+      { [styles['navbar__item--light-bg--active']]: isActive && isHome },
+      { [styles['navbar__item--dark-bg']]: isHomeAI || isResponse || isSignUp },
+      {
+        [styles['navbar__item--dark-bg--active']]:
+          (isActive && isHomeAI) ||
+          (isActive && isResponse) ||
+          (isActive && isSignUp),
+      },
+      className,
+    );
 
   const checkUserExists = async () => {
     try {
@@ -43,41 +60,24 @@ export const NavbarRight: React.FC<Props> = () => {
       <div className={styles.navbar__right}>
         <button
           className={cn(styles.navbar__lang, {
-            [styles['navbar__lang--light']]: isHomeAI,
-            [styles['navbar__lang--resp']]: isResponse,
-            [styles['navbar__lang--sign']]: isSignUp,
+            [styles['navbar__lang--light-bg']]: isHome || isResponse,
+            [styles['navbar__lang--dark-bg']]: isHomeAI || isSignUp,
           })}
         >
-          <span
-            className={cn(styles['navbar__lang-name'], {
-              [styles['navbar__lang-name--light']]: isHomeAI,
-              [styles['navbar__lang-name--resp']]: isResponse,
-              [styles['navbar__lang-name--sign']]: isSignUp,
-            })}
-          >
-            ENG
-          </span>
+          <span className={styles['navbar__lang-name']}>ENG</span>
         </button>
-        <NavLink
-          to={Path.SignUp}
-          className={({ isActive }: { isActive: boolean }) =>
-            cn(styles.navbar__sign, {
-              [styles['navbar__sign--light']]: isHomeAI,
-              [styles['navbar__sign--active']]: isActive,
-            })
-          }
-          end
-        >
+        <NavLink to={Path.SignUp} className={getActiveLink}>
           <img
-            src={isHomeAI ? user_black : user_white}
+            src={isHome ? user_white : user_black}
             alt="user"
             className={cn(styles.navbar__img, {
-              [styles['navbar__img--light']]: isHomeAI,
+              [styles['navbar__img--dark']]: isHomeAI || isResponse || isSignUp,
             })}
           />
           <span
             className={cn(styles.navbar__name, {
-              [styles['navbar__name--light']]: isHomeAI,
+              [styles['navbar__name--dark']]:
+                isHomeAI || isResponse || isSignUp,
             })}
           >
             {userExists && 'Log In'}

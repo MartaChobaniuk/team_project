@@ -1,20 +1,17 @@
 import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import cn from 'classnames';
 import styles from './Header.module.scss';
 import { NavbarLeft } from '../NavbarLeft';
-import { NavbarRight } from '../NavbarRight';
 import { Logo } from '../Logo';
 import { Path } from '../../utils/constants';
 import cross_white from '../../images/icons/cross_white.svg';
 import burger_white from '../../images/icons/menu_light.svg';
-import burger_black from '../../images/icons/menu_dark.svg';
+import { NavbarRight } from '../NavbarRight';
 
 export const Header = () => {
   const [openMenu, setOpenMenu] = useState(false);
-  const { pathname } = useLocation();
   const navigate = useNavigate();
-  const isHomeAI = pathname === Path.HomeAI;
+  const { pathname } = useLocation();
 
   useEffect(() => {
     document.body.style.overflow = openMenu ? 'hidden' : '';
@@ -25,9 +22,10 @@ export const Header = () => {
   }, [openMenu]);
 
   useEffect(() => {
-    if (pathname !== Path.Menu && openMenu) {
+    if (pathname === Path.Menu) {
+      setOpenMenu(true);
+    } else if (openMenu) {
       setOpenMenu(false);
-      document.body.style.overflow = '';
     }
   }, [pathname, openMenu]);
 
@@ -38,7 +36,7 @@ export const Header = () => {
 
   const handleCloseMenu = () => {
     setOpenMenu(false);
-    navigate(Path.Home);
+    navigate(-1);
   };
 
   return (
@@ -48,31 +46,24 @@ export const Header = () => {
         <NavbarLeft className={styles['header__navbar--left']} />
       </div>
 
+      <div className={styles['header__right--mobile']}>
+        <button className={styles.header__lang}>
+          <span className={styles['header__lang-name']}>ENG</span>
+        </button>
+        <button
+          onClick={openMenu ? handleCloseMenu : handleOpenMenu}
+          className={styles.header__button}
+        >
+          <img
+            src={openMenu ? cross_white : burger_white}
+            alt={openMenu ? 'close' : 'menu'}
+            className={styles.header__img}
+          />
+        </button>
+      </div>
+
       <div className={styles.header__right}>
-        <NavbarRight className={styles['header__navbar--right']} />
-        {openMenu ? (
-          <button
-            onClick={handleCloseMenu}
-            className={cn(styles.header__button, {
-              [styles['header__button--light']]: isHomeAI,
-            })}
-          >
-            <img src={cross_white} alt="cross" className={styles.header__img} />
-          </button>
-        ) : (
-          <button
-            onClick={handleOpenMenu}
-            className={cn(styles.header__button, {
-              [styles['header__button--light']]: isHomeAI,
-            })}
-          >
-            <img
-              src={isHomeAI ? burger_black : burger_white}
-              alt="menu"
-              className={styles.header__img}
-            />
-          </button>
-        )}
+        <NavbarRight />
       </div>
     </div>
   );

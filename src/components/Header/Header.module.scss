@@ -32,8 +32,43 @@
   }
 
   &__right {
-    display: flex;
-    flex-direction: row;
+    @include mixin.on-mobile {
+      display: none;
+    }
+
+    @include mixin.on-tablet {
+      display: none;
+    }
+
+    @include mixin.on-tablet-2 {
+      display: flex;
+      flex-direction: row;
+    }
+
+    @include mixin.on-desktop {
+      display: flex;
+      flex-direction: row;
+    }
+  }
+
+  &__right--mobile {
+    @include mixin.on-mobile {
+      display: flex;
+      flex-direction: row;
+    }
+
+    @include mixin.on-tablet {
+      display: flex;
+      flex-direction: row;
+    }
+
+    @include mixin.on-tablet-2 {
+      display: none;
+    }
+
+    @include mixin.on-desktop {
+      display: none;
+    }
   }
 
   &__navbar--left {
@@ -105,28 +140,75 @@
     &:hover::before {
       width: 100%;
     }
-
-    &--light {
-      @include mixin.on-mobile {
-        border: solid 0.5px var.$black;
-      }
-      @include mixin.on-tablet {
-        border: solid 0.5px var.$black;
-      }
-
-      @include mixin.on-tablet-2 {
-        border: solid 0.5px var.$black;
-      }
-
-      @include mixin.on-desktop {
-        border: solid 0.5px var.$white;
-      }
-    }
   }
 
   &__img {
     width: 16px;
     height: 16px;
     z-index: 5;
+  }
+
+  &__lang {
+    position: relative;
+    width: max-content;
+    height: 38px;
+    border: solid 0.5px var.$white;
+    background-color: transparent;
+    cursor: pointer;
+    overflow: hidden;
+    transition: all 0.5s ease;
+
+    @include mixin.flex(flex, center, center, false);
+
+    @include mixin.on-mobile {
+      border-radius: 60px;
+      padding: 8px;
+      border: solid 0.5px var.$white;
+    }
+
+    @include mixin.on-tablet {
+      border-radius: 60px;
+      padding: 8px;
+      border: solid 0.5px var.$white;
+    }
+
+    @include mixin.on-tablet-2 {
+      display: none;
+    }
+
+    @include mixin.on-desktop {
+      display: none;
+    }
+
+    &::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 50%;
+      width: 0;
+      height: 100%;
+      background: var.$orange-red;
+      transform: translateY(-50%);
+      z-index: 0;
+      transition: width 0.5s ease;
+    }
+
+    &:hover::before {
+      width: 100%;
+    }
+  }
+
+  &__lang-name {
+    text-transform: uppercase;
+    z-index: 5;
+    transition: all 0.5s ease;
+
+    @include mixin.on-mobile {
+      color: var.$white;
+    }
+
+    @include mixin.on-tablet {
+      color: var.$white;
+    }
   }
 }

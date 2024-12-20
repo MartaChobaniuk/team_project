@@ -3,6 +3,7 @@
 
 .home {
   position: relative;
+  overflow: hidden;
 
   &__nav {
     height: 100vh;
@@ -32,21 +33,7 @@
   &__right-side {
     @include mixin.flex(flex, false, space-between, column);
 
-    @include mixin.on-mobile {
-      flex: 1;
-    }
-
-    @include mixin.on-tablet {
-      flex: 1;
-    }
-
-    @include mixin.on-tablet-2 {
-      flex: 1;
-    }
-
-    @include mixin.on-desktop {
-      flex: 1.2;
-    }
+    @include mixin.responsive-property(flex, 1, 1, 1, 1.2);
   }
 
   &__empty {
@@ -59,26 +46,21 @@
     color: var.$black;
 
     @include mixin.flex(flex, center, space-between, false);
-    @include mixin.h3-desktop-tablet;
+    @include mixin.responsive-property(padding, 20px, 30px, 30px, 40px);
+    @include mixin.responsive-property(height, 100px, 130px, 150px, 192px);
 
     @include mixin.on-mobile {
-      height: 130px;
-      padding: 20px 30px;
-    }
-
-    @include mixin.on-tablet {
-      height: 150px;
-      padding: 30px 40px;
+      @include mixin.h3-mobile;
     }
 
     @include mixin.on-tablet-2 {
-      height: 192px;
-      padding: 40px 50px;
+      @include mixin.h3-desktop-tablet;
     }
 
     @include mixin.on-desktop {
-      height: 192px;
-      padding: 40px 50px;
+      @include mixin.h3-desktop-tablet;
+
+      backdrop-filter: blur(34px);
     }
   }
 
@@ -86,29 +68,11 @@
     border: solid 0.5px var.$black;
     border-radius: 120px;
     transition: all 0.5s;
+    margin-right: 30px;
 
     @include mixin.flex(flex, center, center, false);
-
-    @include mixin.on-mobile {
-      margin-right: 15px;
-      max-width: 100px;
-      height: 54px;
-    }
-
-    @include mixin.on-tablet {
-      max-width: 100px;
-      height: 54px;
-    }
-
-    @include mixin.on-tablet-2 {
-      max-width: 120px;
-      height: 64px;
-    }
-
-    @include mixin.on-desktop {
-      max-width: 120px;
-      height: 64px;
-    }
+    @include mixin.responsive-property(max-width, 100px, 120px, 120px, 120px);
+    @include mixin.responsive-property(height, 54px, 54px, 64px, 64px);
 
     &:hover {
       transform: translateX(20px);
@@ -119,21 +83,7 @@
     cursor: pointer;
     transition: transform 0.5s;
 
-    @include mixin.on-mobile {
-      padding: 5px;
-    }
-
-    @include mixin.on-tablet {
-      padding: 15px;
-    }
-
-    @include mixin.on-tablet-2 {
-      padding: 25px;
-    }
-
-    @include mixin.on-desktop {
-      padding: 25px;
-    }
+    @include mixin.responsive-property(padding, 5px, 15px, 25px, 25px);
 
     &:hover {
       transform: scale(1.05);
@@ -145,77 +95,41 @@
 
     @include mixin.flex(flex, false, space-between, column);
 
-    @include mixin.on-mobile {
-      flex: 1;
-      padding: 20px 30px;
-      border-radius: 15px 15px 0 0;
-    }
-
-    @include mixin.on-tablet {
-      flex: 1;
-      padding: 20px 30px;
-      border-radius: 20px 20px 0 0;
-    }
-
-    @include mixin.on-tablet-2 {
-      flex: 1;
-      padding: 20px 30px;
-      border-radius: 20px 20px 0 0;
-    }
-
-    @include mixin.on-desktop {
-      flex: 0.8;
-      padding: 40px 50px;
-      border-radius: 20px 0 0 20px;
-    }
+    @include mixin.responsive-property(flex, 1, 1, 1, 0.8);
+    @include mixin.responsive-property(padding, 20px, 20px, 20px, 40px 50px);
+    @include mixin.responsive-property(padding, 20px, 20px, 20px, 40px 50px);
+    @include mixin.responsive-property(border-radius, 15px 15px 0 0, 20px 20px 0 0, 20px 20px 0 0, 20px 0 0 20px);
   }
 
   &__content {
     flex-grow: 1;
 
-    @include mixin.on-mobile {
-      margin-top: 30px;
-    }
-
-    @include mixin.on-tablet {
-      margin-top: 30px;
-    }
-
-    @include mixin.on-tablet-2 {
-      margin-top: 30px;
-    }
+    @include mixin.responsive-property(margin-top, 10px, 10px, 10px, 80px);
 
     @include mixin.on-desktop {
       max-width: 600px;
-      margin-top: 80px;
     }
   }
 
   &__title {
     text-align: left;
 
+    @include mixin.responsive-property(margin-bottom, 10px, 10px, 10px, 20px);
+
     @include mixin.on-mobile {
       @include mixin.h2-mobile;
-
-      margin-bottom: 10px;
     }
 
     @include mixin.on-tablet {
       @include mixin.h2-mobile;
-
-      margin-bottom: 10px;
     }
 
     @include mixin.on-tablet-2 {
       @include mixin.h2-mobile;
-
-      margin-bottom: 10px;
     }
 
     @include mixin.on-desktop {
       @include mixin.h2-desktop-tablet;
-
-      margin-bottom: 20px;
     }
   }
 
@@ -224,6 +138,20 @@
 
     text-align: left;
     margin-bottom: 20px;
+  }
+
+  &__question-right {
+    @include mixin.on-mobile {
+      @include mixin.h3-mobile;
+    }
+
+    @include mixin.on-tablet-2 {
+      @include mixin.h3-desktop-tablet;
+    }
+
+    @include mixin.on-desktop {
+      @include mixin.h3-desktop-tablet;
+    }
   }
 
   &__input {
