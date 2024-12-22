@@ -24,6 +24,13 @@
     width: 100%;
     z-index: 20;
     background-color: transparent;
-    padding: 20px;
+
+    @include mixin.on-mobile {
+      padding: 16px;
+    }
+
+    @include mixin.on-desktop {
+      padding: 24px;
+    }
   }
 }

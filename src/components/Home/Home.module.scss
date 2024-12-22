@@ -31,218 +31,56 @@
     }
   }
 
-  &__right-side {
-    flex: 1;
-
-    @include mixin.flex(flex, false, space-between, column);
-  }
-
   &__left-side {
-    flex: 1;
-    height: 100%;
-    background-color: var.$black;
-    position: relative;
-    z-index: 8;
-
-    @include mixin.flex(flex, false, space-between, column);
-    @include mixin.responsive-property(border-radius, 0 0 15px 15px, 0 0 20px 20px, 0 0 20px 20px, 0 20px 20px 0);
-    @include mixin.responsive-property(padding, 20px, 30px, 30px, 40px);
-
-    &--collapsed {
-      transform: translateY(90%);
-    }
-  }
-
-  &__collaps-line {
-    width: 100px;
-    height: 5px;
-    background: var.$white;
-    margin: 0 auto;
-    border-radius: 5px;
-    position: absolute;
-    bottom: 10px;
-    left: 50%;
-    transform: translateX(-50%);
-    cursor: pointer;
-
-    @include mixin.on-desktop {
-      display: none;
-    }
-  }
-
-  &__empty {
-    flex-grow: 1;
-  }
-
-  &__footer-left {
     @include mixin.on-mobile {
       display: none;
     }
 
     @include mixin.on-desktop {
-      display: block;
+      height: 100%;
+      background-color: var.$black;
+      position: relative;
+      z-index: 8;
+      flex: 1;
+      border-radius: 0 20px 20px 0;
+      padding: 40px 50px;
+
+      @include mixin.flex(flex, false, space-between, column);
     }
   }
 
-  &__footer {
-    display: none;
-    transition: display 0.5s;
-
-    &--collapsed {
-      display: block;
-      position: fixed;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-    }
-  }
-
-  &__footer-right {
-    background-color: transparent;
-    color: var.$black;
-
-    @include mixin.flex(flex, center, space-between, false);
-    @include mixin.responsive-property(padding, 20px, 30px, 30px, 40px);
-    @include mixin.responsive-property(height, 130px, 150px, 150px, 192px);
-
-    @include mixin.on-mobile {
-      @include mixin.h3-mobile;
-    }
-
-    @include mixin.on-tablet-2 {
-      @include mixin.h3-desktop-tablet;
-    }
-
-    @include mixin.on-desktop {
-      @include mixin.h3-desktop-tablet;
-
-      backdrop-filter: blur(34px);
-    }
-  }
-
-  &__arrow-button {
-    border: solid 0.5px var.$black;
-    border-radius: 120px;
-    transition: all 0.5s;
-    margin-right: 30px;
-
-    @include mixin.flex(flex, center, center, false);
-    @include mixin.responsive-property(max-width, 100px, 120px, 120px, 120px);
-    @include mixin.responsive-property(height, 54px, 54px, 64px, 64px);
-
-    &:hover {
-      transform: translateX(20px);
-    }
-  }
-
-  &__img {
-    cursor: pointer;
-    transition: transform 0.5s;
-
-    @include mixin.responsive-property(padding, 5px, 15px, 25px, 25px);
-
-    &:hover {
-      transform: scale(1.05);
-    }
-  }
-
-  &__content {
-    flex-grow: 1;
-
-    @include mixin.responsive-property(margin-top, 50px, 50px, 50px, 100px);
-
+  &__content-left {
     @include mixin.on-desktop {
       max-width: 600px;
+      flex-grow: 1;
+      margin-top: 100px;
     }
   }
 
   &__title {
-    margin-bottom: 20px;
-
-    @include mixin.on-mobile {
-      @include mixin.h1-mobile;
-
-      display: block;
-
-      &--collapsed {
-        display: none;
-      }
-    }
-
-    @include mixin.on-tablet {
-      @include mixin.h1-mobile;
-
-      display: block;
-
-      &--collapsed {
-        display: none;
-      }
-    }
-
-    @include mixin.on-tablet-2 {
-      @include mixin.h1-mobile;
-
-      display: block;
-
-      &--collapsed {
-        display: none;
-      }
-    }
-
     @include mixin.on-desktop {
       @include mixin.h1-desktop-tablet;
 
-      display: block;
+      margin-bottom: 10px;
     }
   }
 
   &__text {
-    display: block;
+    @include mixin.on-desktop {
+      @include mixin.body-text-desktop-tablet;
 
-    @include mixin.body-text-desktop-tablet;
-
-    text-align: left;
-    margin-bottom: 20px;
-
-    &--collapsed {
-      display: none;
+      text-align: left;
     }
   }
 
-  &__question {
-    margin-bottom: 20px;
-
-    @include mixin.on-mobile {
-      @include mixin.h3-mobile;
-
-      color: var.$black;
-    }
-
-    @include mixin.on-tablet-2 {
-      @include mixin.h3-desktop-tablet;
-
-      color: var.$black;
-    }
-
+  &__question-left {
     @include mixin.on-desktop {
       @include mixin.h3-desktop-tablet;
-
-      color: var.$white;
+      margin-bottom: 10px;
     }
   }
 
   &__buttons {
-    @include mixin.on-mobile {
-      display: flex;
-      flex-direction: column;
-      gap: 5px;
-    }
-
-    @include mixin.on-tablet {
-      display: flex;
-      flex-direction: row;
-    }
-
     @include mixin.on-desktop {
       @include mixin.flex(flex, center, flex-start, row);
 
@@ -293,6 +131,304 @@
 
     &:hover > span {
       color: var.$light-gray;
+    }
+  }
+
+  &__right-side {
+    @include mixin.on-mobile {
+      display: none;
+    }
+
+    @include mixin.on-desktop {
+      flex: 1;
+
+      @include mixin.flex(flex, false, space-between, column);
+    }
+  }
+
+  &__content-right {
+    @include mixin.on-desktop {
+      flex-grow: 1;
+    }
+  }
+
+  &__footer-right {
+    @include mixin.on-desktop {
+      height: 192px;
+      background-color: transparent;
+      color: var.$black;
+      backdrop-filter: blur(34px);
+      padding: 40px;
+
+      @include mixin.flex(flex, center, space-between, row);
+    }
+  }
+
+  &__arrow-button {
+    @include mixin.on-desktop {
+      border: solid 0.5px var.$black;
+      border-radius: 120px;
+      transition: all 0.5s;
+      margin-right: 20px;
+      cursor: pointer;
+
+      @include mixin.sizes(120px, 64px);
+      @include mixin.flex(flex, center, center, false);
+
+      &:hover {
+        transform: translateX(25px);
+      }
+    }
+  }
+
+  &__img {
+    @include mixin.on-desktop {
+      padding: 25px;
+    }
+  }
+
+  &__question-right {
+    @include mixin.on-desktop {
+      @include mixin.h3-desktop-tablet;
+    }
+  }
+
+  &__left-mobile {
+    @include mixin.on-mobile {
+      height: 100%;
+      background-color: var.$black;
+      position: relative;
+      z-index: 8;
+      flex: 1.7;
+      border-radius: 0 0 20px 20px;
+      padding: 16px;
+      transform: translateY(0%);
+      transition: transform 0.3s ease-in-out;
+
+      @include mixin.flex(flex, false, false, column);
+
+      &--collapsed {
+        transform: translateY(-80%);
+        flex: 0.3;
+      }
+    }
+
+    @include mixin.on-desktop {
+      display: none;
+    }
+  }
+
+  &__mobile-content-left {
+    margin-top: 70px;
+  }
+
+  &__mobile-title {
+    @include mixin.on-mobile {
+      @include mixin.h1-desktop-tablet;
+      font-size: 54px;
+      margin-bottom: 10px;
+      opacity: 1;
+      transition: opasity 0.5s;
+
+      &--collapsed {
+        opacity: 0;
+        transition: opasity 0.5s;
+      }
+    }
+
+    @include mixin.on-desktop {
+      display: none;
+    }
+  }
+
+  &__mobile-text {
+    @include mixin.on-mobile {
+      @include mixin.body-text-desktop-tablet;
+      opacity: 1;
+      transition: opasity 0.5s;
+
+      &--collapsed {
+        opacity: 0;
+        transition: opasity 0.5s;
+      }
+    }
+
+    @include mixin.on-desktop {
+      display: none;
+    }
+  }
+
+  &__collaps-line {
+    @include mixin.on-mobile {
+      @include mixin.sizes(100px, 3px);
+      background: var.$white;
+      margin: 0 auto;
+      border-radius: 5px;
+      position: absolute;
+      bottom: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      cursor: pointer;
+    }
+
+    @include mixin.on-desktop {
+      display: none;
+    }
+  }
+
+  &__right-mobile {
+    @include mixin.on-mobile {
+      flex: 0.25;
+    }
+
+    @include mixin.on-desktop {
+      display: none;
+    }
+  }
+
+  &__mobile-footer-right {
+    @include mixin.on-mobile {
+      width: 100%;
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      background-color: transparent;
+      backdrop-filter: blur(34px);
+      color: var.$black;
+      padding: 16px;
+
+      @include mixin.flex(flex, false, flex-start, column);
+    }
+
+    @include mixin.on-desktop {
+      display: none;
+    }
+  }
+
+  &__mobile-question-left {
+    @include mixin.on-mobile {
+      @include mixin.h3-desktop-tablet;
+
+      text-align: left;
+      color: var.$black;
+    }
+
+    @include mixin.on-desktop {
+      display: none;
+    }
+  }
+
+  &__mobile-question-right {
+    @include mixin.on-mobile {
+      @include mixin.h3-desktop-tablet;
+
+      text-align: left;
+      margin-bottom: 8px;
+    }
+
+    @include mixin.on-desktop {
+      display: none;
+    }
+  }
+
+  &__mobile-arrow-button {
+    @include mixin.on-mobile {
+      border: solid 0.5px var.$black;
+      border-radius: 120px;
+      transition: all 0.5s;
+      cursor: pointer;
+
+      @include mixin.sizes(100px, 54px);
+      @include mixin.flex(flex, center, center, false);
+
+      &:hover {
+        transform: translateX(25px);
+      }
+    }
+
+    @include mixin.on-desktop {
+      display: none;
+    }
+  }
+
+  &__mobile-content-right {
+    @include mixin.on-mobile {
+      display: none;
+
+      &--collapsed {
+        width: 100%;
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        padding: 16px;
+      }
+    }
+
+    @include mixin.on-desktop {
+      display: none;
+    }
+  }
+
+  &__mobile-buttons {
+    @include mixin.on-mobile {
+      @include mixin.flex(flex, center, center, column);
+
+      width: 100%;
+    }
+
+    @include mixin.on-desktop {
+      display: none;
+    }
+  }
+
+  &__mobile-button {
+    position: relative;
+    width: 100%;
+    height: 44px;
+    text-align: center;
+    text-transform: uppercase;
+    background-color: var.$black;
+    color: var.$white;
+    border-radius: 12px;
+    border: 1px solid var.$black;
+    overflow: hidden;
+    cursor: pointer;
+    transition: border-color 1s ease;
+
+    &::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 50%;
+      width: 100%;
+      height: 0;
+      background-color: var.$white;
+      transform: translateY(-50%);
+      z-index: 0;
+      transition: height 0.5s ease;
+    }
+
+    &:hover::before {
+      height: 100%;
+    }
+
+    & > span {
+      position: relative;
+      z-index: 1;
+      color: inherit;
+      transition: color 0.5s ease;
+    }
+
+    &:hover {
+      border-color: var.$black;
+    }
+
+    &:hover > span {
+      color: var.$black;
     }
   }
 }

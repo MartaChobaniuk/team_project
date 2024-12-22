@@ -1,10 +1,12 @@
 import { useState } from 'react';
 import { NavLink } from 'react-router-dom';
+import { Path } from '../../utils/constants';
+import { motion } from 'framer-motion';
 import cn from 'classnames';
 import styles from './SignUp.module.scss';
 import eye from '../../images/icons/eye.svg';
-import { Path } from '../../utils/constants';
-import { motion } from 'framer-motion';
+import apple from '../../images/icons/apple.svg';
+import google from '../../images/icons/google.svg';
 
 export const SignUp = () => {
   const [isCollapsed, setIsCollapsed] = useState(false);
@@ -113,7 +115,10 @@ export const SignUp = () => {
                 </span>
               </div>
               <div className={styles['sign-up__button-shell']}>
-                <button className={styles['sign-up__button']} type="submit">
+                <button
+                  className={styles['sign-up__button-sign']}
+                  type="submit"
+                >
                   <span>Sign Up</span>
                 </button>
               </div>
@@ -125,9 +130,19 @@ export const SignUp = () => {
               </p>
               <div className={styles['sign-up__acc-button-shell']}>
                 <button className={styles['sign-up__button']} type="submit">
+                  <img
+                    src={google}
+                    alt="google"
+                    className={styles['sign-up__img']}
+                  />
                   <span>Google</span>
                 </button>
                 <button className={styles['sign-up__button']} type="submit">
+                  <img
+                    src={apple}
+                    alt="apple"
+                    className={styles['sign-up__img']}
+                  />
                   <span>Apple</span>
                 </button>
               </div>

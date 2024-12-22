@@ -57,35 +57,37 @@
       width: 100%;
     }
 
-    &--light-bg {
-      background-color: var.$black;
-      color: var.$white;
-      border: 0.5 solid var.$white;
-
-      &--active {
-        background: var.$orange-red;
+    @include mixin.on-desktop {
+      &--light-bg {
+        background-color: var.$black;
         color: var.$white;
+        border: 0.5 solid var.$white;
+
+        &--active {
+          background: var.$orange-red;
+          color: var.$white;
+        }
+
+        &:hover {
+          background: var.$orange-red;
+          color: var.$white;
+        }
       }
 
-      &:hover {
-        background: var.$orange-red;
-        color: var.$white;
-      }
-    }
-
-    &--dark-bg {
-      background-color: var.$white;
-      border: 0.5 solid var.$black;
-      color: var.$black;
-
-      &--active {
-        background: var.$yellow-green;
+      &--dark-bg {
+        background-color: var.$white;
+        border: 0.5 solid var.$black;
         color: var.$black;
-      }
 
-      &:hover {
-        background: var.$yellow-green;
-        color: var.$black;
+        &--active {
+          background: var.$yellow-green;
+          color: var.$black;
+        }
+
+        &:hover {
+          background: var.$yellow-green;
+          color: var.$black;
+        }
       }
     }
   }
@@ -138,35 +140,71 @@
       width: 100%;
     }
 
-    &--dark-bg {
-      border: solid 0.5px var.$white;
-      background-color: transparent;
-      color: var.$white;
-
-      &--active {
-        background: var.$orange-red;
+    @include mixin.on-mobile {
+      &--light-bg {
+        border: solid 0.5px var.$white;
+        background-color: transparent;
         color: var.$white;
+
+        &--active {
+          background: var.$orange-red;
+          color: var.$white;
+        }
+
+        &:hover {
+          background-color: var.$white;
+          color: var.$black;
+        }
       }
 
-      &:hover {
-        background-color: var.$white;
+      &--dark-bg {
+        border: solid 0.5px var.$black;
+        background-color: transparent;
         color: var.$black;
+
+        &--active {
+          background: var.$yellow-green;
+          color: var.$black;
+        }
+
+        &:hover {
+          background-color: var.$black;
+          color: var.$white;
+        }
       }
     }
 
-    &--light-bg {
-      border: solid 0.5px var.$black;
-      background-color: transparent;
-      color: var.$black;
+    @include mixin.on-desktop {
+      &--dark-bg {
+        border: solid 0.5px var.$white;
+        background-color: transparent;
+        color: var.$white;
 
-      &--active {
-        background: var.$yellow-green;
-        color: var.$black;
+        &--active {
+          background: var.$orange-red;
+          color: var.$white;
+        }
+
+        &:hover {
+          background-color: var.$white;
+          color: var.$black;
+        }
       }
 
-      &:hover {
-        background-color: var.$black;
-        color: var.$white;
+      &--light-bg {
+        border: solid 0.5px var.$black;
+        background-color: transparent;
+        color: var.$black;
+
+        &--active {
+          background: var.$yellow-green;
+          color: var.$black;
+        }
+
+        &:hover {
+          background-color: var.$black;
+          color: var.$white;
+        }
       }
     }
   }

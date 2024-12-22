@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styles from './HomeAI.module.scss';
-import arrow from '../../images/icons/arrow_r.svg';
+import arrow from '../../images/icons/arrow_left.svg';
 import { Path } from '../../utils/constants';
 
 export const HomeAI = () => {
@@ -46,9 +46,7 @@ export const HomeAI = () => {
               <img src={arrow} alt={arrow} className={styles.home__img} />
             </button>
             <h3 className={styles['home__question-right']}>
-              Prefer The Regular Search?
-              <br />
-              No Problem, Just Drag The Arrow!
+              Prefer The Regular Search? No Problem, Just Drag The Arrow!
             </h3>
           </div>
         </div>
@@ -72,7 +70,7 @@ export const HomeAI = () => {
                 className={styles.home__input}
                 placeholder="Tell about your submission"
                 maxLength={600}
-                rows={5}
+                rows={4}
               />
               <div className={styles.home__line}></div>
               <div className={styles['home__button-shell']}>

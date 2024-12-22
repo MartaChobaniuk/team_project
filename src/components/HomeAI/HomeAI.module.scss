@@ -44,23 +44,18 @@
     background-color: transparent;
     backdrop-filter: blur(34px);
     color: var.$black;
-
-    @include mixin.flex(flex, center, space-between, false);
-    @include mixin.responsive-property(padding, 20px, 30px, 30px, 40px);
-    @include mixin.responsive-property(height, 100px, 130px, 150px, 192px);
+    gap: 8px;
+    @include mixin.h3-desktop-tablet;
+    @include mixin.responsive-property(padding, 16px, 16px, 16px, 40px);
 
     @include mixin.on-mobile {
-      @include mixin.h3-mobile;
-    }
-
-    @include mixin.on-tablet-2 {
-      @include mixin.h3-desktop-tablet;
+      @include mixin.flex(flex, flex-end, space-between, column-reverse);
+      height: max-content;
     }
 
     @include mixin.on-desktop {
-      @include mixin.h3-desktop-tablet;
-
-      backdrop-filter: blur(34px);
+      @include mixin.flex(flex, center, space-between, row);
+      height: 192px;
     }
   }
 
@@ -68,26 +63,19 @@
     border: solid 0.5px var.$black;
     border-radius: 120px;
     transition: all 0.5s;
-    margin-right: 30px;
+    cursor: pointer;
 
     @include mixin.flex(flex, center, center, false);
-    @include mixin.responsive-property(max-width, 100px, 120px, 120px, 120px);
+    @include mixin.responsive-property(width, 100px, 120px, 120px, 120px);
     @include mixin.responsive-property(height, 54px, 54px, 64px, 64px);
 
     &:hover {
-      transform: translateX(20px);
+      transform: translateX(-25px);
     }
   }
 
   &__img {
-    cursor: pointer;
-    transition: transform 0.5s;
-
-    @include mixin.responsive-property(padding, 5px, 15px, 25px, 25px);
-
-    &:hover {
-      transform: scale(1.05);
-    }
+    padding: 15px;
   }
 
   &__left-side {
@@ -96,23 +84,22 @@
     @include mixin.flex(flex, false, space-between, column);
 
     @include mixin.responsive-property(flex, 1, 1, 1, 0.8);
-    @include mixin.responsive-property(padding, 20px, 20px, 20px, 40px 50px);
-    @include mixin.responsive-property(padding, 20px, 20px, 20px, 40px 50px);
+    @include mixin.responsive-property(padding, 16px, 16px, 16px, 40px 50px);
     @include mixin.responsive-property(border-radius, 15px 15px 0 0, 20px 20px 0 0, 20px 20px 0 0, 20px 0 0 20px);
   }
 
   &__content {
     flex-grow: 1;
 
-    @include mixin.responsive-property(margin-top, 10px, 10px, 10px, 80px);
-
     @include mixin.on-desktop {
+      margin-top: 80px;
       max-width: 600px;
     }
   }
 
   &__title {
     text-align: left;
+    @include mixin.h2-desktop-tablet;
 
     @include mixin.responsive-property(margin-bottom, 10px, 10px, 10px, 20px);
 
@@ -120,47 +107,28 @@
       @include mixin.h2-mobile;
     }
 
-    @include mixin.on-tablet {
-      @include mixin.h2-mobile;
-    }
-
-    @include mixin.on-tablet-2 {
-      @include mixin.h2-mobile;
-    }
-
     @include mixin.on-desktop {
-      @include mixin.h2-desktop-tablet;
     }
   }
 
   &__text {
-    @include mixin.body-text-desktop-tablet;
-
     text-align: left;
-    margin-bottom: 20px;
+    @include mixin.body-text-desktop-tablet;
+    @include mixin.responsive-property(margin-bottom, 10px, 10px, 10px, 20px);
   }
 
   &__question-right {
-    @include mixin.on-mobile {
-      @include mixin.h3-mobile;
-    }
-
-    @include mixin.on-tablet-2 {
-      @include mixin.h3-desktop-tablet;
-    }
-
-    @include mixin.on-desktop {
-      @include mixin.h3-desktop-tablet;
-    }
+    @include mixin.h3-desktop-tablet;
+    max-width: 450px;
   }
 
   &__input {
-    margin-bottom: 20px;
     width: 100%;
     display: flex;
     flex-wrap: wrap;
 
     @include mixin.body-text-desktop-tablet;
+    @include mixin.responsive-property(margin-bottom, 10px, 10px, 10px, 20px);
 
     &:placeholder-shown {
       color: var.$light-gray;
@@ -172,16 +140,21 @@
     width: 100%;
     height: 1px;
     background-color: var.$light-gray;
-    margin-bottom: 15px;
+    margin-bottom: 10px;
   }
 
   &__button-shell {
-    @include mixin.flex(flex, center, flex-end, false);
+    @include mixin.on-mobile {
+      @include mixin.flex(flex, center, center, false);
+    }
+
+    @include mixin.on-desktop {
+      @include mixin.flex(flex, center, flex-end, false);
+    }
   }
 
   &__button {
     position: relative;
-    width: 300px;
     height: 44px;
     text-align: center;
     background-color: var.$light-gray;
@@ -193,6 +166,14 @@
     transition: border-color 1s ease;
 
     @include mixin.flex(flex, center, center, false);
+
+    @include mixin.on-mobile {
+      width: 100%;
+    }
+
+    @include mixin.on-desktop {
+      width: 300px;
+    }
 
     &::before {
       content: "";

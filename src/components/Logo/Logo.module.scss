@@ -22,8 +22,24 @@
       transform: scale(1.1);
     }
 
-    &--light {
-      color: var.$black;
+    &--home-ai {
+      @include mixin.on-mobile {
+        color: var.$white;
+      }
+
+      @include mixin.on-desktop {
+        color: var.$black;
+      }
+    }
+
+    &--sign-up {
+      @include mixin.on-mobile {
+        color: var.$white;
+      }
+
+      @include mixin.on-desktop {
+        color: var.$black;
+      }
     }
   }
 }

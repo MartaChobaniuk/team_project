@@ -63,10 +63,17 @@
       border: solid 0.5px var.$white;
       background-color: transparent;
       color: var.$white;
+      transition: background 0.5s ease;
 
       &--active {
         background: var.$orange-red;
         color: var.$white;
+        transition: background 0.5s ease;
+
+        &:hover {
+          background: var.$white;
+          color: var.$black;
+        }
       }
 
       &:hover {
@@ -79,10 +86,17 @@
       border: solid 0.5px var.$black;
       background-color: transparent;
       color: var.$black;
+      transition: background 0.5s ease;
 
       &--active {
         background: var.$yellow-green;
         color: var.$black;
+        transition: background 0.5s ease;
+
+        &:hover {
+          background: var.$black;
+          color: var.$white;
+        }
       }
 
       &:hover {
