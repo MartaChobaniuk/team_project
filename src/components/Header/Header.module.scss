@@ -41,8 +41,7 @@
     }
 
     @include mixin.on-tablet-2 {
-      display: flex;
-      flex-direction: row;
+      display: none;
     }
 
     @include mixin.on-desktop {
@@ -51,7 +50,7 @@
     }
   }
 
-  &__right--mobile {
+  &__right-mobile {
     @include mixin.on-mobile {
       display: flex;
       flex-direction: row;
@@ -63,7 +62,8 @@
     }
 
     @include mixin.on-tablet-2 {
-      display: none;
+      display: flex;
+      flex-direction: row;
     }
 
     @include mixin.on-desktop {
@@ -71,7 +71,7 @@
     }
   }
 
-  &__navbar--left {
+  &__navbar-left {
     @include mixin.on-mobile {
       display: none;
     }
@@ -81,7 +81,7 @@
     }
 
     @include mixin.on-tablet-2 {
-      display: flex;
+      display: none;
     }
 
     @include mixin.on-desktop {
@@ -106,6 +106,18 @@
       height: 38px;
       border-radius: 60px;
       padding: 8px;
+
+      &--sign {
+        background-color: var.$black;
+      }
+
+      &--login {
+        background-color: var.$black;
+      }
+
+      &--homeAi {
+        background-color: var.$black;
+      }
     }
 
     @include mixin.on-tablet {
@@ -117,7 +129,11 @@
     }
 
     @include mixin.on-tablet-2 {
-      display: none;
+      display: flex;
+      border: solid 0.5px var.$white;
+      height: 38px;
+      border-radius: 60px;
+      padding: 8px;
     }
 
     @include mixin.on-desktop {
@@ -164,6 +180,21 @@
       border-radius: 60px;
       padding: 8px;
       border: solid 0.5px var.$white;
+
+      &--sign {
+        background-color: var.$black;
+        color: var.$white;
+      }
+
+      &--login {
+        background-color: var.$black;
+        color: var.$white;
+      }
+
+      &--homeAi {
+        background-color: var.$black;
+        color: var.$white;
+      }
     }
 
     @include mixin.on-tablet {
@@ -173,7 +204,9 @@
     }
 
     @include mixin.on-tablet-2 {
-      display: none;
+      border-radius: 60px;
+      padding: 8px;
+      border: solid 0.5px var.$white;
     }
 
     @include mixin.on-desktop {

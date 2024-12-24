@@ -1,1 +1,3 @@
-export const LogInPage = () => <p>Log In</p>;
+import { LogIn } from '../../components/LogIn';
+
+export const LogInPage = () => <LogIn />;

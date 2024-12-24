@@ -10,15 +10,23 @@ type Props = {
 
 export const Logo: React.FC<Props> = ({ className }) => {
   const { pathname } = useLocation();
+  const isHome = pathname === Path.Home;
   const isHomeAI = pathname === Path.HomeAI;
+  const isResponse = pathname === Path.Response;
   const isSignUp = pathname === Path.SignUp;
+  const isLogIn = pathname === Path.LogIn;
+  const isAbout = pathname === Path.About;
 
   return (
     <Link to={Path.Home} className={cn(styles.logo, className)}>
       <p
         className={cn(styles.logo__text, {
-          [styles['logo__text--home-ai']]: isHomeAI,
-          [styles['logo__text--sign-up']]: isSignUp,
+          [styles['logo__text--home']]: isHome,
+          [styles['logo__text--homeAi']]: isHomeAI,
+          [styles['logo__text--response']]: isResponse,
+          [styles['logo__text--about']]: isAbout,
+          [styles['logo__text--sign']]: isSignUp,
+          [styles['logo__text--login']]: isLogIn,
         })}
       >
         THE i change

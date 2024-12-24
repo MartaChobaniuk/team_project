@@ -15,19 +15,19 @@ import { LogInPage } from './pages/LogInPage';
 export const Root = () => (
   <Router>
     <Routes>
-      <Route path={`${Path.Home}`} element={<App />}>
+      <Route path={Path.Home} element={<App />}>
         <Route index element={<HomePage />} />
-        <Route path={`${Path.HomeAI}`} element={<HomeAIPage />} />
-        <Route path={`${Path.Response}`} element={<ResponsePage />} />
+        <Route path={Path.HomeAI} element={<HomeAIPage />} />
+        <Route path={Path.Response} element={<ResponsePage />} />
 
-        <Route path={`${Path.Stories}`} element={<StoriesPage />} />
-        <Route path={`${Path.About}`} element={<AboutUsPage />} />
-        <Route path={`${Path.Contact}`} element={<ContactPage />} />
+        <Route path={Path.Stories} element={<StoriesPage />} />
+        <Route path={Path.About} element={<AboutUsPage />} />
+        <Route path={Path.Contact} element={<ContactPage />} />
 
-        <Route path={`${Path.SignUp}`} element={<SignUpPage />} />
-        <Route path={`${Path.LogIn}`} element={<LogInPage />} />
+        <Route path={Path.SignUp} element={<SignUpPage />} />
+        <Route path={Path.LogIn} element={<LogInPage />} />
 
-        <Route path={`${Path.Menu}`} element={<MenuPage />} />
+        <Route path={Path.Menu} element={<MenuPage />} />
 
         <Route path="*" element={<NotFoundPage />} />
       </Route>

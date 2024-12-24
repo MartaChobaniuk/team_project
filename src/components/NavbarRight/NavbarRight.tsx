@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import cn from 'classnames';
 import { NavLink, useLocation } from 'react-router-dom';
 import styles from './NavbarRight.module.scss';
@@ -16,42 +16,23 @@ export const NavbarRight: React.FC<Props> = ({ className }) => {
   const isHomeAI = pathname === Path.HomeAI;
   const isResponse = pathname === Path.Response;
   const isSignUp = pathname === Path.SignUp;
-  const [userExists, setUserExists] = useState<boolean | null>(null);
+  const isLogIn = pathname === Path.LogIn;
+  const isAbout = pathname === Path.About;
 
   const getActiveLink = ({ isActive }: { isActive: boolean }) =>
     cn(
       styles.navbar__item,
       { [styles['navbar__item--active']]: isActive },
-      { [styles['navbar__item--light-bg']]: isHome },
-      { [styles['navbar__item--light-bg--active']]: isActive && isHome },
-      { [styles['navbar__item--dark-bg']]: isHomeAI || isResponse || isSignUp },
-      {
-        [styles['navbar__item--dark-bg--active']]:
-          (isActive && isHomeAI) ||
-          (isActive && isResponse) ||
-          (isActive && isSignUp),
-      },
+      { [styles['navbar__item--home']]: isHome },
+      { [styles['navbar__item--homeAi']]: isHomeAI },
+      { [styles['navbar__item--response']]: isResponse },
+      { [styles['navbar__item--about']]: isAbout },
+      { [styles['navbar__item--sign']]: isSignUp },
+      { [styles['navbar__item--sign--active']]: isSignUp && isActive },
+      { [styles['navbar__item--login']]: isLogIn },
+      { [styles['navbar__item--login--active']]: isLogIn && isActive },
       className,
     );
-
-  const checkUserExists = async () => {
-    try {
-      const response = await fetch(`/api/users/check?username=`);
-      // eslint-disable-next-line @typescript-eslint/no-throw-literal
-
-      if (!response.ok) {
-        new Error('Failed to fetch user data');
-      }
-
-      const data = await response.json();
-
-      setUserExists(data.exists); // Оновлюємо стан залежно від результату
-    } catch (error) {
-      setUserExists(false); // У разі помилки припускаємо, що користувач не існує
-    }
-  };
-
-  checkUserExists();
 
   return (
     <section className={styles.navbar}>
@@ -60,31 +41,41 @@ export const NavbarRight: React.FC<Props> = ({ className }) => {
       <div className={styles.navbar__right}>
         <button
           className={cn(styles.navbar__lang, {
-            [styles['navbar__lang--light-bg']]: isHome || isResponse,
-            [styles['navbar__lang--dark-bg']]: isHomeAI || isSignUp,
+            [styles['navbar__lang--home']]: isHome,
+            [styles['navbar__lang--homeAi']]: isHomeAI,
+            [styles['navbar__lang--response']]: isResponse,
+            [styles['navbar__lang--about']]: isAbout,
+            [styles['navbar__lang--sign']]: isSignUp,
+            [styles['navbar__lang--login']]: isLogIn,
           })}
         >
           <span className={styles['navbar__lang-name']}>ENG</span>
         </button>
-        <NavLink to={Path.SignUp} className={getActiveLink}>
-          <img
-            src={isHome ? user_white : user_black}
-            alt="user"
-            className={cn(styles.navbar__img, {
-              [styles['navbar__img--dark']]: isHomeAI || isResponse || isSignUp,
-            })}
-          />
-          <span
-            className={cn(styles.navbar__name, {
-              [styles['navbar__name--dark']]:
-                isHomeAI || isResponse || isSignUp,
-            })}
-          >
-            {userExists && 'Log In'}
-            {!userExists && 'Sign Up'}
-            {false && 'Profile'}
-          </span>
-        </NavLink>
+        {isLogIn ? (
+          <NavLink to={Path.LogIn} className={getActiveLink}>
+            <img
+              src={isHome || isAbout ? user_white : user_black}
+              alt="user"
+              className={cn(styles.navbar__img, {
+                [styles['navbar__img--dark']]:
+                  isHomeAI || isResponse || isSignUp || isLogIn,
+              })}
+            />
+            <span className={styles.navbar__name}>Log In</span>
+          </NavLink>
+        ) : (
+          <NavLink to={Path.SignUp} className={getActiveLink}>
+            <img
+              src={isHome || isAbout ? user_white : user_black}
+              alt="user"
+              className={cn(styles.navbar__img, {
+                [styles['navbar__img--dark']]:
+                  isHomeAI || isResponse || isSignUp || isLogIn,
+              })}
+            />
+            <span className={styles.navbar__name}>Sign Up</span>
+          </NavLink>
+        )}
       </div>
     </section>
   );

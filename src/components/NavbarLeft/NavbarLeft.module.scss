@@ -16,7 +16,7 @@
     }
 
     @include mixin.on-tablet-2 {
-      @include mixin.flex(flex, center, center, row);
+      display: none;
     }
 
     @include mixin.on-desktop {
@@ -34,10 +34,8 @@
     height: 38px;
     border-radius: 80px;
     padding: 8px 16px;
-    background-color: transparent;
     cursor: pointer;
     text-transform: uppercase;
-
     overflow: hidden;
     transition: all 0.5s ease;
 
@@ -59,49 +57,146 @@
       width: 100%;
     }
 
-    &--dark-bg {
-      border: solid 0.5px var.$white;
-      background-color: transparent;
-      color: var.$white;
-      transition: background 0.5s ease;
-
-      &--active {
-        background: var.$orange-red;
+    &--home {
+      @include mixin.on-desktop {
+        background-color: transparent;
+        border: 0.5px solid var.$white;
         color: var.$white;
-        transition: background 0.5s ease;
+
+        &--active {
+          background: var.$orange-red;
+          transition: all 0.5s ease;
+
+          &:hover {
+            background: var.$white;
+            color: var.$black;
+          }
+        }
 
         &:hover {
-          background: var.$white;
+          background-color: var.$white;
+          color: var.$black;
+        }
+
+        &:active {
+          background-color: var.$light-gray;
           color: var.$black;
         }
       }
-
-      &:hover {
-        background-color: var.$white;
-        color: var.$black;
-      }
     }
 
-    &--light-bg {
-      border: solid 0.5px var.$black;
-      background-color: transparent;
-      color: var.$black;
-      transition: background 0.5s ease;
-
-      &--active {
-        background: var.$yellow-green;
+    &--homeAi {
+      @include mixin.on-desktop {
+        background-color: transparent;
+        border: 0.5px solid var.$black;
         color: var.$black;
-        transition: background 0.5s ease;
+
+        &--active {
+          background: var.$yellow-green;
+          color: var.$black;
+        }
 
         &:hover {
-          background: var.$black;
+          background-color: var.$black;
+          color: var.$white;
+        }
+
+        &:active {
+          background-color: var.$dark-gray;
           color: var.$white;
         }
       }
+    }
 
-      &:hover {
-        background-color: var.$black;
+    &--response {
+      @include mixin.on-desktop {
+        background-color: transparent;
+        border: 0.5px solid var.$white;
         color: var.$white;
+
+        &--active {
+          background: var.$orange-red;
+          transition: all 0.5s ease;
+
+          &:hover {
+            background: var.$white;
+            color: var.$black;
+          }
+        }
+
+        &:hover {
+          background-color: var.$white;
+          color: var.$black;
+        }
+
+        &:active {
+          background-color: var.$light-gray;
+          color: var.$black;
+        }
+      }
+    }
+
+    &--sign {
+      @include mixin.on-desktop {
+        background-color: transparent;
+        border: 0.5px solid var.$black;
+        color: var.$black;
+
+        &:hover {
+          background-color: var.$black;
+          color: var.$white;
+        }
+
+        &:active {
+          background-color: var.$dark-gray;
+          color: var.$white;
+        }
+      }
+    }
+
+    &--login {
+      @include mixin.on-desktop {
+        background-color: transparent;
+        border: 0.5px solid var.$black;
+        color: var.$black;
+
+        &:hover {
+          background-color: var.$black;
+          color: var.$white;
+        }
+
+        &:active {
+          background-color: var.$dark-gray;
+          color: var.$white;
+        }
+      }
+    }
+
+    &--about {
+      @include mixin.on-desktop {
+        background-color: transparent;
+        border: 0.5px solid var.$white;
+        color: var.$white;
+
+        &--active {
+          background: var.$orange-red;
+          transition: all 0.5s ease;
+
+          &:hover {
+            background: var.$white;
+            color: var.$black;
+          }
+        }
+
+        &:hover {
+          background-color: var.$white;
+          color: var.$black;
+        }
+
+        &:active {
+          background-color: var.$light-gray;
+          color: var.$black;
+        }
       }
     }
   }

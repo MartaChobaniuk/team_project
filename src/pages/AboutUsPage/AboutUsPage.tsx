@@ -1,1 +1,3 @@
-export const AboutUsPage = () => <div>About Us Page</div>;
+import { AboutUs } from '../../components/AboutUs';
+
+export const AboutUsPage = () => <AboutUs />;

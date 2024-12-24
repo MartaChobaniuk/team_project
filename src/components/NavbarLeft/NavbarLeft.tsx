@@ -14,6 +14,8 @@ export const NavbarLeft: React.FC<Props> = ({ className }) => {
   const isHomeAI = pathname === Path.HomeAI;
   const isResponse = pathname === Path.Response;
   const isSignUp = pathname === Path.SignUp;
+  const isLogIn = pathname === Path.LogIn;
+  const isAbout = pathname === Path.About;
 
   const navLinks = [
     { path: Path.Stories, label: 'Success Stories' },
@@ -25,16 +27,16 @@ export const NavbarLeft: React.FC<Props> = ({ className }) => {
     cn(
       styles.navbar__item,
       { [styles['navbar__item--active']]: isActive },
-      { [styles['navbar__item--light-bg']]: isHomeAI || isSignUp },
-      {
-        [styles['navbar__item--light-bg--active']]:
-          (isActive && isHomeAI) || (isSignUp && isActive),
-      },
-      { [styles['navbar__item--dark-bg']]: isHome || isResponse },
-      {
-        [styles['navbar__item--dark-bg--active']]:
-          (isActive && isHome) || (isActive && isResponse),
-      },
+      { [styles['navbar__item--home']]: isHome },
+      { [styles['navbar__item--home--active']]: isHome && isActive },
+      { [styles['navbar__item--homeAi']]: isHomeAI },
+      { [styles['navbar__item--homeAi--active']]: isHomeAI && isActive },
+      { [styles['navbar__item--response']]: isResponse },
+      { [styles['navbar__item--response--active']]: isResponse && isActive },
+      { [styles['navbar__item--sign']]: isSignUp },
+      { [styles['navbar__item--login']]: isLogIn },
+      { [styles['navbar__item--about']]: isAbout },
+      { [styles['navbar__item--about--active']]: isAbout && isActive },
       className,
     );
 

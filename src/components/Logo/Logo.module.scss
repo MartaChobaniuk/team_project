@@ -22,9 +22,19 @@
       transform: scale(1.1);
     }
 
-    &--home-ai {
+    &--home {
       @include mixin.on-mobile {
         color: var.$white;
+      }
+
+      @include mixin.on-desktop {
+        color: var.$white;
+      }
+    }
+
+    &--homeAi {
+      @include mixin.on-mobile {
+        color: var.$black;
       }
 
       @include mixin.on-desktop {
@@ -32,13 +42,43 @@
       }
     }
 
-    &--sign-up {
+    &--response {
       @include mixin.on-mobile {
         color: var.$white;
       }
 
       @include mixin.on-desktop {
+        color: var.$white;
+      }
+    }
+
+    &--sign {
+      @include mixin.on-mobile {
         color: var.$black;
+      }
+
+      @include mixin.on-desktop {
+        color: var.$black;
+      }
+    }
+
+    &--login {
+      @include mixin.on-mobile {
+        color: var.$black;
+      }
+
+      @include mixin.on-desktop {
+        color: var.$black;
+      }
+    }
+
+    &--about {
+      @include mixin.on-mobile {
+        color: var.$white;
+      }
+
+      @include mixin.on-desktop {
+        color: var.$white;
       }
     }
   }

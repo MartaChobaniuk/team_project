@@ -1,7 +1,7 @@
 @use "../../utils/mixins" as mixin;
 @use "../../utils/variables" as var;
 
-.sign-up {
+.log-in {
   position: relative;
   height: 100vh;
   overflow: hidden;
@@ -436,7 +436,6 @@
     transition: border-color 1s ease;
 
     @include mixin.flex(flex, center, center, false);
-    gap: 10px;
 
     &::before {
       content: "";
