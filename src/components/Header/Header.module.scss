@@ -118,6 +118,10 @@
       &--homeAi {
         background-color: var.$black;
       }
+
+      &--about {
+        background-color: var.$black;
+      }
     }
 
     @include mixin.on-tablet {
@@ -195,12 +199,23 @@
         background-color: var.$black;
         color: var.$white;
       }
+
+      &--about {
+        background-color: var.$black;
+        color: var.$white;
+      }
     }
 
     @include mixin.on-tablet {
       border-radius: 60px;
       padding: 8px;
       border: solid 0.5px var.$white;
+
+      &--about {
+        background-color: transparent;
+        color: var.$black;
+        border: solid 0.5px var.$black;
+      }
     }
 
     @include mixin.on-tablet-2 {
@@ -242,6 +257,24 @@
 
     @include mixin.on-tablet {
       color: var.$white;
+    }
+
+    &--about {
+      @include mixin.on-mobile {
+        color: var.$white;
+      }
+
+      @include mixin.on-tablet {
+        color: var.$black;
+      }
+
+      @include mixin.on-tablet-2 {
+        color: var.$white;
+      }
+
+      @include mixin.on-desktop {
+        color: var.$black;
+      }
     }
   }
 }

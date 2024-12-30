@@ -199,6 +199,32 @@
         }
       }
     }
+
+    &--faq {
+      background-color: transparent;
+      border: 0.5px solid var.$white;
+      color: var.$white;
+
+      &--active {
+        background: var.$orange-red;
+        transition: all 0.5s ease;
+
+        &:hover {
+          background: var.$white;
+          color: var.$black;
+        }
+      }
+
+      &:hover {
+        background-color: var.$white;
+        color: var.$black;
+      }
+
+      &:active {
+        background-color: var.$light-gray;
+        color: var.$black;
+      }
+    }
   }
 
   &__name {

@@ -16,6 +16,7 @@ export const Header = () => {
   const isSignUp = pathname === Path.SignUp;
   const isLogIn = pathname === Path.LogIn;
   const isHomeAI = pathname === Path.HomeAI;
+  const isAbout = pathname === Path.About;
 
   useEffect(() => {
     document.body.style.overflow = openMenu ? 'hidden' : '';
@@ -44,7 +45,11 @@ export const Header = () => {
   };
 
   return (
-    <div className={styles.header}>
+    <div
+      className={cn(styles.header, {
+        [styles['header--about']]: isAbout,
+      })}
+    >
       <div className={styles.header__left}>
         <Logo className={styles.header__logo} />
         <NavbarLeft className={styles['header__navbar-left']} />
@@ -56,9 +61,16 @@ export const Header = () => {
             [styles['header__lang--sign']]: isSignUp,
             [styles['header__lang--login']]: isLogIn,
             [styles['header__lang--homeAi']]: isHomeAI,
+            [styles['header__lang--about']]: isAbout,
           })}
         >
-          <span className={styles['header__lang-name']}>ENG</span>
+          <span
+            className={cn(styles['header__lang-name'], {
+              [styles['header__lang-name--about']]: isAbout,
+            })}
+          >
+            ENG
+          </span>
         </button>
         <button
           onClick={openMenu ? handleCloseMenu : handleOpenMenu}
@@ -66,6 +78,7 @@ export const Header = () => {
             [styles['header__button--sign']]: isSignUp,
             [styles['header__button--login']]: isLogIn,
             [styles['header__button--homeAi']]: isHomeAI,
+            [styles['header__button--about']]: isAbout,
           })}
         >
           <img

@@ -4,6 +4,7 @@ export enum Path {
   Response = '/response',
   Stories = '/stories',
   About = '/about-us',
+  Faq = '/about-us/faq',
   Contact = '/contact',
   SignUp = '/sign-up',
   LogIn = '/log-in',

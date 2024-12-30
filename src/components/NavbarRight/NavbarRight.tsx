@@ -18,6 +18,7 @@ export const NavbarRight: React.FC<Props> = ({ className }) => {
   const isSignUp = pathname === Path.SignUp;
   const isLogIn = pathname === Path.LogIn;
   const isAbout = pathname === Path.About;
+  const isFaq = pathname === Path.Faq;
 
   const getActiveLink = ({ isActive }: { isActive: boolean }) =>
     cn(
@@ -27,6 +28,7 @@ export const NavbarRight: React.FC<Props> = ({ className }) => {
       { [styles['navbar__item--homeAi']]: isHomeAI },
       { [styles['navbar__item--response']]: isResponse },
       { [styles['navbar__item--about']]: isAbout },
+      { [styles['navbar__item--faq']]: isFaq },
       { [styles['navbar__item--sign']]: isSignUp },
       { [styles['navbar__item--sign--active']]: isSignUp && isActive },
       { [styles['navbar__item--login']]: isLogIn },
@@ -47,6 +49,7 @@ export const NavbarRight: React.FC<Props> = ({ className }) => {
             [styles['navbar__lang--about']]: isAbout,
             [styles['navbar__lang--sign']]: isSignUp,
             [styles['navbar__lang--login']]: isLogIn,
+            [styles['navbar__lang--faq']]: isFaq,
           })}
         >
           <span className={styles['navbar__lang-name']}>ENG</span>
@@ -66,7 +69,7 @@ export const NavbarRight: React.FC<Props> = ({ className }) => {
         ) : (
           <NavLink to={Path.SignUp} className={getActiveLink}>
             <img
-              src={isHome || isAbout ? user_white : user_black}
+              src={isHome || isAbout || isFaq ? user_white : user_black}
               alt="user"
               className={cn(styles.navbar__img, {
                 [styles['navbar__img--dark']]:

@@ -77,6 +77,14 @@
         color: var.$white;
       }
 
+      @include mixin.on-tablet {
+        color: var.$black;
+      }
+
+      @include mixin.on-tablet-2 {
+        color: var.$black;
+      }
+
       @include mixin.on-desktop {
         color: var.$white;
       }

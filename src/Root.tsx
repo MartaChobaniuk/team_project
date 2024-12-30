@@ -11,6 +11,7 @@ import { HomeAIPage } from './pages/HomeAIPage';
 import { ResponsePage } from './pages/ResponsePage';
 import { MenuPage } from './pages/MenuPage';
 import { LogInPage } from './pages/LogInPage';
+import { FaqPage } from './pages/FaqPage';
 
 export const Root = () => (
   <Router>
@@ -21,7 +22,12 @@ export const Root = () => (
         <Route path={Path.Response} element={<ResponsePage />} />
 
         <Route path={Path.Stories} element={<StoriesPage />} />
-        <Route path={Path.About} element={<AboutUsPage />} />
+
+        <Route path={Path.About}>
+          <Route index element={<AboutUsPage />} />
+          <Route path={Path.Faq} element={<FaqPage />} />
+        </Route>
+
         <Route path={Path.Contact} element={<ContactPage />} />
 
         <Route path={Path.SignUp} element={<SignUpPage />} />

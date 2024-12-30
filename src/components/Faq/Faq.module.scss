@@ -1,0 +1,481 @@
+@use "../../utils/mixins" as mixin;
+@use "../../utils/variables" as var;
+
+.faq {
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+  z-index: 11;
+
+  &__content-top {
+    @include mixin.on-mobile {
+      position: relative;
+      width: 100%;
+      height: 100vh;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      background-color: var.$black;
+      color: var.$white;
+      margin-top: 0;
+      border-radius: 0 0 20px 20px;
+      animation: slideUpMobile 0.5s ease-in-out 4s forwards;
+
+      &--visible {
+        padding: 70px 20px 20px;
+      }
+
+      &--collapsed {
+        padding: 40px 20px 20px;
+        margin-top: -250px;
+      }
+    }
+
+    @include mixin.on-tablet {
+      position: relative;
+      width: 100%;
+      height: 100vh;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      background-color: var.$black;
+      color: var.$white;
+      margin-top: 0;
+      border-radius: 0 0 20px 20px;
+      animation: slideUp 0.5s ease-in-out 4s forwards;
+
+      &--visible {
+        padding: 70px 20px 20px;
+      }
+    }
+
+    @include mixin.on-tablet-2 {
+      position: relative;
+      width: 100%;
+      height: 100vh;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      background-color: var.$black;
+      color: var.$white;
+      margin-top: 0;
+      border-radius: 0 0 20px 20px;
+      animation: slideUpTablet 0.5s ease-in-out 4s forwards;
+
+      &--visible {
+        padding: 70px 20px 20px;
+      }
+
+      &--collapsed {
+        padding: 40px 20px 20px;
+        margin-top: -50px;
+        height: 35vh;
+      }
+    }
+
+    @include mixin.on-desktop {
+      width: 100%;
+      height: 100vh;
+      padding: 60px 40px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      background-color: var.$black;
+      color: var.$white;
+      margin-top: 0;
+      border-radius: 0 0 20px 20px;
+      animation: slideUp 0.5s ease-in-out 4s forwards;
+
+      &--visible {
+        padding: 70px 30px 20px;
+      }
+    }
+  }
+
+  @keyframes slideUp {
+    0% {
+      height: 100vh;
+    }
+    100% {
+      height: 45vh;
+    }
+  }
+
+  @keyframes slideUpTablet {
+    0% {
+      height: 100vh;
+    }
+    100% {
+      height: 55vh;
+    }
+  }
+
+  @keyframes slideUpMobile {
+    0% {
+      height: 100vh;
+    }
+    100% {
+      height: 65vh;
+    }
+  }
+
+  &__title {
+    @include mixin.on-mobile {
+      display: block;
+      @include mixin.h2-mobile;
+      width: 100%;
+      margin-bottom: 10px;
+      text-align: left;
+
+      &--collapsed {
+        display: none;
+      }
+    }
+
+    @include mixin.on-tablet {
+      @include mixin.h2-mobile;
+      display: block;
+      width: 100%;
+      margin-bottom: 10px;
+      text-align: left;
+    }
+
+    @include mixin.on-tablet-2 {
+      @include mixin.h2-desktop-tablet;
+      display: block;
+      width: 100%;
+      margin-bottom: 10px;
+      text-align: left;
+    }
+
+    @include mixin.on-desktop {
+      @include mixin.h2-desktop-tablet;
+      display: block;
+      width: 60%;
+      margin-bottom: 10px;
+    }
+  }
+
+  &__subtitle {
+    @include mixin.on-mobile {
+      display: block;
+      font-size: 14px;
+      width: 100%;
+      text-align: justify;
+      margin-bottom: 15px;
+
+      &--collapsed {
+        display: none;
+      }
+    }
+
+    @include mixin.on-tablet {
+      display: block;
+      font-size: 14px;
+      width: 100%;
+      text-align: justify;
+      margin-bottom: 15px;
+    }
+
+    @include mixin.on-tablet-2 {
+      display: block;
+      @include mixin.body-text-desktop-tablet;
+      width: 100%;
+      text-align: justify;
+      margin-bottom: 10px;
+
+      &--collapsed {
+        display: none;
+      }
+    }
+
+    @include mixin.on-desktop {
+      @include mixin.body-text-desktop-tablet;
+      display: block;
+      width: 60%;
+      text-align: justify;
+      margin-bottom: 16px;
+    }
+  }
+
+  &__collaps-line {
+    @include mixin.on-mobile {
+      display: block;
+      @include mixin.sizes(200px, 1px);
+      background: var.$white;
+      margin: 0 auto;
+      border-radius: 5px;
+      position: absolute;
+      bottom: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      cursor: pointer;
+    }
+
+    @include mixin.on-tablet {
+      display: block;
+      @include mixin.sizes(300px, 1px);
+      background: var.$white;
+      margin: 0 auto;
+      border-radius: 5px;
+      position: absolute;
+      bottom: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      cursor: pointer;
+    }
+
+    @include mixin.on-tablet-2 {
+      display: block;
+      @include mixin.sizes(300px, 1px);
+      background: var.$white;
+      margin: 0 auto;
+      border-radius: 5px;
+      position: absolute;
+      bottom: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      cursor: pointer;
+    }
+
+    @include mixin.on-desktop {
+      display: none;
+    }
+  }
+
+  &__question {
+    @include mixin.on-mobile {
+      display: none;
+    }
+
+    @include mixin.on-tablet {
+      display: none;
+    }
+
+    @include mixin.on-tablet-2 {
+      display: block;
+      @include mixin.h3-desktop-tablet;
+      margin-bottom: 10px;
+    }
+
+    @include mixin.on-desktop {
+      display: block;
+      @include mixin.h3-desktop-tablet;
+      margin-bottom: 10px;
+    }
+  }
+
+  &__buttons {
+    @include mixin.on-mobile {
+      @include mixin.flex(flex, center, center, column);
+      width: 100%;
+    }
+
+    @include mixin.on-tablet {
+      @include mixin.flex(flex, center, center, row);
+      width: 100%;
+    }
+
+    @include mixin.on-tablet-2 {
+      @include mixin.flex(flex, center, center, row);
+      width: 100%;
+    }
+
+    @include mixin.on-desktop {
+      @include mixin.flex(flex, center, flex-start, row);
+      width: 60%;
+    }
+  }
+
+  &__button {
+    position: relative;
+    width: 100%;
+    height: 44px;
+    line-height: 44px;
+    text-align: center;
+    text-transform: uppercase;
+    background-color: var.$black;
+    color: var.$white;
+    border-radius: 20px;
+    border: 1px solid var.$white;
+    overflow: hidden;
+    cursor: pointer;
+    transition: background-color 0.5s ease;
+
+    &::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 50%;
+      width: 0;
+      height: 100%;
+      background-color: var.$white;
+      transform: translateY(-50%);
+      z-index: 0;
+      transition: width 0.5s ease;
+    }
+
+    &:hover::before {
+      width: 100%;
+    }
+
+    & > span {
+      position: relative;
+      z-index: 1;
+      color: inherit;
+      transition: color 0.5s ease;
+    }
+
+    &:hover {
+      border-color: var.$white;
+    }
+
+    &:hover > span {
+      color: var.$black;
+    }
+
+    &--active {
+      background-color: var.$white;
+      color: var.$black;
+    }
+  }
+
+  &__content-bottom {
+    @include mixin.on-mobile {
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      flex-wrap: nowrap;
+      height: 45vh;
+      overflow-y: auto;
+
+      &--collapsed {
+        height: 65vh;
+      }
+    }
+
+    @include mixin.on-tablet {
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      flex-wrap: nowrap;
+      height: 45vh;
+      overflow-y: auto;
+    }
+
+    @include mixin.on-tablet-2 {
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      flex-wrap: wrap;
+      height: 45vh;
+      overflow-y: scroll;
+      overflow-x: hidden;
+
+      &--collapsed {
+        height: 65vh;
+      }
+    }
+
+    @include mixin.on-desktop {
+      padding: 20px 30px;
+      display: flex;
+      flex-direction: column;
+      flex-wrap: wrap;
+      height: 50vh;
+      overflow: hidden;
+    }
+  }
+
+  &__block {
+    @include mixin.on-mobile {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      cursor: pointer;
+      margin-bottom: 15px;
+
+      &--open {
+        margin-bottom: 0;
+      }
+    }
+
+    @include mixin.on-tablet {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      cursor: pointer;
+      margin-bottom: 15px;
+
+      &--open {
+        margin-bottom: 0;
+      }
+    }
+
+    @include mixin.on-tablet-2 {
+      width: 49%;
+      display: flex;
+      flex-direction: column;
+      cursor: pointer;
+      margin-right: 25px;
+      margin-bottom: 15px;
+
+      &--open {
+        margin-bottom: 0;
+      }
+    }
+
+    @include mixin.on-desktop {
+      width: 49%;
+      display: flex;
+      flex-direction: column;
+      cursor: pointer;
+      margin-right: 25px;
+      margin-bottom: 15px;
+
+      &--open {
+        margin-bottom: 0;
+      }
+    }
+  }
+
+  &__block-container {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  &__line {
+    width: 100%;
+    height: 0.5px;
+    background-color: var.$dark-gray;
+  }
+
+  &__question-bottom {
+    @include mixin.h3-desktop-tablet;
+    color: var.$dark-gray;
+  }
+
+  &__answer {
+    display: none;
+
+    &--open {
+      display: block;
+      width: 100%;
+    }
+  }
+
+  &__answer-text {
+    @include mixin.body-text-desktop-tablet;
+    padding: 5px;
+    background-color: var.$light-gray;
+    color: var.$dark-gray;
+  }
+
+  &__img {
+    @include mixin.sizes(22px, 22px);
+    cursor: pointer;
+  }
+}

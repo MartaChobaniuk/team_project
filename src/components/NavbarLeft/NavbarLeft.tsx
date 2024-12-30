@@ -15,7 +15,8 @@ export const NavbarLeft: React.FC<Props> = ({ className }) => {
   const isResponse = pathname === Path.Response;
   const isSignUp = pathname === Path.SignUp;
   const isLogIn = pathname === Path.LogIn;
-  const isAbout = pathname === Path.About;
+  const isFaq = pathname === Path.Faq;
+  const isAbout = pathname === Path.About || isFaq;
 
   const navLinks = [
     { path: Path.Stories, label: 'Success Stories' },
@@ -35,8 +36,11 @@ export const NavbarLeft: React.FC<Props> = ({ className }) => {
       { [styles['navbar__item--response--active']]: isResponse && isActive },
       { [styles['navbar__item--sign']]: isSignUp },
       { [styles['navbar__item--login']]: isLogIn },
-      { [styles['navbar__item--about']]: isAbout },
-      { [styles['navbar__item--about--active']]: isAbout && isActive },
+      { [styles['navbar__item--about']]: isAbout || isFaq },
+      {
+        [styles['navbar__item--about--active']]: (isAbout || isFaq) && isActive,
+      },
+      { [styles['navbar__item--faq']]: isFaq },
       className,
     );
 

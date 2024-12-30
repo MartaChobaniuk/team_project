@@ -191,6 +191,22 @@
         }
       }
     }
+
+    &--faq {
+      background-color: transparent;
+      color: var.$white;
+      border: 0.5px solid var.$white;
+
+      &:hover {
+        background: var.$orange-red;
+        color: var.$white;
+      }
+
+      &:active {
+        background: var.$orange-red;
+        color: var.$white;
+      }
+    }
   }
 
   &__lang {
@@ -243,7 +259,8 @@
     &--homeAi,
     &--response,
     &--sign,
-    &--login {
+    &--login,
+    &--faq {
       @include mixin.on-desktop {
         background-color: transparent;
         color: var.$white;

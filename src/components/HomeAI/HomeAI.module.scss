@@ -20,6 +20,12 @@
 
     @include mixin.on-tablet {
       flex-direction: column;
+      background-position: left;
+      background-size: cover;
+    }
+
+    @include mixin.on-tablet-2 {
+      flex-direction: row;
       background-position: center;
       background-size: cover;
     }
@@ -33,7 +39,7 @@
   &__right-side {
     @include mixin.flex(flex, false, space-between, column);
 
-    @include mixin.responsive-property(flex, 1, 1, 1, 1.2);
+    @include mixin.responsive-property(flex, 1, 0.4, 1, 1.2);
   }
 
   &__empty {
@@ -46,16 +52,23 @@
     color: var.$black;
     gap: 8px;
     @include mixin.h3-desktop-tablet;
-    @include mixin.responsive-property(padding, 16px, 16px, 16px, 40px);
 
     @include mixin.on-mobile {
       @include mixin.flex(flex, flex-end, space-between, column-reverse);
       height: max-content;
+      padding: 16px;
+    }
+
+    @include mixin.on-tablet {
+      @include mixin.flex(flex, center, space-between, row-reverse);
+      height: max-content;
+      padding: 20px;
     }
 
     @include mixin.on-desktop {
       @include mixin.flex(flex, center, space-between, row);
       height: 192px;
+      padding: 40px;
     }
   }
 
@@ -83,13 +96,25 @@
 
     @include mixin.flex(flex, false, space-between, column);
 
-    @include mixin.responsive-property(flex, 1, 1, 1, 0.8);
-    @include mixin.responsive-property(padding, 16px, 16px, 16px, 40px 50px);
-    @include mixin.responsive-property(border-radius, 15px 15px 0 0, 20px 20px 0 0, 20px 20px 0 0, 20px 0 0 20px);
+    @include mixin.responsive-property(flex, 1, 1.2, 1, 0.8);
+    @include mixin.responsive-property(padding, 20px, 20px, 20px, 40px 50px);
+    @include mixin.responsive-property(border-radius, 15px 15px 0 0, 20px 20px 0 0, 20px 0 0 20px, 20px 0 0 20px);
   }
 
   &__content {
     flex-grow: 1;
+
+    @include mixin.on-mobile {
+      margin-top: 10px;
+    }
+
+    @include mixin.on-tablet {
+      margin-top: 10px;
+    }
+
+    @include mixin.on-tablet-2 {
+      margin-top: 70px;
+    }
 
     @include mixin.on-desktop {
       margin-top: 80px;
@@ -99,15 +124,22 @@
 
   &__title {
     text-align: left;
-    @include mixin.h2-desktop-tablet;
-
     @include mixin.responsive-property(margin-bottom, 10px, 10px, 10px, 20px);
 
     @include mixin.on-mobile {
       @include mixin.h2-mobile;
     }
 
+    @include mixin.on-tablet {
+      @include mixin.h2-desktop-tablet;
+    }
+
+    @include mixin.on-tablet-2 {
+      @include mixin.h2-desktop-tablet;
+    }
+
     @include mixin.on-desktop {
+      @include mixin.h2-desktop-tablet;
     }
   }
 
@@ -118,8 +150,24 @@
   }
 
   &__question-right {
-    @include mixin.h3-desktop-tablet;
-    max-width: 450px;
+    @include mixin.on-mobile {
+      @include mixin.h3-desktop-tablet;
+    }
+
+    @include mixin.on-tablet {
+      @include mixin.h3-desktop-tablet;
+      max-width: 450px;
+    }
+
+    @include mixin.on-tablet-2 {
+      max-width: 250px;
+      @include mixin.h3-desktop-tablet;
+    }
+
+    @include mixin.on-desktop {
+      @include mixin.h3-desktop-tablet;
+      max-width: 450px;
+    }
   }
 
   &__input {

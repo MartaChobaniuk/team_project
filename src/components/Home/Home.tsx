@@ -3,6 +3,8 @@ import cn from 'classnames';
 import { motion } from 'framer-motion';
 import styles from './Home.module.scss';
 import arrow from '../../images/icons/arrow_r.svg';
+import { NavLink } from 'react-router-dom';
+import { Path } from '../../utils/constants';
 
 type Props = {
   handleHomeAI: () => void;
@@ -41,9 +43,9 @@ export const Home: React.FC<Props> = ({ handleHomeAI }) => {
               <button className={styles.home__button}>
                 <span>Volunteer</span>
               </button>
-              <button className={styles.home__button}>
+              <NavLink to={Path.Response} className={styles.home__button}>
                 <span>Explore All</span>
-              </button>
+              </NavLink>
             </div>
           </div>
         </div>
