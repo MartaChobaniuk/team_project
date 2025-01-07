@@ -37,13 +37,13 @@ export const Home: React.FC<Props> = ({ handleHomeAI }) => {
               How Do You Want To Contribute Today?
             </h3>
             <div className={styles.home__buttons}>
-              <button className={styles.home__button}>
+              <NavLink to={Path.Donate} className={styles.home__button}>
                 <span>Donate</span>
-              </button>
-              <button className={styles.home__button}>
+              </NavLink>
+              <NavLink to={Path.Volunteering} className={styles.home__button}>
                 <span>Volunteer</span>
-              </button>
-              <NavLink to={Path.Response} className={styles.home__button}>
+              </NavLink>
+              <NavLink to={Path.Explore} className={styles.home__button}>
                 <span>Explore All</span>
               </NavLink>
             </div>
@@ -109,15 +109,24 @@ export const Home: React.FC<Props> = ({ handleHomeAI }) => {
               How Do You Want To Contribute Today?
             </h3>
             <div className={styles['home__mobile-buttons']}>
-              <button className={styles['home__mobile-button']}>
+              <NavLink
+                to={Path.Donate}
+                className={styles['home__mobile-button']}
+              >
                 <span>Donate</span>
-              </button>
-              <button className={styles['home__mobile-button']}>
+              </NavLink>
+              <NavLink
+                to={Path.Volunteering}
+                className={styles['home__mobile-button']}
+              >
                 <span>Volunteer</span>
-              </button>
-              <button className={styles['home__mobile-button']}>
+              </NavLink>
+              <NavLink
+                to={Path.Explore}
+                className={styles['home__mobile-button']}
+              >
                 <span>Explore All</span>
-              </button>
+              </NavLink>
             </div>
           </div>
           <div

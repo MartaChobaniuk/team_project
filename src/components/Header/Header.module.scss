@@ -107,20 +107,14 @@
       border-radius: 60px;
       padding: 8px;
 
-      &--sign {
-        background-color: var.$black;
-      }
-
-      &--login {
-        background-color: var.$black;
-      }
-
-      &--homeAi {
-        background-color: var.$black;
-      }
-
-      &--about {
-        background-color: var.$black;
+      &--sign,
+      &--login,
+      &--homeAi,
+      &--home,
+      &--about,
+      &--contact,
+      &--faq {
+        background-color: var.$white;
       }
     }
 
@@ -130,6 +124,20 @@
       height: 38px;
       border-radius: 60px;
       padding: 8px;
+
+      &--sign,
+      &--login,
+      &--homeAi,
+      &--home,
+      &--contact,
+      &--faq {
+        background-color: var.$white;
+      }
+
+      &--about {
+        border: 0.5px solid var.$black;
+        background-color: var.$white;
+      }
     }
 
     @include mixin.on-tablet-2 {
@@ -138,6 +146,16 @@
       height: 38px;
       border-radius: 60px;
       padding: 8px;
+
+      &--sign,
+      &--login,
+      &--homeAi,
+      &--home,
+      &--about,
+      &--contact,
+      &--faq {
+        background-color: var.$white;
+      }
     }
 
     @include mixin.on-desktop {
@@ -185,23 +203,13 @@
       padding: 8px;
       border: solid 0.5px var.$white;
 
-      &--sign {
-        background-color: var.$black;
-        color: var.$white;
-      }
-
-      &--login {
-        background-color: var.$black;
-        color: var.$white;
-      }
-
-      &--homeAi {
-        background-color: var.$black;
-        color: var.$white;
-      }
-
-      &--about {
-        background-color: var.$black;
+      &--sign,
+      &--login,
+      &--homeAi,
+      &--about,
+      &--home,
+      &--contact {
+        background-color: transparent;
         color: var.$white;
       }
     }

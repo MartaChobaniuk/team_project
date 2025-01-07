@@ -170,7 +170,9 @@
       }
     }
 
-    &--login {
+    &--login,
+    &--contact,
+    &--explore {
       @include mixin.on-desktop {
         background-color: var.$white;
         color: var.$black;
@@ -260,7 +262,9 @@
     &--response,
     &--sign,
     &--login,
-    &--faq {
+    &--faq,
+    &--contact,
+    &--explore {
       @include mixin.on-desktop {
         background-color: transparent;
         color: var.$white;

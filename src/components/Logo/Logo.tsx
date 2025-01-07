@@ -16,6 +16,7 @@ export const Logo: React.FC<Props> = ({ className }) => {
   const isSignUp = pathname === Path.SignUp;
   const isLogIn = pathname === Path.LogIn;
   const isAbout = pathname === Path.About;
+  const isContact = pathname === Path.Contact;
 
   return (
     <Link to={Path.Home} className={cn(styles.logo, className)}>
@@ -27,6 +28,7 @@ export const Logo: React.FC<Props> = ({ className }) => {
           [styles['logo__text--about']]: isAbout,
           [styles['logo__text--sign']]: isSignUp,
           [styles['logo__text--login']]: isLogIn,
+          [styles['logo__text--contact']]: isContact,
         })}
       >
         THE i change

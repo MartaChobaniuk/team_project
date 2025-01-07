@@ -1,5 +1,9 @@
 export enum Path {
   Home = '/',
+  Explore = '/explore',
+  Volunteering = '/volunteering',
+  Wishes = '/wishes',
+  Donate = '/donate',
   HomeAI = '/ai',
   Response = '/response',
   Stories = '/stories',

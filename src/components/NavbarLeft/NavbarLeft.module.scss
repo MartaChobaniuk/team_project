@@ -225,6 +225,52 @@
         color: var.$black;
       }
     }
+
+    &--contact {
+      @include mixin.on-desktop {
+        background-color: transparent;
+        border: 0.5px solid var.$black;
+        color: var.$black;
+
+        &--active {
+          background: var.$yellow-green;
+          color: var.$black;
+        }
+
+        &:hover {
+          background: var.$black;
+          color: var.$white;
+        }
+      }
+    }
+
+    &--explore {
+      @include mixin.on-desktop {
+        background-color: transparent;
+        border: 0.5px solid var.$white;
+        color: var.$white;
+
+        &--active {
+          background: var.$orange-red;
+          transition: all 0.5s ease;
+
+          &:hover {
+            background: var.$white;
+            color: var.$black;
+          }
+        }
+
+        &:hover {
+          background-color: var.$white;
+          color: var.$black;
+        }
+
+        &:active {
+          background-color: var.$light-gray;
+          color: var.$black;
+        }
+      }
+    }
   }
 
   &__name {

@@ -1,0 +1,30 @@
+@use "../../utils/mixins" as mixin;
+@use "../../utils/variables" as var;
+
+.filters {
+  padding: 40px;
+  margin-top: 60px;
+  color: var.$white;
+
+  &__line {
+    width: 100%;
+    height: 1px;
+    background-color: var.$white;
+    margin-bottom: 15px;
+  }
+
+  &__name {
+    @include mixin.h4-desktop-tablet;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+
+  &__toggle-button {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+}

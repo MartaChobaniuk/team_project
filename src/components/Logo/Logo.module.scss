@@ -27,6 +27,14 @@
         color: var.$white;
       }
 
+      @include mixin.on-tablet {
+        color: var.$white;
+      }
+
+      @include mixin.on-tablet-2 {
+        color: var.$black;
+      }
+
       @include mixin.on-desktop {
         color: var.$white;
       }
@@ -34,6 +42,14 @@
 
     &--homeAi {
       @include mixin.on-mobile {
+        color: var.$white;
+      }
+
+      @include mixin.on-tablet {
+        color: var.$white;
+      }
+
+      @include mixin.on-tablet-2 {
         color: var.$black;
       }
 
@@ -57,6 +73,14 @@
         color: var.$black;
       }
 
+      @include mixin.on-tablet {
+        color: var.$black;
+      }
+
+      @include mixin.on-tablet-2 {
+        color: var.$black;
+      }
+
       @include mixin.on-desktop {
         color: var.$black;
       }
@@ -64,6 +88,14 @@
 
     &--login {
       @include mixin.on-mobile {
+        color: var.$black;
+      }
+
+      @include mixin.on-tablet {
+        color: var.$black;
+      }
+
+      @include mixin.on-tablet-2 {
         color: var.$black;
       }
 
@@ -87,6 +119,24 @@
 
       @include mixin.on-desktop {
         color: var.$white;
+      }
+    }
+
+    &--contact {
+      @include mixin.on-mobile {
+        color: var.$white;
+      }
+
+      @include mixin.on-tablet {
+        color: var.$white;
+      }
+
+      @include mixin.on-tablet-2 {
+        color: var.$black;
+      }
+
+      @include mixin.on-desktop {
+        color: var.$black;
       }
     }
   }

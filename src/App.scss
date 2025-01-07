@@ -25,6 +25,10 @@
     z-index: 20;
     background-color: transparent;
 
+    &--explore {
+      background-color: var.$black;
+    }
+
     @include mixin.on-mobile {
       padding: 16px;
     }

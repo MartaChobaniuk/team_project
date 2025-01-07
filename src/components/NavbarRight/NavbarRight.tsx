@@ -19,6 +19,8 @@ export const NavbarRight: React.FC<Props> = ({ className }) => {
   const isLogIn = pathname === Path.LogIn;
   const isAbout = pathname === Path.About;
   const isFaq = pathname === Path.Faq;
+  const isContact = pathname === Path.Contact;
+  const isExplore = pathname === Path.Explore;
 
   const getActiveLink = ({ isActive }: { isActive: boolean }) =>
     cn(
@@ -33,6 +35,8 @@ export const NavbarRight: React.FC<Props> = ({ className }) => {
       { [styles['navbar__item--sign--active']]: isSignUp && isActive },
       { [styles['navbar__item--login']]: isLogIn },
       { [styles['navbar__item--login--active']]: isLogIn && isActive },
+      { [styles['navbar__item--contact']]: isContact },
+      { [styles['navbar__item--explore']]: isExplore },
       className,
     );
 
@@ -50,6 +54,8 @@ export const NavbarRight: React.FC<Props> = ({ className }) => {
             [styles['navbar__lang--sign']]: isSignUp,
             [styles['navbar__lang--login']]: isLogIn,
             [styles['navbar__lang--faq']]: isFaq,
+            [styles['navbar__lang--contact']]: isContact,
+            [styles['navbar__lang--explore']]: isExplore,
           })}
         >
           <span className={styles['navbar__lang-name']}>ENG</span>
@@ -61,7 +67,12 @@ export const NavbarRight: React.FC<Props> = ({ className }) => {
               alt="user"
               className={cn(styles.navbar__img, {
                 [styles['navbar__img--dark']]:
-                  isHomeAI || isResponse || isSignUp || isLogIn,
+                  isHomeAI ||
+                  isResponse ||
+                  isSignUp ||
+                  isLogIn ||
+                  isContact ||
+                  isExplore,
               })}
             />
             <span className={styles.navbar__name}>Log In</span>
@@ -73,7 +84,12 @@ export const NavbarRight: React.FC<Props> = ({ className }) => {
               alt="user"
               className={cn(styles.navbar__img, {
                 [styles['navbar__img--dark']]:
-                  isHomeAI || isResponse || isSignUp || isLogIn,
+                  isHomeAI ||
+                  isResponse ||
+                  isSignUp ||
+                  isLogIn ||
+                  isContact ||
+                  isExplore,
               })}
             />
             <span className={styles.navbar__name}>Sign Up</span>

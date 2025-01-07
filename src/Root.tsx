@@ -12,12 +12,15 @@ import { ResponsePage } from './pages/ResponsePage';
 import { MenuPage } from './pages/MenuPage';
 import { LogInPage } from './pages/LogInPage';
 import { FaqPage } from './pages/FaqPage';
+import { ExploreAllPage } from './pages/ExploreAllPage';
 
 export const Root = () => (
   <Router>
     <Routes>
       <Route path={Path.Home} element={<App />}>
         <Route index element={<HomePage />} />
+        <Route path={Path.Explore} element={<ExploreAllPage />} />
+
         <Route path={Path.HomeAI} element={<HomeAIPage />} />
         <Route path={Path.Response} element={<ResponsePage />} />
 
