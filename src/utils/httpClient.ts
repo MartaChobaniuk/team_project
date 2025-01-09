@@ -2,11 +2,6 @@ export const BASE_URL = `https://dewvdtfd5m.execute-api.eu-north-1.amazonaws.com
 
 const handleResponse = async (response: Response) => {
   if (!response.ok) {
-    throw {
-      name: 'HTTPError',
-      message: `${response.status} ${response.statusText}`,
-      status: response.status,
-    };
   }
 
   return await response.json();
