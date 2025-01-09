@@ -80,13 +80,30 @@ export const filteredEv = (
     });
   }
 
-  if (filters.duration) {
-    const [minDuration, maxDuration] = filters.duration.split('-').map(Number);
-
+  if (filters.duration?.length) {
     filteredEvents = filteredEvents.filter(event => {
       const eventDuration = event.duration;
 
-      return eventDuration >= minDuration && eventDuration <= maxDuration;
+      switch (filters.duration as string) {
+        case 'Up to 1 hour':
+          return eventDuration <= 1;
+        case '1-6 hours':
+          return eventDuration > 1 && eventDuration <= 6;
+        case 'Up to a day':
+          return eventDuration > 7 && eventDuration <= 24;
+        case 'Up to a week':
+          return eventDuration > 25 && eventDuration <= 144;
+        case 'Up to a month':
+          return eventDuration > 145 && eventDuration <= 744;
+        case '1 - 3 months':
+          return eventDuration > 745 && eventDuration <= 2232;
+        case '3 - 6 months':
+          return eventDuration > 2233 && eventDuration <= 4464;
+        case 'Up to a year':
+          return eventDuration > 4465 && eventDuration <= 8950;
+        default:
+          return;
+      }
     });
   }
 

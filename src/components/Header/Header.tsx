@@ -20,6 +20,7 @@ export const Header = () => {
   const isAbout = pathname === Path.About;
   const isContact = pathname === Path.Contact;
   const isFaq = pathname === Path.Faq;
+  const isExplore = pathname === Path.Explore;
 
   useEffect(() => {
     document.body.style.overflow = openMenu ? 'hidden' : '';
@@ -67,6 +68,7 @@ export const Header = () => {
             [styles['header__lang--home']]: isHome,
             [styles['header__lang--about']]: isAbout,
             [styles['header__lang--contact']]: isContact,
+            [styles['header__lang--explore']]: isExplore,
           })}
         >
           <span
@@ -87,6 +89,7 @@ export const Header = () => {
             [styles['header__button--about']]: isAbout,
             [styles['header__button--faq']]: isFaq,
             [styles['header__button--contact']]: isContact,
+            [styles['header__button--explore']]: isExplore,
           })}
         >
           <img

@@ -113,7 +113,8 @@
       &--home,
       &--about,
       &--contact,
-      &--faq {
+      &--faq,
+      &--explore {
         background-color: var.$white;
       }
     }
@@ -130,7 +131,8 @@
       &--homeAi,
       &--home,
       &--contact,
-      &--faq {
+      &--faq,
+      &--explore {
         background-color: var.$white;
       }
 
@@ -153,7 +155,8 @@
       &--home,
       &--about,
       &--contact,
-      &--faq {
+      &--faq,
+      &--explore {
         background-color: var.$white;
       }
     }
@@ -208,7 +211,8 @@
       &--homeAi,
       &--about,
       &--home,
-      &--contact {
+      &--contact,
+      &--explore {
         background-color: transparent;
         color: var.$white;
       }

@@ -27,6 +27,7 @@
 
     &--explore {
       background-color: var.$black;
+      z-index: 30;
     }
 
     @include mixin.on-mobile {

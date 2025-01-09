@@ -14,7 +14,7 @@ import { filteredEv } from '../../helpers/getSortedEvents';
 
 export const ExploreAll = () => {
   const { pathname } = useLocation();
-  const { events } = useContext(EventsContext); // отримуємо події з контексту
+  const { events } = useContext(EventsContext);
   const [isVisible, setIsVisible] = useState(false);
   const [query, setQuery] = useState('');
   const [isFiltersOpen, setIsFiltersOpen] = useState<boolean>(false);
@@ -55,9 +55,6 @@ export const ExploreAll = () => {
       setFilteredEvent(filtered);
     }
   }, [events, filters, query]);
-
-  // eslint-disable-next-line no-console
-  console.log('filteredEvent:', filteredEvent);
 
   const openFilters = () => {
     setIsFiltersOpen(true);
@@ -131,6 +128,7 @@ export const ExploreAll = () => {
         <div
           className={cn(styles.explore__buttons, {
             [styles['explore__buttons--visible']]: isVisible,
+            [styles['explore__buttons--is-filters']]: isFiltersOpen,
           })}
         >
           <Link
@@ -159,7 +157,11 @@ export const ExploreAll = () => {
             <span>Explore All</span>
           </Link>
         </div>
-        <div className={styles['explore__collaps-line']}></div>
+        <div
+          className={cn(styles['explore__collaps-line'], {
+            [styles['explore__collaps-line--is-filters']]: isFiltersOpen,
+          })}
+        ></div>
       </div>
       <div
         className={cn(styles['explore__content-bottom'], {
@@ -217,7 +219,10 @@ export const ExploreAll = () => {
             [styles['explore__filters-panel--open']]: isFiltersOpen,
           })}
         >
-          <Filters onFilterChange={handleFilterChange} />
+          <Filters
+            onFilterChange={handleFilterChange}
+            setIsFiltersOpen={setIsFiltersOpen}
+          />
         </div>
         <div
           className={cn(styles['explore__events-block'], {
@@ -225,33 +230,39 @@ export const ExploreAll = () => {
             [styles['explore__events-block--is-filters']]: isFiltersOpen,
           })}
         >
-          {filteredEvent.map(event => (
-            <div key={event.id} className={styles.explore__event}>
-              <div className={styles['explore__event-container-img']}>
-                <img
-                  src={image}
-                  alt="Event"
-                  className={styles['explore__event-img']}
+          {filteredEvent.length > 0 ? (
+            filteredEvent.map(event => (
+              <div key={event.id} className={styles.explore__event}>
+                <div className={styles['explore__event-container-img']}>
+                  <img
+                    src={image}
+                    alt="Event"
+                    className={styles['explore__event-img']}
+                  />
+                  <span className={styles['explore__event-help-type']}>
+                    {event.assistanceType}
+                  </span>
+                </div>
+                <h4 className={styles['explore__event-title']}>
+                  {event.title}
+                </h4>
+                <ProgressBar
+                  goal={event.goal}
+                  currentProgress={event.currentProgress}
+                  opportunityType={event.opportunityType}
                 />
-                <span className={styles['explore__event-help-type']}>
-                  {event.assistanceType}
-                </span>
+                <div className={styles['explore__event-types']}>
+                  <p>{event.opportunityType}</p> / <p>{event.assistanceType}</p>
+                </div>
+                <div className={styles['explore__event-details']}>
+                  <p>{event.location}</p> /
+                  <p>{new Date(event.date).toLocaleString('uk-UA')}</p>
+                </div>
               </div>
-              <h4 className={styles['explore__event-title']}>{event.title}</h4>
-              <ProgressBar
-                goal={event.goal}
-                currentProgress={event.currentProgress}
-                opportunityType={event.opportunityType}
-              />
-              <div className={styles['explore__event-types']}>
-                <p>{event.opportunityType}</p> / <p>{event.assistanceType}</p>
-              </div>
-              <div className={styles['explore__event-details']}>
-                <p>{event.location}</p> /
-                <p>{new Date(event.date).toLocaleString('uk-UA')}</p>
-              </div>
-            </div>
-          ))}
+            ))
+          ) : (
+            <div className={styles.explore__error}>No Matched Events</div>
+          )}
         </div>
       </div>
     </section>
