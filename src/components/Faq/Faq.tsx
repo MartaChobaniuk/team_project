@@ -11,11 +11,23 @@ export const Faq = () => {
   const { pathname } = useLocation();
   const [isVisible, setIsVisible] = useState(false);
   const [openQuestionId, setOpenQuestionId] = useState<number | null>(null);
-  const [isCollapsed, setIsCollapsed] = useState(false);
+  const [isScrolled, setIsScrolled] = useState<boolean>(false);
+  const [isFixed, setIsFixed] = useState<boolean>(false);
 
-  const handleClick = () => {
-    setIsCollapsed(prev => !prev);
-  };
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollY = window.scrollY;
+
+      setIsScrolled(scrollY > 50);
+      setIsFixed(scrollY > 170);
+    };
+
+    window.addEventListener('scroll', handleScroll);
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
 
   const toggleQuestion = (id: number) => {
     setOpenQuestionId(prevId => (prevId === id ? null : id));
@@ -30,37 +42,45 @@ export const Faq = () => {
   }, []);
 
   return (
-    <div className={styles.faq}>
+    <div
+      className={cn(styles.faq, {
+        [styles['faq--visible']]: isVisible,
+      })}
+    >
       <div
         className={cn(styles['faq__content-top'], {
           [styles['faq__content-top--visible']]: isVisible,
-          [styles['faq__content-top--collapsed']]: isCollapsed,
+          [styles['faq__content-top--scrolled']]: isScrolled,
         })}
       >
         <h2
           className={cn(styles.faq__title, {
-            [styles['faq__title--collapsed']]: isCollapsed,
+            [styles['faq__title--visible']]: isVisible,
           })}
         >
           Frequently Asked Questions
         </h2>
-        <p
-          className={cn(styles.faq__subtitle, {
-            [styles['faq__subtitle--collapsed']]: isCollapsed,
-          })}
-        >
+        <p className={styles.faq__subtitle}>
           Discover how The Change works and find answers to your questions.
           Whether you’re looking to volunteer, donate, post a wish, or
           collaborate with us, this section covers everything you need to know.
           Learn how we ensure trustworthiness, how to get involved, and how to
           make the most of our platform to support Ukraine and her people.
         </p>
+        <div className={styles['faq__collaps-line']}></div>
         <div
-          className={styles['faq__collaps-line']}
-          onClick={handleClick}
-        ></div>
-        <div className={styles.faq__footer}>
-          <h3 className={styles.faq__question}>What Would You Like To Know?</h3>
+          className={cn(styles.faq__footer, {
+            [styles['faq__footer--scrolled']]: isScrolled,
+            [styles['faq__footer--fixed']]: isFixed,
+          })}
+        >
+          <h3
+            className={cn(styles.faq__question, {
+              [styles['faq__question--scrolled']]: isScrolled,
+            })}
+          >
+            What Would You Like To Know?
+          </h3>
           <div className={styles.faq__buttons}>
             <Link
               to={Path.About}
@@ -81,11 +101,7 @@ export const Faq = () => {
           </div>
         </div>
       </div>
-      <div
-        className={cn(styles['faq__content-bottom'], {
-          [styles['faq__content-bottom--collapsed']]: isCollapsed,
-        })}
-      >
+      <div className={styles['faq__content-bottom']}>
         {questions.map(({ id, answer, question }) => (
           <React.Fragment key={id}>
             <div

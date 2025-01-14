@@ -8,6 +8,8 @@ import { Path } from './utils/constants';
 export const App: React.FC = () => {
   const { pathname } = useLocation();
   const isExplore = pathname === Path.Explore;
+  const isAbout = pathname === Path.About;
+  const isFaq = pathname === Path.Faq;
 
   return (
     <div className="app">
@@ -15,6 +17,8 @@ export const App: React.FC = () => {
         <header
           className={cn('app__header', {
             'app__header--explore': isExplore,
+            'app__header--about': isAbout,
+            'app__header--faq': isFaq,
           })}
         >
           <Header />

@@ -13,13 +13,18 @@ import { MenuPage } from './pages/MenuPage';
 import { LogInPage } from './pages/LogInPage';
 import { FaqPage } from './pages/FaqPage';
 import { ExploreAllPage } from './pages/ExploreAllPage';
+import { EventDetailsPage } from './pages/EventDetailsPage';
 
 export const Root = () => (
   <Router>
     <Routes>
       <Route path={Path.Home} element={<App />}>
         <Route index element={<HomePage />} />
-        <Route path={Path.Explore} element={<ExploreAllPage />} />
+
+        <Route path={Path.Explore}>
+          <Route index element={<ExploreAllPage />} />
+          <Route path=":eventId" element={<EventDetailsPage />} />
+        </Route>
 
         <Route path={Path.HomeAI} element={<HomeAIPage />} />
         <Route path={Path.Response} element={<ResponsePage />} />

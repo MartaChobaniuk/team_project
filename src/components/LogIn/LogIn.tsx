@@ -5,12 +5,46 @@ import { Path } from '../../utils/constants';
 import eye from '../../images/icons/eye.svg';
 import apple from '../../images/icons/apple.svg';
 import google from '../../images/icons/google.svg';
+import cognito from '../cognito';
 
 export const LogIn = () => {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
+  const [successMessage, setSuccessMessage] = useState('');
   const [isFormVisible, setIsFormVisible] = useState(false);
 
   const showForm = () => {
     setIsFormVisible(true);
+  };
+
+  const handleLogin = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    const params = {
+      AuthFlow: 'USER_PASSWORD_AUTH',
+      ClientId: '7f4n0jvd5vp0g8ji7p6ppe4gke',
+      AuthParameters: {
+        USERNAME: email,
+        PASSWORD: password,
+      },
+    };
+
+    try {
+      const result = await cognito.initiateAuth(params).promise();
+      const idToken = result.AuthenticationResult?.IdToken;
+
+      if (idToken) {
+        setSuccessMessage('Login successful!');
+        // Handle the user session and token storage here (e.g., save token in localStorage)
+      } else {
+        setErrorMessage('Authentication failed.');
+      }
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      console.error(error);
+      setErrorMessage('An error occurred during login.');
+    }
   };
 
   return (
@@ -82,11 +116,13 @@ export const LogIn = () => {
             </button>
           )}
           <div className={styles['log-in__footer']}>
-            <form className={styles['log-in__form']}>
+            <form className={styles['log-in__form']} onSubmit={handleLogin}>
               <input
                 type="email"
                 className={styles['log-in__input']}
                 placeholder="Email address"
+                value={email}
+                onChange={e => setEmail(e.target.value)}
               />
               <div className={styles['log-in__line']}></div>
               <div className={styles['log-in__input-shell']}>
@@ -94,6 +130,9 @@ export const LogIn = () => {
                   type="password"
                   className={styles['log-in__input']}
                   placeholder="Create password"
+                  value={password}
+                  onChange={e => setPassword(e.target.value)}
+                  autoComplete="current-password"
                 />
                 <img src={eye} alt="eye" />
               </div>
@@ -112,13 +151,19 @@ export const LogIn = () => {
                   <span>Log In</span>
                 </button>
               </div>
+              {errorMessage && (
+                <p className={styles['log-in__error']}>{errorMessage}</p>
+              )}
+              {successMessage && (
+                <p className={styles['log-in__success']}>{successMessage}</p>
+              )}
             </form>
             <div className={styles['log-in__accounts-shell']}>
               <p className={styles['log-in__text']}>
                 Not a fan of an old-school method? No problem, we’ve got you:
               </p>
               <div className={styles['log-in__acc-button-shell']}>
-                <button className={styles['log-in__button']} type="submit">
+                <button className={styles['log-in__button']}>
                   <img
                     src={google}
                     alt="google"

@@ -91,6 +91,7 @@ export const Filters: React.FC<FiltersProps> = ({
     setCalendarOpen(false);
     setApplyActive(true);
     setCancelActive(false);
+    setIsFiltersOpen(false);
   };
 
   const cancelFilters = () => {
@@ -110,7 +111,7 @@ export const Filters: React.FC<FiltersProps> = ({
 
   return (
     <div className={styles.filters}>
-      <div>
+      <div className={styles.filters__content}>
         {filterOptions.map(filter => (
           <div key={filter.id} className={styles.filters__group}>
             <p className={styles.filters__name}>{filter.nameOfFilter}</p>
@@ -118,7 +119,7 @@ export const Filters: React.FC<FiltersProps> = ({
               className={styles['filters__toggle-button']}
               onClick={() => toggleDropdown(filter.id)}
             >
-              {selectedOptions[filter.id] || 'Select an option'}
+              <p>{selectedOptions[filter.id] || 'Select an option'}</p>
               <img
                 className={styles.filters__img}
                 src={dropdownState[filter.id] ? arrow_up : arrow_down}
@@ -201,10 +202,10 @@ export const Filters: React.FC<FiltersProps> = ({
           })}
           onClick={cancelFilters}
         >
-          <span>Cancel</span>
+          <span>Clear</span>
         </button>
         <button className={styles.filters__button} onClick={handleHideFilters}>
-          <span>Hide Filters</span>
+          <span>Cancel</span>
         </button>
       </div>
     </div>

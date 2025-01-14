@@ -1,0 +1,61 @@
+@use "../../utils/mixins" as mixin;
+@use "../../utils/variables" as var;
+
+.event {
+  width: 350px;
+  height: max-content;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+
+  @include mixin.on-mobile {
+    width: 100%;
+  }
+
+  &__container-img {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  &__help-type {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    @include mixin.small-text-desktop-tablet;
+    color: var.$dark-gray;
+    padding: 4px 8px;
+    border-radius: 4px;
+    z-index: 10;
+
+    &--yellow {
+      background: var.$yellow-green;
+    }
+
+    &--blue {
+      background: var.$blue-purple;
+    }
+  }
+
+  &__img {
+    width: 100%;
+    border-radius: 15px 15px 0 0;
+    object-fit: contain;
+    object-position: center;
+  }
+
+  &__title {
+    @include mixin.h4-desktop-tablet;
+    color: var.$black;
+    text-transform: uppercase;
+  }
+
+  &__types,
+  &__details {
+    display: flex;
+    flex-direction: row;
+    color: var.$dark-gray;
+    @include mixin.small-text-desktop-tablet;
+  }
+}

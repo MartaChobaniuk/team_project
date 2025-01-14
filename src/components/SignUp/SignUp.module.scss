@@ -536,4 +536,10 @@
   &__link-container {
     @include mixin.flex(flex, center, center, false);
   }
+
+  &__img-eye {
+    width: 24px;
+    height: 24px;
+    padding: 6px;
+  }
 }

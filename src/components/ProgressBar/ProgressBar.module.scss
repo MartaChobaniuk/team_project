@@ -11,9 +11,16 @@
 
   &__filled {
     height: 100%;
-    background: var.$yellow-green;
     transition: width 0.3s ease-in-out;
     margin-bottom: 5px;
+
+    &--yellow {
+      background: var.$yellow-green;
+    }
+
+    &--blue {
+      background: var.$blue-purple;
+    }
   }
 
   &__text {

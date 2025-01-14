@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import cn from 'classnames';
 import styles from './AboutUs.module.scss';
@@ -6,30 +6,48 @@ import { Path } from '../../utils/constants';
 
 export const AboutUs = () => {
   const { pathname } = useLocation();
-  const [isCollapsed, setIsCollapsed] = useState(false);
+  const [isScrolled, setIsScrolled] = useState<boolean>(false);
+  const [isFixed, setIsFixed] = useState<boolean>(false);
+  const contentRef = useRef<HTMLDivElement | null>(null);
 
-  const handleClick = () => {
-    setIsCollapsed(prev => !prev);
-  };
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollY = window.scrollY;
+
+      setIsScrolled(scrollY > 50);
+      setIsFixed(scrollY > 170);
+    };
+
+    const handleFixed = () => {
+      if (contentRef.current) {
+        const isAtBottom =
+          contentRef.current.scrollHeight - contentRef.current.scrollTop <=
+          contentRef.current.clientHeight + 1;
+
+        setIsScrolled(contentRef.current.scrollTop > 0);
+        setIsFixed(isAtBottom);
+      }
+    };
+
+    contentRef.current?.addEventListener('scroll', handleFixed);
+    window.addEventListener('scroll', handleScroll);
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      contentRef.current?.removeEventListener('scroll', handleFixed);
+    };
+  }, []);
 
   return (
     <div className={styles.about}>
       <section className={styles.about__nav}>
         <div
           className={cn(styles['about__left-side'], {
-            [styles['about__left-side--collapsed']]: isCollapsed,
+            [styles['about__left-side--scrolled']]: isScrolled,
           })}
         >
-          <div
-            className={cn(styles['about__content-left'], {
-              [styles['about__content-left--collapsed']]: isCollapsed,
-            })}
-          >
-            <h1
-              className={cn(styles.about__title, {
-                [styles['about__title--collapsed']]: isCollapsed,
-              })}
-            >
+          <div ref={contentRef} className={styles['about__content-left']}>
+            <h1 className={styles.about__title}>
               At The Change, We Believe In Action Over Words.
             </h1>
             <p className={styles.about__text}>
@@ -52,10 +70,7 @@ export const AboutUs = () => {
               worldwide to shape a better future - one act of generosity at a
               time.
             </p>
-            <div
-              className={styles['about__collaps-line']}
-              onClick={handleClick}
-            ></div>
+            <div className={styles['about__collaps-line']}></div>
           </div>
           <div className={styles['about__footer-left']}>
             <h3 className={styles['about__question-left']}>
@@ -83,7 +98,7 @@ export const AboutUs = () => {
         </div>
         <div
           className={cn(styles['about__right-side'], {
-            [styles['about__right-side--collapsed']]: isCollapsed,
+            [styles['about__right-side--scrolled']]: isScrolled,
           })}
         >
           <div className={styles['about__right-content']}>
@@ -92,7 +107,8 @@ export const AboutUs = () => {
             </h3>
             <div
               className={cn(styles.about__buttons, {
-                [styles['about__buttons--collapsed']]: isCollapsed,
+                [styles['about__buttons--scrolled']]: isScrolled,
+                [styles['about__buttons--fixed']]: isFixed,
               })}
             >
               <Link

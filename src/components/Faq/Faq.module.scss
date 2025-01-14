@@ -4,95 +4,11 @@
 .faq {
   width: 100%;
   height: 100vh;
-  overflow: hidden;
   z-index: 11;
+  overflow: hidden;
 
-  &__content-top {
-    @include mixin.on-mobile {
-      position: relative;
-      width: 100%;
-      height: 100vh;
-      padding: 20px;
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-end;
-      background-color: var.$black;
-      color: var.$white;
-      margin-top: 0;
-      border-radius: 0 0 20px 20px;
-      animation: slideUpMobile 0.5s ease-in-out 4s forwards;
-
-      &--visible {
-        padding: 70px 20px 20px;
-      }
-
-      &--collapsed {
-        padding: 40px 20px 20px;
-        margin-top: -250px;
-      }
-    }
-
-    @include mixin.on-tablet {
-      position: relative;
-      width: 100%;
-      height: 100vh;
-      padding: 20px;
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-end;
-      background-color: var.$black;
-      color: var.$white;
-      margin-top: 0;
-      border-radius: 0 0 20px 20px;
-      animation: slideUp 0.5s ease-in-out 4s forwards;
-
-      &--visible {
-        padding: 70px 20px 20px;
-      }
-    }
-
-    @include mixin.on-tablet-2 {
-      position: relative;
-      width: 100%;
-      height: 100vh;
-      padding: 20px;
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-end;
-      background-color: var.$black;
-      color: var.$white;
-      margin-top: 0;
-      border-radius: 0 0 20px 20px;
-      animation: slideUpTablet 0.5s ease-in-out 4s forwards;
-
-      &--visible {
-        padding: 70px 20px 20px;
-      }
-
-      &--collapsed {
-        padding: 40px 20px 20px;
-        margin-top: -50px;
-        height: 35vh;
-      }
-    }
-
-    @include mixin.on-desktop {
-      width: 100%;
-      height: 100vh;
-      padding: 60px 40px;
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-end;
-      background-color: var.$black;
-      color: var.$white;
-      margin-top: 0;
-      border-radius: 0 0 20px 20px;
-      animation: slideUp 0.5s ease-in-out 4s forwards;
-
-      &--visible {
-        padding: 70px 30px 20px;
-      }
-    }
+  &--visible {
+    overflow: visible;
   }
 
   @keyframes slideUp {
@@ -109,7 +25,7 @@
       height: 100vh;
     }
     100% {
-      height: 55vh;
+      height: 65vh;
     }
   }
 
@@ -118,127 +34,178 @@
       height: 100vh;
     }
     100% {
-      height: 65vh;
+      height: 50vh;
+    }
+  }
+
+  &__content-top {
+    box-sizing: border-box;
+    position: relative;
+    background-color: var.$black;
+    color: var.$white;
+    border-radius: 0 0 20px 20px;
+    @include mixin.sizes(100%, 100vh);
+    @include mixin.flex(flex, false, flex-end, column);
+
+    @include mixin.on-mobile {
+      padding: 16px;
+      animation: slideUpMobile 0.5s ease-in-out 4s forwards;
+
+      &--visible {
+        height: 50vh;
+        margin-top: 70px;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+      }
+
+      &--scrolled {
+        height: 30vh;
+      }
+    }
+
+    @include mixin.on-tablet {
+      padding: 24px;
+      animation: slideUp 0.5s ease-in-out 4s forwards;
+
+      &--visible {
+        height: 45vh;
+        padding: 24px;
+      }
+
+      &--scrolled {
+        height: 30vh;
+      }
+    }
+
+    @include mixin.on-tablet-2 {
+      padding: 24px;
+      animation: slideUpTablet 0.5s ease-in-out 4s forwards;
+
+      &--visible {
+        height: 65vh;
+        padding: 24px;
+      }
+    }
+
+    @include mixin.on-desktop {
+      padding: 24px;
+      animation: slideUp 0.5s ease-in-out 4s forwards;
+
+      &--visible {
+        height: 45vh;
+        padding: 24px;
+      }
+    }
+  }
+
+  &__content-bottom {
+    @include mixin.flex(flex, false, false, column);
+
+    @include mixin.on-mobile {
+      padding: 16px;
+      flex-wrap: nowrap;
+      height: 70vh;
+    }
+
+    @include mixin.on-tablet {
+      padding: 30px 24px;
+      flex-wrap: nowrap;
+      height: 80vh;
+    }
+
+    @include mixin.on-tablet-2 {
+      padding: 30px 24px;
+      flex-wrap: wrap;
+      height: 70vh;
+    }
+
+    @include mixin.on-desktop {
+      padding: 24px;
+      flex-wrap: wrap;
+      height: 50vh;
     }
   }
 
   &__title {
+    @include mixin.h2-desktop-tablet;
+    margin-bottom: 10px;
+
     @include mixin.on-mobile {
       display: block;
-      @include mixin.h2-mobile;
       width: 100%;
-      margin-bottom: 10px;
       text-align: left;
 
-      &--collapsed {
+      &--visible {
         display: none;
       }
     }
 
     @include mixin.on-tablet {
-      @include mixin.h2-mobile;
       display: block;
       width: 100%;
-      margin-bottom: 10px;
       text-align: left;
     }
 
     @include mixin.on-tablet-2 {
-      @include mixin.h2-desktop-tablet;
       display: block;
       width: 100%;
-      margin-bottom: 10px;
       text-align: left;
     }
 
     @include mixin.on-desktop {
-      @include mixin.h2-desktop-tablet;
       display: block;
       width: 60%;
-      margin-bottom: 10px;
     }
   }
 
   &__subtitle {
-    @include mixin.on-mobile {
-      display: block;
-      font-size: 14px;
-      width: 100%;
-      text-align: justify;
-      margin-bottom: 15px;
+    @include mixin.body-text-desktop-tablet;
+    display: block;
+    text-align: justify;
 
-      &--collapsed {
-        display: none;
-      }
+    @include mixin.on-mobile {
+      width: 100%;
+      margin-bottom: 15px;
     }
 
     @include mixin.on-tablet {
-      display: block;
-      font-size: 14px;
       width: 100%;
-      text-align: justify;
       margin-bottom: 15px;
     }
 
     @include mixin.on-tablet-2 {
-      display: block;
-      @include mixin.body-text-desktop-tablet;
-      width: 100%;
-      text-align: justify;
+      width: 70%;
       margin-bottom: 10px;
-
-      &--collapsed {
-        display: none;
-      }
     }
 
     @include mixin.on-desktop {
-      @include mixin.body-text-desktop-tablet;
-      display: block;
       width: 60%;
-      text-align: justify;
-      margin-bottom: 16px;
+      margin-bottom: 15px;
     }
   }
 
   &__collaps-line {
+    display: block;
+    background: var.$white;
+    margin: 0 auto;
+    border-radius: 5px;
+    position: absolute;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    cursor: pointer;
+
     @include mixin.on-mobile {
-      display: block;
       @include mixin.sizes(200px, 1px);
-      background: var.$white;
-      margin: 0 auto;
-      border-radius: 5px;
-      position: absolute;
-      bottom: 10px;
-      left: 50%;
-      transform: translateX(-50%);
-      cursor: pointer;
     }
 
     @include mixin.on-tablet {
-      display: block;
       @include mixin.sizes(300px, 1px);
-      background: var.$white;
-      margin: 0 auto;
-      border-radius: 5px;
-      position: absolute;
-      bottom: 10px;
-      left: 50%;
-      transform: translateX(-50%);
-      cursor: pointer;
     }
 
     @include mixin.on-tablet-2 {
-      display: block;
       @include mixin.sizes(300px, 1px);
-      background: var.$white;
-      margin: 0 auto;
-      border-radius: 5px;
-      position: absolute;
-      bottom: 10px;
-      left: 50%;
-      transform: translateX(-50%);
-      cursor: pointer;
     }
 
     @include mixin.on-desktop {
@@ -258,13 +225,75 @@
     @include mixin.on-tablet-2 {
       display: block;
       @include mixin.h3-desktop-tablet;
-      margin-bottom: 10px;
+      margin-bottom: 15px;
+
+      &--scrolled {
+        margin-bottom: 20px;
+      }
     }
 
     @include mixin.on-desktop {
       display: block;
       @include mixin.h3-desktop-tablet;
       margin-bottom: 10px;
+    }
+  }
+
+  &__footer {
+    position: relative;
+    background-color: var.$black;
+    transition: position 0.3s ease-in;
+
+    @include mixin.on-mobile {
+      width: 100%;
+      border-radius: 0 0 20px 20px;
+
+      &--scrolled {
+        position: sticky;
+        top: 70px;
+        left: 0;
+        right: 0;
+      }
+
+      &--fixed {
+        position: fixed;
+        top: 70px;
+        left: 0;
+        right: 0;
+        padding: 20px 24px;
+      }
+    }
+
+    @include mixin.on-tablet {
+      width: 100%;
+      border-radius: 0 0 20px 20px;
+
+      &--scrolled {
+        position: sticky;
+        top: 86px;
+        left: 0;
+        right: 0;
+      }
+
+      &--fixed {
+        position: fixed;
+        top: 86px;
+        left: 0;
+        right: 0;
+        padding: 20px 24px;
+      }
+    }
+
+    @include mixin.on-tablet-2 {
+      position: relative;
+      top: auto;
+      left: auto;
+      right: auto;
+      bottom: auto;
+
+      &--fixed {
+        padding: 0;
+      }
     }
   }
 
@@ -343,59 +372,12 @@
     }
   }
 
-  &__content-bottom {
-    @include mixin.on-mobile {
-      padding: 20px;
-      display: flex;
-      flex-direction: column;
-      flex-wrap: nowrap;
-      height: 45vh;
-      overflow-y: auto;
-
-      &--collapsed {
-        height: 65vh;
-      }
-    }
-
-    @include mixin.on-tablet {
-      padding: 20px;
-      display: flex;
-      flex-direction: column;
-      flex-wrap: nowrap;
-      height: 45vh;
-      overflow-y: auto;
-    }
-
-    @include mixin.on-tablet-2 {
-      padding: 20px;
-      display: flex;
-      flex-direction: column;
-      flex-wrap: wrap;
-      height: 45vh;
-      overflow-y: scroll;
-      overflow-x: hidden;
-
-      &--collapsed {
-        height: 65vh;
-      }
-    }
-
-    @include mixin.on-desktop {
-      padding: 20px 30px;
-      display: flex;
-      flex-direction: column;
-      flex-wrap: wrap;
-      height: 50vh;
-      overflow: hidden;
-    }
-  }
-
   &__block {
+    @include mixin.flex(flex, false, false, column);
+    cursor: pointer;
+
     @include mixin.on-mobile {
       width: 100%;
-      display: flex;
-      flex-direction: column;
-      cursor: pointer;
       margin-bottom: 15px;
 
       &--open {
@@ -405,9 +387,6 @@
 
     @include mixin.on-tablet {
       width: 100%;
-      display: flex;
-      flex-direction: column;
-      cursor: pointer;
       margin-bottom: 15px;
 
       &--open {
@@ -417,9 +396,6 @@
 
     @include mixin.on-tablet-2 {
       width: 49%;
-      display: flex;
-      flex-direction: column;
-      cursor: pointer;
       margin-right: 25px;
       margin-bottom: 15px;
 
@@ -430,9 +406,6 @@
 
     @include mixin.on-desktop {
       width: 49%;
-      display: flex;
-      flex-direction: column;
-      cursor: pointer;
       margin-right: 25px;
       margin-bottom: 15px;
 
@@ -464,6 +437,7 @@
     &--open {
       display: block;
       width: 100%;
+      margin-bottom: 8px;
     }
   }
 

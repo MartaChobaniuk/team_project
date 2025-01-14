@@ -12,4 +12,8 @@ export type EventType = {
   "image": string,
   "goal": number,
   "currentProgress": number,
+  "organizerName": string,
+  "organizerEmail": string,
+  "organizerPhone": string,
+  "link": string,
 }

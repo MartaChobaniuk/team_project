@@ -25,17 +25,56 @@
     z-index: 20;
     background-color: transparent;
 
-    &--explore {
-      background-color: var.$black;
-      z-index: 30;
-    }
-
     @include mixin.on-mobile {
       padding: 16px;
     }
 
+    @include mixin.on-tablet {
+      padding: 24px;
+    }
+
     @include mixin.on-desktop {
       padding: 24px;
+    }
+
+    &--explore {
+      background-color: var.$black;
+    }
+
+    &--about {
+      @include mixin.on-mobile {
+        background-color: var.$black;
+      }
+
+      @include mixin.on-tablet {
+        background-color: transparent;
+      }
+
+      @include mixin.on-tablet-2 {
+        background-color: transparent;
+      }
+
+      @include mixin.on-desktop {
+        background-color: transparent;
+      }
+    }
+
+    &--faq {
+      @include mixin.on-mobile {
+        background-color: var.$black;
+      }
+
+      @include mixin.on-tablet {
+        background-color: var.$black;
+      }
+
+      @include mixin.on-tablet-2 {
+        background-color: var.$black;
+      }
+
+      @include mixin.on-desktop {
+        background-color: var.$black;
+      }
     }
   }
 }

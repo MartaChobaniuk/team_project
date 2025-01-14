@@ -55,7 +55,7 @@ export const EventsProvider: React.FC<Props> = ({ children }) => {
   return (
     <EventsContext.Provider value={value}>
       {loading && !errorMessage && <Loader />}
-      {!loading && errorMessage && errorMessage}
+      {!loading && errorMessage && children}
       {!loading && !errorMessage && children}
     </EventsContext.Provider>
   );

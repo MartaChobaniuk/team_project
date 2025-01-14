@@ -4,3 +4,7 @@ import { client } from '../utils/httpClient';
 export const getEvents = () => {
   return client.get<EventType[]>('/events');
 };
+
+export const getEventById = (eventId: string) => {
+  return client.get<EventType>(`/events/${eventId}`);
+};
