@@ -1,20 +1,30 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import cn from 'classnames';
-import { motion } from 'framer-motion';
 import styles from './Home.module.scss';
 import arrow from '../../images/icons/arrow_r.svg';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import { Path } from '../../utils/constants';
 
-type Props = {
-  handleHomeAI: () => void;
-};
+export const Home: React.FC = () => {
+  const [isScrolled, setIsScrolled] = useState<boolean>(false);
+  const navigate = useNavigate();
 
-export const Home: React.FC<Props> = ({ handleHomeAI }) => {
-  const [isCollapsed, setIsCollapsed] = useState(false);
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollY = window.scrollY;
 
-  const handleClick = () => {
-    setIsCollapsed(prev => !prev);
+      setIsScrolled(scrollY > 20);
+    };
+
+    window.addEventListener('scroll', handleScroll);
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
+
+  const handleHomeAI = () => {
+    navigate(Path.HomeAI);
   };
 
   return (
@@ -66,26 +76,23 @@ export const Home: React.FC<Props> = ({ handleHomeAI }) => {
           </div>
         </div>
 
-        <motion.div
+        <div
           className={cn(styles['home__left-mobile'], {
-            [styles['home__left-mobile--collapsed']]: isCollapsed,
+            [styles['home__left-mobile--scrolled']]: isScrolled,
           })}
         >
-          <div
-            className={styles['home__collaps-line']}
-            onClick={handleClick}
-          ></div>
+          <div className={styles['home__collaps-line']}></div>
           <div className={styles['home__mobile-content-left']}>
             <h1
               className={cn(styles['home__mobile-title'], {
-                [styles['home__mobile-title--collapsed']]: isCollapsed,
+                [styles['home__mobile-title--scrolled']]: isScrolled,
               })}
             >
               Take Action Today. Be The Change You Want To See In The World.
             </h1>
             <p
               className={cn(styles['home__mobile-text'], {
-                [styles['home__mobile-text--collapsed']]: isCollapsed,
+                [styles['home__mobile-text--scrolled']]: isScrolled,
               })}
             >
               Use our search filters to explore opportunities to fulfill wishes,
@@ -94,15 +101,15 @@ export const Home: React.FC<Props> = ({ handleHomeAI }) => {
               place.
             </p>
           </div>
-        </motion.div>
+        </div>
         <div
           className={cn(styles['home__right-mobile'], {
-            [styles['home__right-mobile--collapsed']]: isCollapsed,
+            [styles['home__right-mobile--scrolled']]: isScrolled,
           })}
         >
           <div
             className={cn(styles['home__mobile-content-right'], {
-              [styles['home__mobile-content-right--collapsed']]: isCollapsed,
+              [styles['home__mobile-content-right--scrolled']]: isScrolled,
             })}
           >
             <h3 className={styles['home__mobile-question-left']}>
@@ -131,15 +138,15 @@ export const Home: React.FC<Props> = ({ handleHomeAI }) => {
           </div>
           <div
             className={cn(styles['home__mobile-footer-right'], {
-              [styles['home__mobile-footer-right--collapsed']]: isCollapsed,
+              [styles['home__mobile-footer-right--scrolled']]: isScrolled,
             })}
           >
-            {!isCollapsed && (
+            {!isScrolled && (
               <h3 className={styles['home__mobile-question-left']}>
                 How Do You Want To Contribute Today?
               </h3>
             )}
-            {isCollapsed && (
+            {isScrolled && (
               <>
                 <h3 className={styles['home__mobile-question-right']}>
                   Tell Us How You’d Like to Help

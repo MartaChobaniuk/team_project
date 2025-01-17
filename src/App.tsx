@@ -1,15 +1,12 @@
 import React from 'react';
 import './App.scss';
 import cn from 'classnames';
-import { Outlet, useLocation } from 'react-router-dom';
+import { Outlet } from 'react-router-dom';
 import { Header } from './components/Header';
-import { Path } from './utils/constants';
+import { usePathChecker } from './helpers/usePathChecker';
 
 export const App: React.FC = () => {
-  const { pathname } = useLocation();
-  const isExplore = pathname === Path.Explore;
-  const isAbout = pathname === Path.About;
-  const isFaq = pathname === Path.Faq;
+  const { isExplore, isAbout, isFaq, isHome } = usePathChecker();
 
   return (
     <div className="app">
@@ -19,6 +16,7 @@ export const App: React.FC = () => {
             'app__header--explore': isExplore,
             'app__header--about': isAbout,
             'app__header--faq': isFaq,
+            'app__header--home': isHome,
           })}
         >
           <Header />

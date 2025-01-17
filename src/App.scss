@@ -76,5 +76,23 @@
         background-color: var.$black;
       }
     }
+
+    &--home {
+      @include mixin.on-mobile {
+        background-color: var.$black;
+      }
+
+      @include mixin.on-tablet {
+        background-color: var.$black;
+      }
+
+      @include mixin.on-tablet-2 {
+        background-color: transparent;
+      }
+
+      @include mixin.on-desktop {
+        background-color: transparent;
+      }
+    }
   }
 }

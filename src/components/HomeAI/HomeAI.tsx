@@ -6,8 +6,12 @@ import { Path } from '../../utils/constants';
 
 export const HomeAI = () => {
   const [query, setQuery] = useState('');
-  const navigate = useNavigate();
   const [error, setError] = useState('');
+  const navigate = useNavigate();
+
+  const handleHomePage = () => {
+    navigate(Path.Home);
+  };
 
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setQuery(e.target.value);
@@ -43,7 +47,12 @@ export const HomeAI = () => {
           <div className={styles.home__empty}></div>
           <div className={styles['home__footer-right']}>
             <button className={styles['home__arrow-button']}>
-              <img src={arrow} alt={arrow} className={styles.home__img} />
+              <img
+                src={arrow}
+                alt={arrow}
+                className={styles.home__img}
+                onClick={handleHomePage}
+              />
             </button>
             <h3 className={styles['home__question-right']}>
               Prefer The Regular Search? No Problem, Just Drag The Arrow!

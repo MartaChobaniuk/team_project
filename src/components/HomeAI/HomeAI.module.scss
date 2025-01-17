@@ -3,7 +3,8 @@
 
 .home {
   position: relative;
-  overflow: hidden;
+  height: 100vh;
+  width: 100%;
 
   &__nav {
     height: 100vh;
@@ -14,6 +15,7 @@
 
     @include mixin.on-mobile {
       flex-direction: column;
+      justify-content: end;
       background-position: center;
       background-size: cover;
     }
@@ -26,20 +28,70 @@
 
     @include mixin.on-tablet-2 {
       flex-direction: row;
-      background-position: center;
-      background-size: cover;
+      background-position: left;
+      background-size: 53% 100%;
     }
 
     @include mixin.on-desktop {
       flex-direction: row;
-      background-position: right;
+      background-position: left;
+      background-size: 60% 100%;
     }
   }
 
   &__right-side {
     @include mixin.flex(flex, false, space-between, column);
 
-    @include mixin.responsive-property(flex, 1, 0.4, 1, 1.2);
+    @include mixin.on-mobile {
+      border-radius: 20px;
+      height: 20vh;
+    }
+
+    @include mixin.on-tablet {
+      border-radius: 20px;
+      height: 20vh;
+    }
+
+    @include mixin.on-tablet-2 {
+      height: 100vh;
+      width: 50%;
+    }
+
+    @include mixin.on-desktop {
+      height: 100vh;
+      width: 53%;
+    }
+  }
+
+  &__left-side {
+    background-color: var.$black;
+    @include mixin.flex(flex, false, space-between, column);
+
+    @include mixin.on-mobile {
+      padding: 16px;
+      border-radius: 20px 20px 0 0;
+      height: 70vh;
+    }
+
+    @include mixin.on-tablet {
+      padding: 24px;
+      border-radius: 20px 20px 0 0;
+      height: 70vh;
+    }
+
+    @include mixin.on-tablet-2 {
+      padding: 24px;
+      border-radius: 20px 0 0 20px;
+      height: 100vh;
+      width: 50%;
+    }
+
+    @include mixin.on-desktop {
+      padding: 24px;
+      border-radius: 20px 0 0 20px;
+      height: 100vh;
+      width: 47%;
+    }
   }
 
   &__empty {
@@ -55,20 +107,17 @@
 
     @include mixin.on-mobile {
       @include mixin.flex(flex, flex-end, space-between, column-reverse);
-      height: max-content;
       padding: 16px;
     }
 
     @include mixin.on-tablet {
       @include mixin.flex(flex, center, space-between, row-reverse);
-      height: max-content;
-      padding: 20px;
+      padding: 24px;
     }
 
     @include mixin.on-desktop {
       @include mixin.flex(flex, center, space-between, row);
-      height: 192px;
-      padding: 40px;
+      padding: 24px;
     }
   }
 
@@ -91,56 +140,39 @@
     padding: 15px;
   }
 
-  &__left-side {
-    background-color: var.$black;
-
-    @include mixin.flex(flex, false, space-between, column);
-
-    @include mixin.responsive-property(flex, 1, 1.2, 1, 0.8);
-    @include mixin.responsive-property(padding, 20px, 20px, 20px, 40px 50px);
-    @include mixin.responsive-property(border-radius, 15px 15px 0 0, 20px 20px 0 0, 20px 0 0 20px, 20px 0 0 20px);
-  }
-
   &__content {
     flex-grow: 1;
 
     @include mixin.on-mobile {
       margin-top: 10px;
+      height: 50vh;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
     }
 
     @include mixin.on-tablet {
-      margin-top: 10px;
+      margin-top: 0;
+      height: 30vh;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
     }
 
     @include mixin.on-tablet-2 {
-      margin-top: 70px;
+      margin-top: 86px;
     }
 
     @include mixin.on-desktop {
-      margin-top: 80px;
+      margin-top: 86px;
       max-width: 600px;
     }
   }
 
   &__title {
+    @include mixin.h2-desktop-tablet;
     text-align: left;
     @include mixin.responsive-property(margin-bottom, 10px, 10px, 10px, 20px);
-
-    @include mixin.on-mobile {
-      @include mixin.h2-mobile;
-    }
-
-    @include mixin.on-tablet {
-      @include mixin.h2-desktop-tablet;
-    }
-
-    @include mixin.on-tablet-2 {
-      @include mixin.h2-desktop-tablet;
-    }
-
-    @include mixin.on-desktop {
-      @include mixin.h2-desktop-tablet;
-    }
   }
 
   &__text {
@@ -174,13 +206,27 @@
     width: 100%;
     display: flex;
     flex-wrap: wrap;
-
     @include mixin.body-text-desktop-tablet;
-    @include mixin.responsive-property(margin-bottom, 10px, 10px, 10px, 20px);
 
     &:placeholder-shown {
       color: var.$light-gray;
       margin-bottom: 15px;
+    }
+
+    @include mixin.on-mobile {
+      margin: 10px 0;
+    }
+
+    @include mixin.on-tablet {
+      margin-bottom: 10px;
+    }
+
+    @include mixin.on-tablet-2 {
+      margin-bottom: 10px;
+    }
+
+    @include mixin.on-desktop {
+      margin-bottom: 20px;
     }
   }
 
@@ -204,12 +250,12 @@
   &__button {
     position: relative;
     height: 44px;
+    line-height: 44px;
     text-align: center;
-    background-color: var.$light-gray;
+    background-color: var.$grey;
     color: var.$black;
     border-radius: 12px;
     border: 1px solid var.$black;
-    overflow: hidden;
     cursor: pointer;
     transition: border-color 1s ease;
 
@@ -230,7 +276,7 @@
       top: 50%;
       width: 100%;
       height: 0;
-      background-color: var.$black;
+      background-color: var.$white;
       transform: translateY(-50%);
       z-index: 0;
       transition: height 0.5s ease;
@@ -252,7 +298,7 @@
     }
 
     &:hover > span {
-      color: var.$light-gray;
+      color: var.$black;
     }
   }
 }
