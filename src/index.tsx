@@ -8,11 +8,12 @@ import { EventsProvider } from './store/EventsContex';
 import { AuthProvider } from 'react-oidc-context';
 
 const cognitoAuthConfig = {
-  authority: "https://cognito-idp.eu-north-1.amazonaws.com/eu-north-1_uHcVQq9Cg",
-  client_id: "7f4n0jvd5vp0g8ji7p6ppe4gke",
-  redirect_uri: "http://localhost:3000/profile/info",
-  response_type: "code",
-  scope: "aws.cognito.signin.user.admin email openid profile",
+  authority:
+    'https://cognito-idp.eu-north-1.amazonaws.com/eu-north-1_uHcVQq9Cg',
+  client_id: '7f4n0jvd5vp0g8ji7p6ppe4gke',
+  redirect_uri: 'http://localhost:3000/profile/info',
+  response_type: 'code',
+  scope: 'aws.cognito.signin.user.admin email openid profile',
 };
 
 createRoot(document.getElementById('root') as HTMLDivElement).render(
