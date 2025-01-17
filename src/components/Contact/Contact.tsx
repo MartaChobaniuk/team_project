@@ -1,11 +1,17 @@
 import { useEffect, useState } from 'react';
 import styles from './Contact.module.scss';
 import cn from 'classnames';
+import { sendContactWish } from '../../services/events';
 
 export const Contact = () => {
-  const [query, setQuery] = useState('');
   const [isFormVisible, setIsFormVisible] = useState(false);
   const [isScrolled, setIsScrolled] = useState<boolean>(false);
+  const [cover, setCover] = useState<string>('');
+  const [email, setEmail] = useState('');
+  const [description, setDescription] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -25,8 +31,43 @@ export const Contact = () => {
     setIsFormVisible(true);
   };
 
-  const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setQuery(e.target.value);
+  const handleCoverChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setCover(e.target.value);
+  };
+
+  const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setEmail(e.target.value);
+  };
+
+  const handleDescChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setDescription(e.target.value);
+  };
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    setErrorMessage(null);
+    setSuccessMessage(null);
+
+    try {
+      await sendContactWish({ cover, email, description });
+      setSuccessMessage('Your message has been sent successfully!');
+      setCover('');
+      setEmail('');
+      setDescription('');
+
+      setTimeout(() => {
+        setSuccessMessage(null);
+      }, 3000);
+    } catch (error) {
+      setErrorMessage('Failed to send your message. Please try again later.');
+
+      setTimeout(() => {
+        setErrorMessage(null);
+      }, 3000);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -120,26 +161,38 @@ export const Contact = () => {
               <span>Send a message</span>
             </button>
             <form
+              onSubmit={handleSubmit}
               className={cn(styles.contact__form, {
                 [styles['contact__form--visible']]: isFormVisible,
               })}
             >
+              {errorMessage && (
+                <p className={styles.contact__error}>{errorMessage}</p>
+              )}
+              {successMessage && (
+                <p className={styles.contact__success}>{successMessage}</p>
+              )}
               <div className={styles['contact__input-shell']}>
                 <input
                   type="text"
                   className={styles.contact__input}
-                  placeholder="Your name"
+                  placeholder="Your title"
+                  value={cover}
+                  onChange={handleCoverChange}
                 />
                 <div className={styles.contact__line}></div>
                 <input
                   type="email"
                   className={styles.contact__input}
                   placeholder="Email"
+                  value={email}
+                  onChange={handleEmailChange}
+                  required
                 />
                 <div className={styles.contact__line}></div>
                 <textarea
-                  value={query}
-                  onChange={handleChange}
+                  value={description}
+                  onChange={handleDescChange}
                   className={styles.contact__input}
                   placeholder="Tell about your submission"
                   maxLength={600}
@@ -148,8 +201,12 @@ export const Contact = () => {
                 <div className={styles.contact__line}></div>
               </div>
               <div className={styles['contact__button-shell']}>
-                <button className={styles.contact__button} type="submit">
-                  <span>Send</span>
+                <button
+                  className={styles.contact__button}
+                  type="submit"
+                  disabled={isSubmitting}
+                >
+                  <span>{isSubmitting ? 'Sending...' : 'Send'}</span>
                 </button>
               </div>
             </form>
