@@ -1,4 +1,4 @@
-import { Route, HashRouter as Router, Routes } from 'react-router-dom';
+import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
 import { App } from './App';
 import { HomePage } from './pages/HomePage';
 import { StoriesPage } from './pages/StoriesPage';
@@ -14,6 +14,10 @@ import { LogInPage } from './pages/LogInPage';
 import { FaqPage } from './pages/FaqPage';
 import { ExploreAllPage } from './pages/ExploreAllPage';
 import { EventDetailsPage } from './pages/EventDetailsPage';
+import { ProfilePage } from './pages/ProfilePage';
+import { ProfileInfoPage } from './pages/ProfileInfoPage';
+import { ProfileActivityPage } from './pages/ProfileActivityPage';
+import { ProfileOpportunitiesPage } from './pages/ProfileOpportunitiesPage';
 
 export const Root = () => (
   <Router>
@@ -40,6 +44,16 @@ export const Root = () => (
 
         <Route path={Path.SignUp} element={<SignUpPage />} />
         <Route path={Path.LogIn} element={<LogInPage />} />
+
+        <Route path={Path.Profile}>
+          <Route index element={<ProfilePage />} />
+          <Route path={Path.ProfileInfo} element={<ProfileInfoPage />} />
+          <Route path={Path.Activity} element={<ProfileActivityPage />} />
+          <Route
+            path={Path.Opportunities}
+            element={<ProfileOpportunitiesPage />}
+          />
+        </Route>
 
         <Route path={Path.Menu} element={<MenuPage />} />
 

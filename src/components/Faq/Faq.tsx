@@ -56,11 +56,16 @@ export const Faq = () => {
         <h2
           className={cn(styles.faq__title, {
             [styles['faq__title--visible']]: isVisible,
+            [styles['faq__title--scrolled']]: isScrolled,
           })}
         >
           Frequently Asked Questions
         </h2>
-        <p className={styles.faq__subtitle}>
+        <p
+          className={cn(styles.faq__subtitle, {
+            [styles['faq__subtitle--scrolled']]: isScrolled,
+          })}
+        >
           Discover how The Change works and find answers to your questions.
           Whether you’re looking to volunteer, donate, post a wish, or
           collaborate with us, this section covers everything you need to know.

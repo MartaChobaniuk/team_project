@@ -1,13 +1,13 @@
 import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
+import cn from 'classnames';
 import styles from './Header.module.scss';
 import { NavbarLeft } from '../NavbarLeft';
 import { Logo } from '../Logo';
 import { Path } from '../../utils/constants';
-import cross from '../../images/icons/cross_black.svg';
-import burger from '../../images/icons/menu_dark.svg';
 import { NavbarRight } from '../NavbarRight';
-import cn from 'classnames';
+import menu_white from '../../images/icons/menu_white_bg.svg';
+import cross_white from '../../images/icons/cross_white_bg.svg';
 
 export const Header = () => {
   const [openMenu, setOpenMenu] = useState(false);
@@ -93,7 +93,7 @@ export const Header = () => {
           })}
         >
           <img
-            src={openMenu ? cross : burger}
+            src={openMenu ? cross_white : menu_white}
             alt={openMenu ? 'close' : 'menu'}
             className={styles.header__img}
           />

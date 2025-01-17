@@ -39,6 +39,48 @@
     }
   }
 
+  &__profile {
+    position: relative;
+    width: max-content;
+    height: 38px;
+    cursor: pointer;
+    text-transform: uppercase;
+    overflow: hidden;
+    transition: all 0.5s ease;
+    background-color: var.$black;
+    color: var.$white;
+
+    @include mixin.flex(flex, center, center, false);
+    @include mixin.responsive-property(border-radius, 60px, 60px, 80px, 80px);
+    @include mixin.responsive-property(padding, 8px, 8px, 8px 16px, 8px 16px);
+
+    &::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 50%;
+      width: 0;
+      height: 100%;
+      transform: translateY(-50%);
+      z-index: 0;
+      transition: width 0.5s ease;
+    }
+
+    &:hover::before {
+      width: 100%;
+    }
+
+    &:hover {
+      background: var.$orange-red;
+      color: var.$white;
+    }
+
+    &--active {
+      background: var.$orange-red;
+      color: var.$white;
+    }
+  }
+
   &__name {
     @include mixin.button-text-desktop-tablet;
 
@@ -240,7 +282,8 @@
     }
 
     &--home,
-    &--about {
+    &--about,
+    &--profile {
       @include mixin.on-desktop {
         background-color: transparent;
         color: var.$black;

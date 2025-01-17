@@ -1,51 +1,65 @@
-import { useState } from 'react';
 import styles from './LogIn.module.scss';
 import { NavLink } from 'react-router-dom';
 import { Path } from '../../utils/constants';
-import eye from '../../images/icons/eye.svg';
-import apple from '../../images/icons/apple.svg';
-import google from '../../images/icons/google.svg';
-import cognito from '../cognito';
+import { useAuth } from 'react-oidc-context';
+import { Loader } from '../Loader';
 
 export const LogIn = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [errorMessage, setErrorMessage] = useState('');
-  const [successMessage, setSuccessMessage] = useState('');
-  const [isFormVisible, setIsFormVisible] = useState(false);
+  const auth = useAuth();
 
-  const showForm = () => {
-    setIsFormVisible(true);
-  };
+  if (auth.isLoading) {
+    return <Loader />;
+  }
 
-  const handleLogin = async (e: React.FormEvent) => {
-    e.preventDefault();
+  if (auth.error) {
+    return (
+      <div className={styles.error}>
+        Encountering error... {auth.error.message}
+      </div>
+    );
+  }
 
-    const params = {
-      AuthFlow: 'USER_PASSWORD_AUTH',
-      ClientId: '7f4n0jvd5vp0g8ji7p6ppe4gke',
-      AuthParameters: {
-        USERNAME: email,
-        PASSWORD: password,
-      },
-    };
+  if (auth.isAuthenticated) {
+    const idToken = auth.user?.id_token;
+    const accessToken = auth.user?.access_token;
 
-    try {
-      const result = await cognito.initiateAuth(params).promise();
-      const idToken = result.AuthenticationResult?.IdToken;
-
-      if (idToken) {
-        setSuccessMessage('Login successful!');
-        // Handle the user session and token storage here (e.g., save token in localStorage)
-      } else {
-        setErrorMessage('Authentication failed.');
-      }
-    } catch (error) {
-      // eslint-disable-next-line no-console
-      console.error(error);
-      setErrorMessage('An error occurred during login.');
+    if (!idToken || !accessToken) {
+      return <div>Error: Tokens not found</div>;
     }
-  };
+
+    localStorage.setItem('idToken', idToken);
+    localStorage.setItem('accessToken', accessToken);
+    /* eslint-disable no-console */
+    console.log('ID Token saved to localStorage:', idToken);
+    /* eslint-disable no-console */
+    console.log('Access Token saved to localStorage:', accessToken);
+
+    fetch(
+      'https://dewvdtfd5m.execute-api.eu-north-1.amazonaws.com/dev/account',
+      {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${idToken}`,
+          'Content-Type': 'application/json',
+        },
+      },
+    )
+      .then(response => {
+        if (!response.ok) {
+          new Error(`HTTP error! Status: ${response.status}`);
+        }
+
+        return response.json();
+      })
+      .then(data => {
+        console.log('Data from backend:', data);
+      })
+      .catch(error => {
+        console.error('Error:', error);
+      });
+
+    return <div className={styles.message}>Welcome, you are logged in!</div>;
+  }
 
   return (
     <div className={styles['log-in']}>
@@ -76,7 +90,6 @@ export const LogIn = () => {
                 </a>
               </p>
             </div>
-
             <div className={styles['log-in__visit-us']}>
               <p className={styles['log-in__subtitle']}>Visit Us</p>
               <p className={styles['log-in__part']}>
@@ -107,155 +120,19 @@ export const LogIn = () => {
               form.
             </p>
           </div>
-          {!isFormVisible && (
-            <button
-              className={styles['log-in__button-footer']}
-              onClick={showForm}
-            >
-              <span>Log In</span>
-            </button>
-          )}
           <div className={styles['log-in__footer']}>
-            <form className={styles['log-in__form']} onSubmit={handleLogin}>
-              <input
-                type="email"
-                className={styles['log-in__input']}
-                placeholder="Email address"
-                value={email}
-                onChange={e => setEmail(e.target.value)}
-              />
-              <div className={styles['log-in__line']}></div>
-              <div className={styles['log-in__input-shell']}>
-                <input
-                  type="password"
-                  className={styles['log-in__input']}
-                  placeholder="Create password"
-                  value={password}
-                  onChange={e => setPassword(e.target.value)}
-                  autoComplete="current-password"
-                />
-                <img src={eye} alt="eye" />
-              </div>
-              <div className={styles['log-in__line']}></div>
-              <div className={styles['log-in__check-shell']}>
-                <input
-                  type="checkbox"
-                  className={styles['log-in__input-check']}
-                />
-                <span className={styles['log-in__check-text']}>
-                  Remember me
-                </span>
-              </div>
-              <div className={styles['log-in__button-shell']}>
-                <button className={styles['log-in__button-sign']} type="submit">
-                  <span>Log In</span>
-                </button>
-              </div>
-              {errorMessage && (
-                <p className={styles['log-in__error']}>{errorMessage}</p>
-              )}
-              {successMessage && (
-                <p className={styles['log-in__success']}>{successMessage}</p>
-              )}
-            </form>
-            <div className={styles['log-in__accounts-shell']}>
-              <p className={styles['log-in__text']}>
-                Not a fan of an old-school method? No problem, we’ve got you:
-              </p>
-              <div className={styles['log-in__acc-button-shell']}>
-                <button className={styles['log-in__button']}>
-                  <img
-                    src={google}
-                    alt="google"
-                    className={styles['log-in__img']}
-                  />
-                  <span>Google</span>
-                </button>
-                <button className={styles['log-in__button']} type="submit">
-                  <img
-                    src={apple}
-                    alt="apple"
-                    className={styles['log-in__img']}
-                  />
-                  <span>Apple</span>
-                </button>
-              </div>
-            </div>
+            <button
+              className={styles['log-in__button']}
+              onClick={() => auth.signinRedirect()}
+            >
+              Log In
+            </button>
             <div className={styles['log-in__link-container']}>
               <NavLink to={Path.SignUp} className={styles['log-in__acc-link']}>
                 Don&apos;t have an account yet? Sign Up here!
               </NavLink>
             </div>
           </div>
-          {isFormVisible && (
-            <div className={styles['log-in__tablets-footer']}>
-              <form className={styles['log-in__form']}>
-                <input
-                  type="email"
-                  className={styles['log-in__input']}
-                  placeholder="Email address"
-                />
-                <div className={styles['log-in__line']}></div>
-                <div className={styles['log-in__input-shell']}>
-                  <input
-                    type="password"
-                    className={styles['log-in__input']}
-                    placeholder="Create password"
-                  />
-                  <img src={eye} alt="eye" />
-                </div>
-                <div className={styles['log-in__line']}></div>
-                <div className={styles['log-in__check-shell']}>
-                  <input
-                    type="checkbox"
-                    className={styles['log-in__input-check']}
-                  />
-                  <span className={styles['log-in__check-text']}>
-                    Remember me
-                  </span>
-                </div>
-                <div className={styles['log-in__button-shell']}>
-                  <button
-                    className={styles['log-in__button-sign']}
-                    type="submit"
-                  >
-                    <span>Log In</span>
-                  </button>
-                </div>
-              </form>
-              <div className={styles['log-in__accounts-shell']}>
-                <p className={styles['log-in__text']}>
-                  Not a fan of an old-school method? No problem, we’ve got you:
-                </p>
-                <div className={styles['log-in__acc-button-shell']}>
-                  <button className={styles['log-in__button']} type="submit">
-                    <img
-                      src={google}
-                      alt="google"
-                      className={styles['log-in__img']}
-                    />
-                    <span>Google</span>
-                  </button>
-                  <button className={styles['log-in__button']} type="submit">
-                    <img
-                      src={apple}
-                      alt="apple"
-                      className={styles['log-in__img']}
-                    />
-                    <span>Apple</span>
-                  </button>
-                </div>
-              </div>
-              <div className={styles['log-in__link-container']}>
-                <NavLink
-                  to={Path.SignUp}
-                  className={styles['log-in__acc-link']}
-                >
-                  Don&apos;t have an account yet? Sign Up here!
-                </NavLink>
-              </div>
-            </div>
-          )}
         </div>
       </section>
     </div>

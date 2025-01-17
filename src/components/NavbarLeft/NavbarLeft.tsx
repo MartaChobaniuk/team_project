@@ -3,6 +3,7 @@ import cn from 'classnames';
 import { NavLink, useLocation } from 'react-router-dom';
 import styles from './NavbarLeft.module.scss';
 import { Path } from '../../utils/constants';
+import { usePathChecker } from '../../helpers/usePathChecker';
 
 type Props = {
   className?: string;
@@ -10,15 +11,21 @@ type Props = {
 
 export const NavbarLeft: React.FC<Props> = ({ className }) => {
   const { pathname } = useLocation();
-  const isHome = pathname === Path.Home;
-  const isHomeAI = pathname === Path.HomeAI;
-  const isResponse = pathname === Path.Response;
-  const isSignUp = pathname === Path.SignUp;
-  const isLogIn = pathname === Path.LogIn;
-  const isFaq = pathname === Path.Faq;
-  const isAbout = pathname === Path.About || isFaq;
-  const isContact = pathname === Path.Contact;
-  const isExplore = pathname === Path.Explore;
+  const {
+    isHome,
+    isHomeAI,
+    isResponse,
+    isSignUp,
+    isLogIn,
+    isAbout,
+    isFaq,
+    isContact,
+    isExplore,
+    isProfile,
+    isProfileInfo,
+    isActivity,
+    isOpportunities,
+  } = usePathChecker();
 
   const navLinks = [
     { path: Path.Stories, label: 'Success Stories' },
@@ -49,6 +56,10 @@ export const NavbarLeft: React.FC<Props> = ({ className }) => {
       { [styles['navbar__item--faq']]: isFaq },
       { [styles['navbar__item--contact']]: isContact },
       { [styles['navbar__item--contact--active']]: isContact && isActive },
+      {
+        [styles['navbar__item--profile']]:
+          isProfile || isProfileInfo || isActivity || isOpportunities,
+      },
       className,
     );
 

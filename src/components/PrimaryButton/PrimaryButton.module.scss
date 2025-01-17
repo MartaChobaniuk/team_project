@@ -1,0 +1,61 @@
+@use "../../utils/mixins" as mixin;
+@use "../../utils/variables" as var;
+
+.primary-button {
+  display: block;
+  font-size: 16px;
+  text-align: center;
+  z-index: 20;
+
+  &--light {
+    width: 100%;
+    height: 44px;
+    line-height: 44px;
+    text-transform: uppercase;
+    border-radius: 12px;
+    cursor: pointer;
+    background-color: var.$white;
+    color: var.$black;
+    transition: background-color 0.3s ease;
+
+    &:hover {
+      background-color: var.$light-gray;
+    }
+
+    &:active {
+      background-color: var.$light-gray;
+    }
+  }
+
+  &--dark {
+    width: 100%;
+    height: 44px;
+    line-height: 44px;
+    text-transform: uppercase;
+    border-radius: 12px;
+    overflow: hidden;
+    cursor: pointer;
+    background-color: var.$black;
+    color: var.$white;
+
+    & > span {
+      display: inline-block;
+      color: var.$black;
+      transition: color 0.3s ease;
+      text-align: center;
+    }
+
+    &:hover {
+      background-color: var.$dark-gray;
+    }
+
+    &:active {
+      background-color: var.$dark-gray;
+    }
+
+    &--disabled {
+      background-color: var.$grey;
+      color: var.$white;
+    }
+  }
+}

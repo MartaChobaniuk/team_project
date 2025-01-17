@@ -1,0 +1,107 @@
+@use "../../utils/mixins" as mixin;
+@use "../../utils/variables" as var;
+
+.opport {
+  width: 100%;
+  height: 100vh;
+
+  &__nav {
+    height: 100vh;
+    width: 100%;
+    display: flex;
+    background-color: var.$black;
+    color: var.$white;
+
+    @include mixin.on-desktop {
+      flex-direction: column;
+    }
+  }
+
+  &__top {
+    background-image: url("../../images/wallpaper/profile_bg.jpg");
+    background-position: center;
+    color: var.$black;
+    border-radius: 0 0 20px 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+
+    @include mixin.on-desktop {
+      height: 35vh;
+      padding: 86px 24px 24px;
+    }
+  }
+
+  &__bottom {
+    @include mixin.on-desktop {
+      padding: 30px 24px;
+      height: 65vh;
+      display: flex;
+      flex-direction: column;
+    }
+  }
+
+  &__buttons {
+    @include mixin.on-desktop {
+      width: 70%;
+      @include mixin.flex(flex, center, center, row);
+    }
+  }
+
+  &__button {
+    width: 100%;
+    height: 44px;
+    line-height: 44px;
+    text-transform: uppercase;
+    border-radius: 12px;
+    cursor: pointer;
+    background-color: transparent;
+    color: var.$black;
+    border: solid 0.5px var.$black;
+    border-radius: 80px;
+    transition:
+      background-color 0.3s ease,
+      color 0.3s ease;
+    padding: 8px 16px;
+
+    @include mixin.flex(flex, center, center, row);
+
+    &:hover {
+      background-color: var.$black;
+      color: var.$white;
+    }
+
+    &:active {
+      background-color: var.$black;
+      color: var.$white;
+    }
+
+    &--active {
+      background-color: var.$black;
+      color: var.$white;
+    }
+  }
+
+  &__greeting {
+    @include mixin.body-text-desktop-tablet;
+    color: var.$dark-gray;
+    margin-bottom: 10px;
+  }
+
+  &__title {
+    @include mixin.h1-desktop-tablet;
+    margin-bottom: 10px;
+  }
+
+  &__subtitle {
+    @include mixin.h2-desktop-tablet;
+    margin-bottom: 10px;
+  }
+
+  &__block {
+    height: 50%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+  }
+}

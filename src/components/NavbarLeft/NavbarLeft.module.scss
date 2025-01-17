@@ -154,7 +154,8 @@
       }
     }
 
-    &--login {
+    &--login,
+    &--profile {
       @include mixin.on-desktop {
         background-color: transparent;
         border: 0.5px solid var.$black;

@@ -1,131 +1,29 @@
-import { useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import { Path } from '../../utils/constants';
 import styles from './SignUp.module.scss';
-import eye from '../../images/icons/eye.svg';
-import open_eye from '../../images/icons/white-eye-icon-4.jpg';
-import apple from '../../images/icons/apple.svg';
-import google from '../../images/icons/google.svg';
-import cognito from '../cognito';
+import { useAuth } from 'react-oidc-context';
 
 export const SignUp = () => {
-  const [isFormVisible, setIsFormVisible] = useState(false);
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [showPassword, setShowPassword] = useState(false);
-  const [errorMessage, setErrorMessage] = useState('');
-  const [successMessage, setSuccessMessage] = useState('');
-  const [verificationCode, setVerificationCode] = useState('');
-  const [isVerificationRequired, setIsVerificationRequired] = useState(false);
-  const [rememberMe, setRememberMe] = useState(false);
+  const auth = useAuth();
 
-  const handleSignUp = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    setErrorMessage('');
-    setSuccessMessage('');
+  if (auth.isLoading) {
+    return <div>Loading...</div>;
+  }
 
-    const params = {
-      ClientId: '7f4n0jvd5vp0g8ji7p6ppe4gke',
-      Username: email,
-      Password: password,
-      UserAttributes: [
-        {
-          Name: 'email',
-          Value: email,
-        },
-      ],
-    };
+  if (auth.error) {
+    return <div>Encountering error... {auth.error.message}</div>;
+  }
 
-    try {
-      await cognito.signUp(params).promise();
-      setSuccessMessage('Sign-up successful!');
-      setIsVerificationRequired(true);
-    } catch (error) {
-      setErrorMessage('An error occurred during sign-up.');
-    }
-  };
-
-  const handleVerifyCode = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    setErrorMessage('');
-    setSuccessMessage('');
-
-    const params = {
-      ClientId: '7f4n0jvd5vp0g8ji7p6ppe4gke',
-      Username: email!,
-      ConfirmationCode: verificationCode,
-    };
-
-    try {
-      await cognito.confirmSignUp(params).promise();
-
-      const authParams = {
-        AuthFlow: 'USER_PASSWORD_AUTH',
-        ClientId: '7f4n0jvd5vp0g8ji7p6ppe4gke',
-        AuthParameters: {
-          USERNAME: email!,
-          PASSWORD: password,
-        },
-      };
-
-      const authResponse = await cognito.initiateAuth(authParams).promise();
-
-      if (authResponse.AuthenticationResult) {
-        const idToken = authResponse.AuthenticationResult.IdToken ?? '';
-        const accessToken = authResponse.AuthenticationResult.AccessToken ?? '';
-
-        const tokensData = {
-          idToken,
-          accessToken,
-        };
-
-        if (rememberMe) {
-          localStorage.setItem('idToken', idToken);
-          localStorage.setItem('accessToken', accessToken);
-        } else {
-          sessionStorage.setItem('idToken', idToken);
-          sessionStorage.setItem('accessToken', accessToken);
-        }
-
-        const response = await fetch(
-          // eslint-disable-next-line max-len
-          'https://dewvdtfd5m.execute-api.eu-north-1.amazonaws.com/dev/account',
-          {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(tokensData),
-          },
-        );
-
-        if (!response.ok) {
-          new Error('Network response was not ok');
-        }
-
-        const data = await response.json();
-
-        // eslint-disable-next-line no-console
-        console.log(data);
-
-        setSuccessMessage('Account successfully verified and logged in!');
-      } else {
-        setErrorMessage('Authentication failed. Please try again.');
-      }
-    } catch (error) {
-      // eslint-disable-next-line no-console
-      console.error(error);
-      setErrorMessage('An error occurred during verification.');
-    }
-  };
-
-  const showForm = () => {
-    setIsFormVisible(true);
-  };
-
-  const togglePasswordVisibility = () => {
-    setShowPassword(!showPassword);
-  };
+  if (auth.isAuthenticated) {
+    return (
+      <div>
+        <pre> Hello: {auth.user?.profile.email} </pre>
+        <pre> ID Token: {auth.user?.id_token} </pre>
+        <pre> Access Token: {auth.user?.access_token} </pre>
+        <pre> Refresh Token: {auth.user?.refresh_token} </pre>
+      </div>
+    );
+  }
 
   return (
     <div className={styles['sign-up']}>
@@ -186,190 +84,20 @@ export const SignUp = () => {
               fundraisers and events via a convenient application form.
             </p>
           </div>
-          {!isFormVisible && (
-            <button
-              className={styles['sign-up__button-footer']}
-              onClick={showForm}
-            >
-              <span>Sign Up</span>
-            </button>
-          )}
+
           <div className={styles['sign-up__footer']}>
-            <form className={styles['sign-up__form']} onSubmit={handleSignUp}>
-              <input
-                type="email"
-                className={styles['sign-up__input']}
-                placeholder="Email address"
-                value={email}
-                onChange={e => setEmail(e.target.value)}
-              />
-              <div className={styles['sign-up__line']}></div>
-              <div className={styles['sign-up__input-shell']}>
-                <input
-                  type={showPassword ? 'text' : 'password'}
-                  className={styles['sign-up__input']}
-                  placeholder="Create password"
-                  value={password}
-                  onChange={e => setPassword(e.target.value)}
-                  required
-                />
-                <img
-                  src={showPassword ? open_eye : eye}
-                  alt="eye"
-                  onClick={togglePasswordVisibility}
-                  className={styles['sign-up__img-eye']}
-                />
-              </div>
-              <div className={styles['sign-up__line']}></div>
-              <div className={styles['sign-up__check-shell']}>
-                <input
-                  type="checkbox"
-                  checked={rememberMe}
-                  onChange={e => setRememberMe(e.target.checked)}
-                  className={styles['sign-up__input-check']}
-                />
-                <span className={styles['sign-up__check-text']}>
-                  Remember me
-                </span>
-              </div>
-              <div className={styles['sign-up__button-shell']}>
-                <button className={styles['sign-up__button-sign']}>
-                  <span>Sign Up</span>
-                </button>
-              </div>
-              {errorMessage && (
-                <p className={styles['sign-up__error']}>{errorMessage}</p>
-              )}
-              {successMessage && (
-                <p className={styles['sign-up__success']}>{successMessage}</p>
-              )}
-            </form>
-            {isVerificationRequired && (
-              <form onSubmit={handleVerifyCode}>
-                <input
-                  type="text"
-                  className={styles['sign-up__input']}
-                  placeholder="Enter verification code"
-                  value={verificationCode}
-                  onChange={e => setVerificationCode(e.target.value)}
-                  required
-                />
-                <button type="submit" className={styles['sign-up__button']}>
-                  Verify Code
-                </button>
-              </form>
-            )}
-            <div className={styles['sign-up__accounts-shell']}>
-              <p className={styles['sign-up__text']}>
-                Not a fan of an old-school method? No problem, we’ve got you:
-              </p>
-              <div className={styles['sign-up__acc-button-shell']}>
-                <button className={styles['sign-up__button']} type="submit">
-                  <img
-                    src={google}
-                    alt="google"
-                    className={styles['sign-up__img']}
-                  />
-                  <span>Google</span>
-                </button>
-                <button className={styles['sign-up__button']} type="submit">
-                  <img
-                    src={apple}
-                    alt="apple"
-                    className={styles['sign-up__img']}
-                  />
-                  <span>Apple</span>
-                </button>
-              </div>
-            </div>
+            <button
+              className={styles['sign-up__button']}
+              onClick={() => auth.signinRedirect()}
+            >
+              Sign Up
+            </button>
             <div className={styles['sign-up__link-container']}>
               <NavLink to={Path.LogIn} className={styles['sign-up__acc-link']}>
                 I already have an account
               </NavLink>
             </div>
           </div>
-
-          {isFormVisible && (
-            <div className={styles['sign-up__tablets-footer']}>
-              <form className={styles['sign-up__form']} onSubmit={handleSignUp}>
-                <input
-                  type="email"
-                  className={styles['sign-up__input']}
-                  placeholder="Email address"
-                  value={email}
-                  onChange={e => setEmail(e.target.value)}
-                />
-                <div className={styles['sign-up__line']}></div>
-                <div className={styles['sign-up__input-shell']}>
-                  <input
-                    type={showPassword ? 'text' : 'password'}
-                    className={styles['sign-up__input']}
-                    placeholder="Create password"
-                    value={password}
-                    onChange={e => setPassword(e.target.value)}
-                    required
-                  />
-                  <img
-                    src={showPassword ? open_eye : eye}
-                    alt="eye"
-                    onClick={togglePasswordVisibility}
-                    className={styles['sign-up__img-eye']}
-                  />
-                </div>
-                <div className={styles['sign-up__line']}></div>
-                <div className={styles['sign-up__check-shell']}>
-                  <input
-                    type="checkbox"
-                    checked={rememberMe}
-                    onChange={e => setRememberMe(e.target.checked)}
-                    className={styles['sign-up__input-check']}
-                  />
-                  <span className={styles['sign-up__check-text']}>
-                    Remember me
-                  </span>
-                </div>
-                <div className={styles['sign-up__button-shell']}>
-                  <button
-                    className={styles['sign-up__button-sign']}
-                    type="submit"
-                  >
-                    <span>Sign Up</span>
-                  </button>
-                </div>
-              </form>
-              <div className={styles['sign-up__accounts-shell']}>
-                <p className={styles['sign-up__text']}>
-                  Not a fan of an old-school method? No problem, we’ve got you:
-                </p>
-                <div className={styles['sign-up__acc-button-shell']}>
-                  <button className={styles['sign-up__button']} type="submit">
-                    <img
-                      src={google}
-                      alt="google"
-                      className={styles['sign-up__img']}
-                    />
-                    <span>Google</span>
-                  </button>
-                  <button className={styles['sign-up__button']} type="submit">
-                    <img
-                      src={apple}
-                      alt="apple"
-                      className={styles['sign-up__img']}
-                    />
-                    <span>Apple</span>
-                  </button>
-                </div>
-              </div>
-              <div className={styles['sign-up__link-container']}>
-                <NavLink
-                  to={Path.LogIn}
-                  className={styles['sign-up__acc-link']}
-                >
-                  I already have an account
-                </NavLink>
-              </div>
-            </div>
-          )}
         </div>
       </section>
     </div>

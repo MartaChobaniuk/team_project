@@ -1,15 +1,25 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import styles from './Contact.module.scss';
 import cn from 'classnames';
 
 export const Contact = () => {
   const [query, setQuery] = useState('');
   const [isFormVisible, setIsFormVisible] = useState(false);
-  const [isCollapsed, setIsCollapsed] = useState(false);
+  const [isScrolled, setIsScrolled] = useState<boolean>(false);
 
-  const handleClick = () => {
-    setIsCollapsed(prev => !prev);
-  };
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollY = window.scrollY;
+
+      setIsScrolled(scrollY > 20);
+    };
+
+    window.addEventListener('scroll', handleScroll);
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
 
   const showForm = () => {
     setIsFormVisible(true);
@@ -22,12 +32,16 @@ export const Contact = () => {
   return (
     <div className={styles.contact}>
       <section className={styles.contact__nav}>
-        <div className={styles['contact__right-side']}>
+        <div
+          className={cn(styles['contact__right-side'], {
+            [styles['contact__right-side--scrolled']]: isScrolled,
+          })}
+        >
           <div className={styles.contact__empty}></div>
           <div
             className={cn(styles['contact__footer-right'], {
               [styles['contact__footer-right--visible']]: isFormVisible,
-              [styles['contact__footer-right--collapsed']]: isCollapsed,
+              [styles['contact__footer-right--scrolled']]: isScrolled,
             })}
           >
             <div className={styles['contact__contact-us']}>
@@ -72,11 +86,12 @@ export const Contact = () => {
             </div>
           </div>
         </div>
-        <div className={styles['contact__left-side']}>
-          <div
-            className={styles['contact__collaps-line']}
-            onClick={handleClick}
-          ></div>
+        <div
+          className={cn(styles['contact__left-side'], {
+            [styles['contact__left-side--scrolled']]: isScrolled,
+          })}
+        >
+          <div className={styles['contact__collaps-line']}></div>
           <div className={styles.contact__content}>
             <h2
               className={cn(styles.contact__title, {
@@ -86,7 +101,11 @@ export const Contact = () => {
               Want To Submit A Wish, Organizing A Fundraiser Or A Volunteering
               Event? Maybe, You Want To Partner With Us?
             </h2>
-            <p className={styles.contact__text}>
+            <p
+              className={cn(styles.contact__text, {
+                [styles['contact__text--visible']]: isFormVisible,
+              })}
+            >
               Tell us about yourself and your submission, leave an email
               address, and we’ll contact you within 3 business days.
             </p>
@@ -95,7 +114,6 @@ export const Contact = () => {
             <button
               className={cn(styles['contact__button-send'], {
                 [styles['contact__button-send--visible']]: isFormVisible,
-                [styles['contact__button-send--collapsed']]: isCollapsed,
               })}
               onClick={showForm}
             >
@@ -104,7 +122,6 @@ export const Contact = () => {
             <form
               className={cn(styles.contact__form, {
                 [styles['contact__form--visible']]: isFormVisible,
-                [styles['contact__form--collapsed']]: isCollapsed,
               })}
             >
               <div className={styles['contact__input-shell']}>
@@ -126,7 +143,7 @@ export const Contact = () => {
                   className={styles.contact__input}
                   placeholder="Tell about your submission"
                   maxLength={600}
-                  rows={4}
+                  rows={3}
                 />
                 <div className={styles.contact__line}></div>
               </div>

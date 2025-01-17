@@ -18,125 +18,244 @@
     @include mixin.responsive-property(font-size, 20px, 22px, 22px, 24px);
     @include mixin.responsive-property(font-weight, 800, 900, 900, 900);
 
-    &:hover {
-      transform: scale(1.1);
-    }
-
     &--home {
       @include mixin.on-mobile {
         color: var.$white;
+
+        &:hover {
+          color: var.$light-gray;
+        }
       }
 
       @include mixin.on-tablet {
         color: var.$white;
+
+        &:hover {
+          color: var.$light-gray;
+        }
       }
 
       @include mixin.on-tablet-2 {
         color: var.$black;
+
+        &:hover {
+          color: var.$dark-gray;
+        }
       }
 
       @include mixin.on-desktop {
         color: var.$white;
+
+        &:hover {
+          color: var.$light-gray;
+        }
       }
     }
 
     &--homeAi {
       @include mixin.on-mobile {
         color: var.$white;
+
+        &:hover {
+          color: var.$light-gray;
+        }
       }
 
       @include mixin.on-tablet {
         color: var.$white;
+
+        &:hover {
+          color: var.$light-gray;
+        }
       }
 
       @include mixin.on-tablet-2 {
         color: var.$black;
+
+        &:hover {
+          color: var.$dark-gray;
+        }
       }
 
       @include mixin.on-desktop {
         color: var.$black;
+
+        &:hover {
+          color: var.$dark-gray;
+        }
       }
     }
 
-    &--response {
+    &--response,
+    &--faq,
+    &--explore {
       @include mixin.on-mobile {
         color: var.$white;
+
+        &:hover {
+          color: var.$light-gray;
+        }
+      }
+
+      @include mixin.on-tablet {
+        color: var.$white;
+
+        &:hover {
+          color: var.$light-gray;
+        }
+      }
+
+      @include mixin.on-tablet-2 {
+        color: var.$white;
+
+        &:hover {
+          color: var.$light-gray;
+        }
       }
 
       @include mixin.on-desktop {
         color: var.$white;
+
+        &:hover {
+          color: var.$light-gray;
+        }
       }
     }
 
     &--sign {
       @include mixin.on-mobile {
         color: var.$black;
+
+        &:hover {
+          color: var.$dark-gray;
+        }
       }
 
       @include mixin.on-tablet {
         color: var.$black;
+
+        &:hover {
+          color: var.$dark-gray;
+        }
       }
 
       @include mixin.on-tablet-2 {
         color: var.$black;
+
+        &:hover {
+          color: var.$dark-gray;
+        }
       }
 
       @include mixin.on-desktop {
         color: var.$black;
+
+        &:hover {
+          color: var.$dark-gray;
+        }
       }
     }
 
-    &--login {
+    &--login,
+    &--profile {
       @include mixin.on-mobile {
         color: var.$black;
+
+        &:hover {
+          color: var.$dark-gray;
+        }
       }
 
       @include mixin.on-tablet {
         color: var.$black;
+
+        &:hover {
+          color: var.$dark-gray;
+        }
       }
 
       @include mixin.on-tablet-2 {
         color: var.$black;
+
+        &:hover {
+          color: var.$dark-gray;
+        }
       }
 
       @include mixin.on-desktop {
         color: var.$black;
+
+        &:hover {
+          color: var.$dark-gray;
+        }
       }
     }
 
     &--about {
       @include mixin.on-mobile {
         color: var.$white;
+
+        &:hover {
+          color: var.$light-gray;
+        }
       }
 
       @include mixin.on-tablet {
         color: var.$black;
+
+        &:hover {
+          color: var.$dark-gray;
+        }
       }
 
       @include mixin.on-tablet-2 {
         color: var.$black;
+
+        &:hover {
+          color: var.$dark-gray;
+        }
       }
 
       @include mixin.on-desktop {
         color: var.$white;
+
+        &:hover {
+          color: var.$light-gray;
+        }
       }
     }
 
     &--contact {
       @include mixin.on-mobile {
         color: var.$white;
+
+        &:hover {
+          color: var.$light-gray;
+        }
       }
 
       @include mixin.on-tablet {
         color: var.$white;
+
+        &:hover {
+          color: var.$light-gray;
+        }
       }
 
       @include mixin.on-tablet-2 {
         color: var.$black;
+
+        &:hover {
+          color: var.$dark-gray;
+        }
       }
 
       @include mixin.on-desktop {
         color: var.$black;
+
+        &:hover {
+          color: var.$dark-gray;
+        }
       }
     }
   }

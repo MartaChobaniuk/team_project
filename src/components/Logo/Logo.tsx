@@ -1,22 +1,30 @@
 import React from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import cn from 'classnames';
 import styles from './Logo.module.scss';
 import { Path } from '../../utils/constants';
+import { usePathChecker } from '../../helpers/usePathChecker';
 
 type Props = {
   className?: string;
 };
 
 export const Logo: React.FC<Props> = ({ className }) => {
-  const { pathname } = useLocation();
-  const isHome = pathname === Path.Home;
-  const isHomeAI = pathname === Path.HomeAI;
-  const isResponse = pathname === Path.Response;
-  const isSignUp = pathname === Path.SignUp;
-  const isLogIn = pathname === Path.LogIn;
-  const isAbout = pathname === Path.About;
-  const isContact = pathname === Path.Contact;
+  const {
+    isHome,
+    isHomeAI,
+    isResponse,
+    isSignUp,
+    isLogIn,
+    isAbout,
+    isFaq,
+    isContact,
+    isExplore,
+    isProfile,
+    isProfileInfo,
+    isActivity,
+    isOpportunities,
+  } = usePathChecker();
 
   return (
     <Link to={Path.Home} className={cn(styles.logo, className)}>
@@ -29,6 +37,10 @@ export const Logo: React.FC<Props> = ({ className }) => {
           [styles['logo__text--sign']]: isSignUp,
           [styles['logo__text--login']]: isLogIn,
           [styles['logo__text--contact']]: isContact,
+          [styles['logo__text--faq']]: isFaq,
+          [styles['logo__text--explore']]: isExplore,
+          [styles['logo__text--profile']]:
+            isProfile || isProfileInfo || isActivity || isOpportunities,
         })}
       >
         THE i change

@@ -91,9 +91,9 @@
 
   &__button {
     position: relative;
-    width: max-content;
-    border: solid 0.5px var.$black;
-    background-color: transparent;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
     cursor: pointer;
     overflow: hidden;
     transition: all 0.5s ease;
@@ -101,12 +101,6 @@
     @include mixin.flex(flex, center, center, false);
 
     @include mixin.on-mobile {
-      display: flex;
-      border: solid 0.5px var.$white;
-      height: 38px;
-      border-radius: 60px;
-      padding: 8px;
-
       &--sign,
       &--login,
       &--homeAi,
@@ -120,12 +114,6 @@
     }
 
     @include mixin.on-tablet {
-      display: flex;
-      border: solid 0.5px var.$white;
-      height: 38px;
-      border-radius: 60px;
-      padding: 8px;
-
       &--sign,
       &--login,
       &--homeAi,
@@ -143,12 +131,6 @@
     }
 
     @include mixin.on-tablet-2 {
-      display: flex;
-      border: solid 0.5px var.$white;
-      height: 38px;
-      border-radius: 60px;
-      padding: 8px;
-
       &--sign,
       &--login,
       &--homeAi,
@@ -164,35 +146,18 @@
     @include mixin.on-desktop {
       display: none;
     }
-
-    &::before {
-      content: "";
-      position: absolute;
-      left: 0;
-      top: 50%;
-      width: 0;
-      height: 100%;
-      background: var.$orange-red;
-      transform: translateY(-50%);
-      z-index: 0;
-      transition: width 0.5s ease;
-    }
-
-    &:hover::before {
-      width: 100%;
-    }
   }
 
   &__img {
-    width: 16px;
-    height: 16px;
+    width: 44px;
+    height: 44px;
     z-index: 5;
   }
 
   &__lang {
     position: relative;
     width: max-content;
-    height: 38px;
+    height: 44px;
     border: solid 0.5px var.$white;
     background-color: transparent;
     cursor: pointer;

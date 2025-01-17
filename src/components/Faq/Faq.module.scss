@@ -60,7 +60,7 @@
       }
 
       &--scrolled {
-        height: 30vh;
+        height: 20vh;
       }
     }
 
@@ -135,9 +135,11 @@
       display: block;
       width: 100%;
       text-align: left;
+      transition: display 0.3s ease;
 
       &--visible {
         display: none;
+        transition: display 0.3s ease;
       }
     }
 
@@ -145,6 +147,12 @@
       display: block;
       width: 100%;
       text-align: left;
+      transition: display 0.3s ease;
+
+      &--scrolled {
+        display: none;
+        transition: display 0.3s ease;
+      }
     }
 
     @include mixin.on-tablet-2 {
@@ -161,25 +169,40 @@
 
   &__subtitle {
     @include mixin.body-text-desktop-tablet;
-    display: block;
     text-align: justify;
 
     @include mixin.on-mobile {
+      display: block;
       width: 100%;
       margin-bottom: 15px;
+      transition: display 0.3s ease;
+
+      &--scrolled {
+        display: none;
+        transition: display 0.3s ease;
+      }
     }
 
     @include mixin.on-tablet {
+      display: block;
       width: 100%;
       margin-bottom: 15px;
+      transition: display 0.3s ease;
+
+      &--scrolled {
+        display: none;
+        transition: display 0.3s ease;
+      }
     }
 
     @include mixin.on-tablet-2 {
+      display: block;
       width: 70%;
       margin-bottom: 10px;
     }
 
     @include mixin.on-desktop {
+      display: block;
       width: 60%;
       margin-bottom: 15px;
     }

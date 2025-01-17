@@ -1,26 +1,32 @@
 import React from 'react';
 import cn from 'classnames';
-import { NavLink, useLocation } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import styles from './NavbarRight.module.scss';
 import { Path } from '../../utils/constants';
 import user_white from '../../images/icons/account_white.svg';
 import user_black from '../../images/icons/account_black.svg';
+import { usePathChecker } from '../../helpers/usePathChecker';
 
 type Props = {
   className?: string;
 };
 
 export const NavbarRight: React.FC<Props> = ({ className }) => {
-  const { pathname } = useLocation();
-  const isHome = pathname === Path.Home;
-  const isHomeAI = pathname === Path.HomeAI;
-  const isResponse = pathname === Path.Response;
-  const isSignUp = pathname === Path.SignUp;
-  const isLogIn = pathname === Path.LogIn;
-  const isAbout = pathname === Path.About;
-  const isFaq = pathname === Path.Faq;
-  const isContact = pathname === Path.Contact;
-  const isExplore = pathname === Path.Explore;
+  const {
+    isHome,
+    isHomeAI,
+    isResponse,
+    isSignUp,
+    isLogIn,
+    isAbout,
+    isFaq,
+    isContact,
+    isExplore,
+    isProfile,
+    isProfileInfo,
+    isActivity,
+    isOpportunities,
+  } = usePathChecker();
 
   const getActiveLink = ({ isActive }: { isActive: boolean }) =>
     cn(
@@ -56,11 +62,15 @@ export const NavbarRight: React.FC<Props> = ({ className }) => {
             [styles['navbar__lang--faq']]: isFaq,
             [styles['navbar__lang--contact']]: isContact,
             [styles['navbar__lang--explore']]: isExplore,
+            [styles['navbar__lang--profile']]:
+              isProfile || isProfileInfo || isActivity || isOpportunities,
           })}
         >
           <span className={styles['navbar__lang-name']}>ENG</span>
         </button>
-        {isLogIn ? (
+
+        {/* eslint-disable-next-line */}
+        {(isLogIn || isHome || isHomeAI || isResponse || isAbout || isFaq || isContact || isExplore) && (
           <NavLink to={Path.LogIn} className={getActiveLink}>
             <img
               src={isHome || isAbout ? user_white : user_black}
@@ -77,7 +87,9 @@ export const NavbarRight: React.FC<Props> = ({ className }) => {
             />
             <span className={styles.navbar__name}>Log In</span>
           </NavLink>
-        ) : (
+        )}
+
+        {isSignUp && (
           <NavLink to={Path.SignUp} className={getActiveLink}>
             <img
               src={isHome || isAbout || isFaq ? user_white : user_black}
@@ -93,6 +105,23 @@ export const NavbarRight: React.FC<Props> = ({ className }) => {
               })}
             />
             <span className={styles.navbar__name}>Sign Up</span>
+          </NavLink>
+        )}
+        {(isProfile || isProfileInfo || isActivity || isOpportunities) && (
+          <NavLink
+            to={Path.Profile}
+            className={({ isActive }: { isActive: boolean }) =>
+              cn(styles.navbar__profile, {
+                [styles['navbar__profile--active']]:
+                  (isActive && isProfile) ||
+                  (isActive && isProfileInfo) ||
+                  (isActive && isActivity) ||
+                  (isActive && isOpportunities),
+              })
+            }
+          >
+            <img src={user_white} alt="user" className={styles.navbar__img} />
+            <span className={styles.navbar__name}>Profile</span>
           </NavLink>
         )}
       </div>
