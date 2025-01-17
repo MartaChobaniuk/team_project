@@ -1,1 +1,1 @@
-export const ProfileInfo = () => {}
+export const ProfileInfo = () => {};
