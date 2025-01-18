@@ -347,12 +347,9 @@
       border-radius: 0 0 20px 20px;
       padding: 16px;
       @include mixin.flex(flex, false, false, column);
+      transition: height 0.5s ease;
 
       &--scrolled {
-        height: 25vh;
-      }
-
-      &--fixed {
         height: 25vh;
       }
     }
@@ -482,6 +479,7 @@
       @include mixin.h3-desktop-tablet;
       text-align: left;
       color: var.$black;
+      cursor: pointer;
     }
 
     @include mixin.on-desktop {

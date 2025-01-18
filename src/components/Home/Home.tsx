@@ -7,40 +7,41 @@ import { Path } from '../../utils/constants';
 
 export const Home: React.FC = () => {
   const [isScrolled, setIsScrolled] = useState<boolean>(false);
-  const [isFixed, setIsFixed] = useState(false);
   const navigate = useNavigate();
   const contentRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     const handleScroll = () => {
-      const scrollY = window.scrollY;
-
-      setIsScrolled(scrollY > 50);
-      setIsFixed(scrollY > 50);
-    };
-
-    const handleFixed = () => {
       if (contentRef.current) {
-        const isAtBottom =
-          contentRef.current.scrollHeight - contentRef.current.scrollTop <=
-          contentRef.current.clientHeight + 1;
+        const content = contentRef.current;
 
-        setIsScrolled(contentRef.current.scrollTop > 0);
-        setIsFixed(isAtBottom);
+        if (content.scrollTop + content.clientHeight >= content.scrollHeight) {
+          setTimeout(() => {
+            setIsScrolled(true);
+          }, 500);
+        } else {
+          setIsScrolled(false);
+        }
       }
     };
 
-    contentRef.current?.addEventListener('scroll', handleFixed);
-    window.addEventListener('scroll', handleScroll);
+    if (contentRef.current) {
+      contentRef.current.addEventListener('scroll', handleScroll);
+    }
 
     return () => {
-      window.removeEventListener('scroll', handleScroll);
-      contentRef.current?.removeEventListener('scroll', handleFixed);
+      if (contentRef.current) {
+        contentRef.current.removeEventListener('scroll', handleScroll);
+      }
     };
   }, []);
 
   const handleHomeAI = () => {
     navigate(Path.HomeAI);
+  };
+
+  const handleClick = () => {
+    setIsScrolled(true);
   };
 
   return (
@@ -93,14 +94,12 @@ export const Home: React.FC = () => {
         </div>
 
         <div
-          ref={contentRef}
           className={cn(styles['home__left-mobile'], {
             [styles['home__left-mobile--scrolled']]: isScrolled,
-            [styles['home__left-mobile--fixed']]: isFixed,
           })}
         >
           <div className={styles['home__collaps-line']}></div>
-          <div className={styles['home__mobile-content-left']}>
+          <div ref={contentRef} className={styles['home__mobile-content-left']}>
             <h1
               className={cn(styles['home__mobile-title'], {
                 [styles['home__mobile-title--scrolled']]: isScrolled,
@@ -160,7 +159,10 @@ export const Home: React.FC = () => {
             })}
           >
             {!isScrolled && (
-              <h3 className={styles['home__mobile-question-left']}>
+              <h3
+                className={styles['home__mobile-question-left']}
+                onClick={handleClick}
+              >
                 How Do You Want To Contribute Today?
               </h3>
             )}
