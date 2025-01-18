@@ -351,6 +351,10 @@
       &--scrolled {
         height: 25vh;
       }
+
+      &--fixed {
+        height: 25vh;
+      }
     }
 
     @include mixin.on-tablet {

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import cn from 'classnames';
 import styles from './Home.module.scss';
 import arrow from '../../images/icons/arrow_r.svg';
@@ -7,19 +7,35 @@ import { Path } from '../../utils/constants';
 
 export const Home: React.FC = () => {
   const [isScrolled, setIsScrolled] = useState<boolean>(false);
+  const [isFixed, setIsFixed] = useState(false);
   const navigate = useNavigate();
+  const contentRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     const handleScroll = () => {
       const scrollY = window.scrollY;
 
-      setIsScrolled(scrollY > 20);
+      setIsScrolled(scrollY > 50);
+      setIsFixed(scrollY > 50);
     };
 
+    const handleFixed = () => {
+      if (contentRef.current) {
+        const isAtBottom =
+          contentRef.current.scrollHeight - contentRef.current.scrollTop <=
+          contentRef.current.clientHeight + 1;
+
+        setIsScrolled(contentRef.current.scrollTop > 0);
+        setIsFixed(isAtBottom);
+      }
+    };
+
+    contentRef.current?.addEventListener('scroll', handleFixed);
     window.addEventListener('scroll', handleScroll);
 
     return () => {
       window.removeEventListener('scroll', handleScroll);
+      contentRef.current?.removeEventListener('scroll', handleFixed);
     };
   }, []);
 
@@ -77,8 +93,10 @@ export const Home: React.FC = () => {
         </div>
 
         <div
+          ref={contentRef}
           className={cn(styles['home__left-mobile'], {
             [styles['home__left-mobile--scrolled']]: isScrolled,
+            [styles['home__left-mobile--fixed']]: isFixed,
           })}
         >
           <div className={styles['home__collaps-line']}></div>
