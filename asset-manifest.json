@@ -1,8 +1,9 @@
 {
   "files": {
-    "main.css": "./static/css/main.d5fe0e62.css",
-    "main.js": "./static/js/main.d438f724.js",
+    "main.css": "./static/css/main.19f047b0.css",
+    "main.js": "./static/js/main.ed6a3926.js",
     "static/media/sign_up_bg.jpg": "./static/media/sign_up_bg.74bc4f2635a0c1531067.jpg",
+    "static/media/profile_opport_bg.jpg": "./static/media/profile_opport_bg.1b18c97268221426cd1c.jpg",
     "static/media/profile_bg.jpg": "./static/media/profile_bg.a65fb7c91dd0c3c19e00.jpg",
     "static/media/contact_bg.jpg": "./static/media/contact_bg.94db65f51614f0ecb5b6.jpg",
     "static/media/fa-solid-900.ttf": "./static/media/fa-solid-900.ad1782c70927ebc5bc87.ttf",
@@ -24,15 +25,17 @@
     "static/media/arrow_r.svg": "./static/media/arrow_r.a858952c9340f1ed2364197d54e51ba8.svg",
     "static/media/menu_white_bg.svg": "./static/media/menu_white_bg.c99bcdf03d33ff7c45cfb1eadd954c3f.svg",
     "static/media/cross_white_bg.svg": "./static/media/cross_white_bg.9342b3e15cee9935d14043d74c48dbcc.svg",
+    "static/media/arrow_back.svg": "./static/media/arrow_back.34fbeb6ab6b6536bb411acf49f65680b.svg",
     "static/media/arrow_up_white.svg": "./static/media/arrow_up_white.bf592e5284628091eb6ab2dff3570803.svg",
+    "static/media/arrow_up_white (2).svg": "./static/media/arrow_up_white (2).af58fd66962173537928a40ff6f8d235.svg",
     "static/media/up.svg": "./static/media/up.08a513a5e48d451fe0fa0b7e81515353.svg",
     "static/media/arrow_down_white.svg": "./static/media/arrow_down_white.ed56529ee92fbee9980eabf1248beb09.svg",
     "static/media/down.svg": "./static/media/down.6fba0153068f6693b0e28fb18a079d8e.svg",
-    "main.d5fe0e62.css.map": "./static/css/main.d5fe0e62.css.map",
-    "main.d438f724.js.map": "./static/js/main.d438f724.js.map"
+    "main.19f047b0.css.map": "./static/css/main.19f047b0.css.map",
+    "main.ed6a3926.js.map": "./static/js/main.ed6a3926.js.map"
   },
   "entrypoints": [
-    "static/css/main.d5fe0e62.css",
-    "static/js/main.d438f724.js"
+    "static/css/main.19f047b0.css",
+    "static/js/main.ed6a3926.js"
   ]
 }
