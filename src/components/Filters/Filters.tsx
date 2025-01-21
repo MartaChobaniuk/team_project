@@ -28,7 +28,7 @@ export const Filters: React.FC<FiltersProps> = ({
   const [isCancelActive, setCancelActive] = useState(false);
 
   const toggleDropdown = (filterId: string) => {
-    setDropdownState((prevState) => ({
+    setDropdownState(prevState => ({
       ...prevState,
       [filterId]: !prevState[filterId],
     }));
@@ -39,13 +39,13 @@ export const Filters: React.FC<FiltersProps> = ({
   };
 
   const selectOption = (filterId: keyof FilterSelection, option: string) => {
-    setSelectedOptions((prevSelectedOptions) => {
+    setSelectedOptions(prevSelectedOptions => {
       const newSelectedOptions = { ...prevSelectedOptions, [filterId]: option };
-  
+
       return newSelectedOptions;
     });
-  
-    setDropdownState((prevState) => ({
+
+    setDropdownState(prevState => ({
       ...prevState,
       [filterId]: false,
     }));
@@ -53,6 +53,7 @@ export const Filters: React.FC<FiltersProps> = ({
 
   const onChange = (dates: [Date | null, Date | null]) => {
     const [start, end] = dates;
+
     setStartDate(start);
     setEndDate(end);
   };
@@ -64,14 +65,14 @@ export const Filters: React.FC<FiltersProps> = ({
         : startDate
           ? `${startDate.toLocaleDateString('en-GB')}`
           : null;
-  
+
     const filtersToApply = {
       ...selectedOptions,
       ...(dateFilter && { date: dateFilter }),
     };
-  
+
     onFilterChange(filtersToApply);
-  
+
     setApplyActive(true);
     setCancelActive(false);
     setIsFiltersOpen(false);
@@ -174,7 +175,7 @@ export const Filters: React.FC<FiltersProps> = ({
                     endDate={endDate}
                     selectsRange
                     inline
-                    dateFormat='yyyy/mm/dd'
+                    dateFormat="yyyy/mm/dd"
                   />
                 </div>
               )}

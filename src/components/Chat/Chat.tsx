@@ -19,7 +19,8 @@ export const Chat: React.FC = () => {
     }
 
     const userMessageObj: Message = { sender: 'user', text: userMessage };
-    setMessages((prev) => [...prev, userMessageObj]);
+
+    setMessages(prev => [...prev, userMessageObj]);
     setIsSending(true);
     setUserMessage('');
 
@@ -27,7 +28,7 @@ export const Chat: React.FC = () => {
       const encodedMessage = encodeURIComponent(userMessage);
       const response = await fetch(
         `https://dewvdtfd5m.execute-api.eu-north-1.amazonaws.com/dev/chat?message=${encodedMessage}`,
-        { method: 'GET' }
+        { method: 'GET' },
       );
 
       if (!response.ok) {
@@ -36,13 +37,19 @@ export const Chat: React.FC = () => {
 
       const assistantResponseText = await response.text();
 
-      const assistantMessageObj: Message = { sender: 'assistant', text: assistantResponseText };
-      setMessages((prev) => [...prev, assistantMessageObj]);
+      const assistantMessageObj: Message = {
+        sender: 'assistant',
+        text: assistantResponseText,
+      };
+
+      setMessages(prev => [...prev, assistantMessageObj]);
     } catch (error) {
-      console.error('Error fetching assistant response:', error);
-      setMessages((prev) => [
+      setMessages(prev => [
         ...prev,
-        { sender: 'assistant', text: 'Sorry, something went wrong. Please try again.' },
+        {
+          sender: 'assistant',
+          text: 'Sorry, something went wrong. Please try again.',
+        },
       ]);
     } finally {
       setIsSending(false);
@@ -85,19 +92,16 @@ export const Chat: React.FC = () => {
     );
   };
 
-
   return (
     <div className={styles.chat}>
-      <div className={styles.chat__messages}>
-        {messages.map(renderMessage)}
-      </div>
-      <div className='chat-input'>
+      <div className={styles.chat__messages}>{messages.map(renderMessage)}</div>
+      <div className={styles.chat__input}>
         <textarea
           className={styles.chat__textarea}
           value={userMessage}
-          onChange={(e) => setUserMessage(e.target.value)}
+          onChange={e => setUserMessage(e.target.value)}
           onKeyDown={handleKeyDown}
-          placeholder='Type your question here...'
+          placeholder="Type your question here..."
           rows={2}
           maxLength={600}
         />

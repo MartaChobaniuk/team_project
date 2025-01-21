@@ -46,35 +46,29 @@ export const ExploreAll = () => {
   }, []);
 
   const filteredEvents = useCallback(() => {
-    console.log('Filters in filteredEvents:', filters); // Перевірити фільтри всередині filteredEvents
-    console.log('Query in filteredEvents:', query); // Перевірити запит всередині filteredEvents
     if (filters || query) {
       const filtered = filteredEv(events, filters, query);
-      console.log('Filtered events:', filtered); // Перевірити відфільтровані події
+
       setFilteredEvent(filtered);
     } else {
       setFilteredEvent(events);
     }
   }, [events, filters, query]);
-  
-  
-  useEffect(() => {
-    filteredEvents(); // Викликаємо правильну функцію
-  }, [filteredEvents]);
-  
 
-  // Обробка змін фільтрів
+  useEffect(() => {
+    filteredEvents();
+  }, [filteredEvents]);
+
   const handleFilterChange = (newFilters: FilterSelection) => {
-    console.log('Filters before setting:', newFilters); // Лог перед оновленням фільтрів
-    setFilters((prevFilters) => {
+    setFilters(prevFilters => {
       if (JSON.stringify(prevFilters) !== JSON.stringify(newFilters)) {
-        console.log('Updating filters:', newFilters); // Лог оновлених фільтрів
         return newFilters;
       }
-      return prevFilters; // Не змінюємо стан, якщо фільтри однакові
+
+      return prevFilters;
     });
   };
-  
+
   const openFilters = () => {
     setIsFiltersOpen(true);
   };
