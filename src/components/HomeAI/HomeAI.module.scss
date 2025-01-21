@@ -75,7 +75,7 @@
     @include mixin.on-mobile {
       padding: 16px;
       border-radius: 20px 20px 0 0;
-      height: 60vh;
+      height: 70vh;
     }
 
     @include mixin.on-tablet {
@@ -178,6 +178,22 @@
     @include mixin.h2-desktop-tablet;
     text-align: left;
     @include mixin.responsive-property(margin-bottom, 10px, 10px, 10px, 20px);
+
+    @include mixin.on-mobile {
+      display: none;
+    }
+
+    @include mixin.on-tablet {
+      display: none;
+    }
+
+    @include mixin.on-tablet-2 {
+      display: block;
+    }
+
+    @include mixin.on-desktop {
+      display: block;
+    }
   }
 
   &__text {

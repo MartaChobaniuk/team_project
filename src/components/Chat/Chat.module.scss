@@ -4,7 +4,6 @@
 .chat {
   &__messages {
     width: 100%;
-    height: 40vh;
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
     scrollbar-width: none;
@@ -12,6 +11,22 @@
     flex-direction: column;
     gap: 8px;
     margin-bottom: 20px;
+
+    @include mixin.on-mobile {
+      height: 30vh;
+    }
+
+    @include mixin.on-tablet {
+      height: 30vh;
+    }
+
+    @include mixin.on-tablet-2 {
+      height: 35vh;
+    }
+
+    @include mixin.on-desktop {
+      height: 40vh;
+    }
 
     &::-webkit-scrollbar {
       display: none;
