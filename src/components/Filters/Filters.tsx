@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState } from 'react';
 import styles from './Filters.module.scss';
 import cn from 'classnames';
 import { filterOptions } from '../../helpers/filtersData';
@@ -21,14 +21,14 @@ export const Filters: React.FC<FiltersProps> = ({
     [key: string]: boolean;
   }>({});
   const [selectedOptions, setSelectedOptions] = useState<FilterSelection>({});
-  const [startDate, setStartDate] = useState<Date | null>(null);
+  const [startDate, setStartDate] = useState<Date | null>(new Date());
   const [endDate, setEndDate] = useState<Date | null>(null);
   const [calendarOpen, setCalendarOpen] = useState(false);
   const [isApplyActive, setApplyActive] = useState(false);
   const [isCancelActive, setCancelActive] = useState(false);
 
-  const toggleDropdown = useCallback((filterId: string) => {
-    setDropdownState(prevState => ({
+  const toggleDropdown = (filterId: string) => {
+    setDropdownState((prevState) => ({
       ...prevState,
       [filterId]: !prevState[filterId],
     }));
@@ -36,59 +36,42 @@ export const Filters: React.FC<FiltersProps> = ({
     if (filterId === 'date') {
       setCalendarOpen(true);
     }
-  }, []);
+  };
 
-  const selectOption = useCallback(
-    (filterId: keyof FilterSelection, option: string) => {
-      setSelectedOptions(prevSelectedOptions => ({
-        ...prevSelectedOptions,
-        [filterId]: option,
-      }));
+  const selectOption = (filterId: keyof FilterSelection, option: string) => {
+    setSelectedOptions((prevSelectedOptions) => {
+      const newSelectedOptions = { ...prevSelectedOptions, [filterId]: option };
+  
+      return newSelectedOptions;
+    });
+  
+    setDropdownState((prevState) => ({
+      ...prevState,
+      [filterId]: false,
+    }));
+  };
 
-      setDropdownState(prevState => ({
-        ...prevState,
-        [filterId]: false,
-      }));
-    },
-    [],
-  );
-
-  const formatDate = (date: Date | null) =>
-    date ? date.toLocaleDateString('en-GB') : '';
-
-  const updateDateFilter = useCallback(
-    (dates: [Date | null, Date | null]) => {
-      const [start, end] = dates;
-
-      setStartDate(start);
-      setEndDate(end);
-
-      const formattedStartDate = start ? formatDate(start) : '';
-      const formattedEndDate = end ? formatDate(end) : '';
-
-      const formattedDateRange =
-        formattedStartDate && formattedEndDate
-          ? `${formattedStartDate} - ${formattedEndDate}`
-          : formattedStartDate || formattedEndDate;
-
-      setSelectedOptions(prevSelectedOptions => ({
-        ...prevSelectedOptions,
-        date: formattedDateRange,
-      }));
-
-      onFilterChange({
-        ...selectedOptions,
-        date: formattedDateRange,
-      });
-
-      return formattedDateRange;
-    },
-    [onFilterChange, selectedOptions],
-  );
+  const onChange = (dates: [Date | null, Date | null]) => {
+    const [start, end] = dates;
+    setStartDate(start);
+    setEndDate(end);
+  };
 
   const applyFilters = () => {
-    onFilterChange(selectedOptions);
-    setCalendarOpen(false);
+    const dateFilter =
+      startDate && endDate
+        ? `${startDate.toLocaleDateString('en-GB')} - ${endDate.toLocaleDateString('en-GB')}`
+        : startDate
+          ? `${startDate.toLocaleDateString('en-GB')}`
+          : null;
+  
+    const filtersToApply = {
+      ...selectedOptions,
+      ...(dateFilter && { date: dateFilter }),
+    };
+  
+    onFilterChange(filtersToApply);
+  
     setApplyActive(true);
     setCancelActive(false);
     setIsFiltersOpen(false);
@@ -97,12 +80,12 @@ export const Filters: React.FC<FiltersProps> = ({
   const cancelFilters = () => {
     setSelectedOptions({});
     setDropdownState({});
-    onFilterChange({});
-    setStartDate(null);
+    setStartDate(new Date());
     setEndDate(null);
-    setCalendarOpen(false);
+    onFilterChange({});
     setApplyActive(false);
     setCancelActive(true);
+    setIsFiltersOpen(false);
   };
 
   const handleHideFilters = () => {
@@ -119,7 +102,17 @@ export const Filters: React.FC<FiltersProps> = ({
               className={styles['filters__toggle-button']}
               onClick={() => toggleDropdown(filter.id)}
             >
-              <p>{selectedOptions[filter.id] || 'Select an option'}</p>
+              {filter.id === 'date' ? (
+                <p>
+                  {startDate && endDate
+                    ? `${startDate.toLocaleDateString('en-GB')} - ${endDate.toLocaleDateString('en-GB')}`
+                    : startDate
+                      ? `${startDate.toLocaleDateString('en-GB')}`
+                      : 'Select date range'}
+                </p>
+              ) : (
+                <p>{selectedOptions[filter.id] || 'Select an option'}</p>
+              )}
               <img
                 className={styles.filters__img}
                 src={dropdownState[filter.id] ? arrow_up : arrow_down}
@@ -174,13 +167,14 @@ export const Filters: React.FC<FiltersProps> = ({
               (
                 <div className={styles.filters__calendar}>
                   <DatePicker
+                    showIcon
                     selected={startDate}
-                    onChange={updateDateFilter}
+                    onChange={onChange}
                     startDate={startDate}
                     endDate={endDate}
                     selectsRange
                     inline
-                    dateFormat="yyyy/MM/dd"
+                    dateFormat='yyyy/mm/dd'
                   />
                 </div>
               )}

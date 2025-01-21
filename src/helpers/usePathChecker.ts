@@ -18,5 +18,9 @@ export const usePathChecker = () => {
     isProfileInfo: pathname === Path.ProfileInfo,
     isActivity: pathname === Path.Activity,
     isOpportunities: pathname === Path.Opportunities,
+    isStories: pathname === Path.Stories,
+    isStepOne: pathname === Path.StepOne,
+    isStepTwo: pathname === Path.StepTwo,
+    isStepThree: pathname === Path.StepThree,
   };
 };

@@ -5,7 +5,7 @@ export interface FilterSelection {
   opportunityType?: string;
   assistanceType?: string;
   location?: string;
-  date?: string | [string, string] | string[] | [string | null, string | null];
+  date?: string | [string, string];
   duration?: string;
 }
 

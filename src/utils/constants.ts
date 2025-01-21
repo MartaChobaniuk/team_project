@@ -16,5 +16,8 @@ export enum Path {
   ProfileInfo = '/profile/info',
   Activity = '/profile/activity',
   Opportunities = '/profile/opportunities',
+  StepOne = '/profile/opportunities/step-one',
+  StepTwo = '/profile/opportunities/step-two',
+  StepThree = '/profile/opportunities/step-three',
   Menu = '/menu',
 }

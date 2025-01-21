@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from 'react';
+import { useCallback, useContext, useEffect, useState } from 'react';
 import cn from 'classnames';
 import styles from './ExploreAll.module.scss';
 import { Link, useLocation } from 'react-router-dom';
@@ -45,26 +45,42 @@ export const ExploreAll = () => {
     return () => clearTimeout(timer);
   }, []);
 
-  useEffect(() => {
-    setFilteredEvent(events);
-
-    if (filters) {
+  const filteredEvents = useCallback(() => {
+    console.log('Filters in filteredEvents:', filters); // Перевірити фільтри всередині filteredEvents
+    console.log('Query in filteredEvents:', query); // Перевірити запит всередині filteredEvents
+    if (filters || query) {
       const filtered = filteredEv(events, filters, query);
-
+      console.log('Filtered events:', filtered); // Перевірити відфільтровані події
       setFilteredEvent(filtered);
+    } else {
+      setFilteredEvent(events);
     }
   }, [events, filters, query]);
+  
+  
+  useEffect(() => {
+    filteredEvents(); // Викликаємо правильну функцію
+  }, [filteredEvents]);
+  
 
+  // Обробка змін фільтрів
+  const handleFilterChange = (newFilters: FilterSelection) => {
+    console.log('Filters before setting:', newFilters); // Лог перед оновленням фільтрів
+    setFilters((prevFilters) => {
+      if (JSON.stringify(prevFilters) !== JSON.stringify(newFilters)) {
+        console.log('Updating filters:', newFilters); // Лог оновлених фільтрів
+        return newFilters;
+      }
+      return prevFilters; // Не змінюємо стан, якщо фільтри однакові
+    });
+  };
+  
   const openFilters = () => {
     setIsFiltersOpen(true);
   };
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setQuery(e.target.value);
-  };
-
-  const handleFilterChange = (newFilters: FilterSelection) => {
-    setFilters(newFilters);
   };
 
   return (

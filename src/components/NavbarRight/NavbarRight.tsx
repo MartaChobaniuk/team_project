@@ -1,6 +1,6 @@
 import React from 'react';
 import cn from 'classnames';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useLocation, useParams } from 'react-router-dom';
 import styles from './NavbarRight.module.scss';
 import { Path } from '../../utils/constants';
 import user_white from '../../images/icons/account_white.svg';
@@ -12,6 +12,10 @@ type Props = {
 };
 
 export const NavbarRight: React.FC<Props> = ({ className }) => {
+  const { pathname } = useLocation();
+  const { eventId } = useParams();
+  const isEventPage = eventId ? pathname.includes(eventId) : false;
+
   const {
     isHome,
     isHomeAI,
@@ -26,6 +30,10 @@ export const NavbarRight: React.FC<Props> = ({ className }) => {
     isProfileInfo,
     isActivity,
     isOpportunities,
+    isStories,
+    isStepOne,
+    isStepTwo,
+    isStepThree,
   } = usePathChecker();
 
   const getActiveLink = ({ isActive }: { isActive: boolean }) =>
@@ -43,6 +51,8 @@ export const NavbarRight: React.FC<Props> = ({ className }) => {
       { [styles['navbar__item--login--active']]: isLogIn && isActive },
       { [styles['navbar__item--contact']]: isContact },
       { [styles['navbar__item--explore']]: isExplore },
+      { [styles['navbar__item--stories']]: isStories },
+      { [styles['navbar__item--event']]: isEventPage },
       className,
     );
 
@@ -62,6 +72,11 @@ export const NavbarRight: React.FC<Props> = ({ className }) => {
             [styles['navbar__lang--faq']]: isFaq,
             [styles['navbar__lang--contact']]: isContact,
             [styles['navbar__lang--explore']]: isExplore,
+            [styles['navbar__lang--stories']]: isStories,
+            [styles['navbar__lang--event']]: isEventPage,
+            [styles['navbar__lang--step-one']]: isStepOne,
+            [styles['navbar__lang--step-two']]: isStepTwo,
+            [styles['navbar__lang--step-three']]: isStepThree,
             [styles['navbar__lang--profile']]:
               isProfile || isProfileInfo || isActivity || isOpportunities,
           })}
@@ -70,7 +85,7 @@ export const NavbarRight: React.FC<Props> = ({ className }) => {
         </button>
 
         {/* eslint-disable-next-line */}
-        {(isLogIn || isHome || isHomeAI || isResponse || isAbout || isFaq || isContact || isExplore) && (
+        {(isLogIn || isHome || isHomeAI || isResponse || isAbout || isFaq || isContact || isExplore || isStories || isEventPage) && (
           <NavLink to={Path.LogIn} className={getActiveLink}>
             <img
               src={isHome || isAbout ? user_white : user_black}
@@ -82,7 +97,9 @@ export const NavbarRight: React.FC<Props> = ({ className }) => {
                   isSignUp ||
                   isLogIn ||
                   isContact ||
-                  isExplore,
+                  isExplore ||
+                  isStories ||
+                  isEventPage,
               })}
             />
             <span className={styles.navbar__name}>Log In</span>
@@ -121,6 +138,27 @@ export const NavbarRight: React.FC<Props> = ({ className }) => {
             }
           >
             <img src={user_white} alt="user" className={styles.navbar__img} />
+            <span className={styles.navbar__name}>Profile</span>
+          </NavLink>
+        )}
+        {/* eslint-disable-next-line */}
+        {(isStepOne || isStepTwo || isStepThree) && (
+          <NavLink
+            to={Path.Profile}
+            className={({ isActive }: { isActive: boolean }) =>
+              cn(styles.navbar__step, {
+                [styles['navbar__step--active']]:
+                  (isActive && isStepOne) ||
+                  (isActive && isStepTwo) ||
+                  (isActive && isStepThree),
+              })
+            }
+          >
+            <img
+              src={user_black}
+              alt="user"
+              className={styles['navbar__img--dark']}
+            />
             <span className={styles.navbar__name}>Profile</span>
           </NavLink>
         )}

@@ -1,43 +1,14 @@
-import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styles from './HomeAI.module.scss';
 import arrow from '../../images/icons/arrow_left.svg';
 import { Path } from '../../utils/constants';
+import { Chat } from '../Chat';
 
 export const HomeAI = () => {
-  const [query, setQuery] = useState('');
-  const [error, setError] = useState('');
   const navigate = useNavigate();
 
   const handleHomePage = () => {
     navigate(Path.Home);
-  };
-
-  const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setQuery(e.target.value);
-    if (error) {
-      setError('');
-    }
-  };
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-
-    if (query.trim()) {
-      fetch('https://jsonplaceholder.typicode.com/posts', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ query }),
-      })
-        .then(response => response.json())
-        .then(data => {
-          localStorage.setItem('response', JSON.stringify(data));
-          navigate(Path.Response);
-        })
-        .catch(() => {
-          setError('Something went wrong!');
-        });
-    }
   };
 
   return (
@@ -72,22 +43,7 @@ export const HomeAI = () => {
             </p>
           </div>
           <div className={styles.home__footer}>
-            <form onSubmit={handleSubmit}>
-              <textarea
-                value={query}
-                onChange={handleChange}
-                className={styles.home__input}
-                placeholder="Tell about your submission"
-                maxLength={600}
-                rows={4}
-              />
-              <div className={styles.home__line}></div>
-              <div className={styles['home__button-shell']}>
-                <button className={styles.home__button} type="submit">
-                  <span>Search</span>
-                </button>
-              </div>
-            </form>
+            <Chat />
           </div>
         </div>
       </section>

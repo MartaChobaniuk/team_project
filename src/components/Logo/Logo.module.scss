@@ -88,7 +88,9 @@
 
     &--response,
     &--faq,
-    &--explore {
+    &--explore,
+    &--stories,
+    &--event {
       @include mixin.on-mobile {
         color: var.$white;
 
@@ -157,7 +159,10 @@
     }
 
     &--login,
-    &--profile {
+    &--profile,
+    &--step-one,
+    &--step-two,
+    &--step-three {
       @include mixin.on-mobile {
         color: var.$black;
 

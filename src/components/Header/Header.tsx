@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import cn from 'classnames';
 import styles from './Header.module.scss';
 import { NavbarLeft } from '../NavbarLeft';
@@ -8,19 +8,26 @@ import { Path } from '../../utils/constants';
 import { NavbarRight } from '../NavbarRight';
 import menu_white from '../../images/icons/menu_white_bg.svg';
 import cross_white from '../../images/icons/cross_white_bg.svg';
+import { usePathChecker } from '../../helpers/usePathChecker';
 
 export const Header = () => {
   const [openMenu, setOpenMenu] = useState(false);
   const navigate = useNavigate();
   const { pathname } = useLocation();
-  const isHome = pathname === Path.Home;
-  const isSignUp = pathname === Path.SignUp;
-  const isLogIn = pathname === Path.LogIn;
-  const isHomeAI = pathname === Path.HomeAI;
-  const isAbout = pathname === Path.About;
-  const isContact = pathname === Path.Contact;
-  const isFaq = pathname === Path.Faq;
-  const isExplore = pathname === Path.Explore;
+  const { eventId } = useParams();
+  const isEventPage = eventId ? pathname.includes(eventId) : false;
+
+  const {
+    isHome,
+    isHomeAI,
+    isSignUp,
+    isLogIn,
+    isAbout,
+    isContact,
+    isFaq,
+    isExplore,
+    isStories,
+  } = usePathChecker();
 
   useEffect(() => {
     document.body.style.overflow = openMenu ? 'hidden' : '';
@@ -69,6 +76,8 @@ export const Header = () => {
             [styles['header__lang--about']]: isAbout,
             [styles['header__lang--contact']]: isContact,
             [styles['header__lang--explore']]: isExplore,
+            [styles['header__lang--stories']]: isStories,
+            [styles['header__lang--event']]: isEventPage,
           })}
         >
           <span
@@ -90,6 +99,8 @@ export const Header = () => {
             [styles['header__button--faq']]: isFaq,
             [styles['header__button--contact']]: isContact,
             [styles['header__button--explore']]: isExplore,
+            [styles['header__button--stories']]: isStories,
+            [styles['header__button--event']]: isEventPage,
           })}
         >
           <img

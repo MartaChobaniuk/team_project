@@ -1,1 +1,3 @@
-export const StoriesPage = () => <div>Stories Page</div>;
+import { SuccessStories } from '../../components/SuccessStories';
+
+export const StoriesPage = () => <SuccessStories />;

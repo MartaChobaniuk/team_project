@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation, useParams } from 'react-router-dom';
 import cn from 'classnames';
 import styles from './Logo.module.scss';
 import { Path } from '../../utils/constants';
@@ -10,6 +10,10 @@ type Props = {
 };
 
 export const Logo: React.FC<Props> = ({ className }) => {
+  const { pathname } = useLocation();
+  const { eventId } = useParams();
+  const isEventPage = eventId ? pathname.includes(eventId) : false;
+
   const {
     isHome,
     isHomeAI,
@@ -24,6 +28,10 @@ export const Logo: React.FC<Props> = ({ className }) => {
     isProfileInfo,
     isActivity,
     isOpportunities,
+    isStories,
+    isStepOne,
+    isStepTwo,
+    isStepThree,
   } = usePathChecker();
 
   return (
@@ -39,6 +47,11 @@ export const Logo: React.FC<Props> = ({ className }) => {
           [styles['logo__text--contact']]: isContact,
           [styles['logo__text--faq']]: isFaq,
           [styles['logo__text--explore']]: isExplore,
+          [styles['logo__text--stories']]: isStories,
+          [styles['logo__text--event']]: isEventPage,
+          [styles['logo__text--step-one']]: isStepOne,
+          [styles['logo__text--step-two']]: isStepTwo,
+          [styles['logo__text--step-three']]: isStepThree,
           [styles['logo__text--profile']]:
             isProfile || isProfileInfo || isActivity || isOpportunities,
         })}

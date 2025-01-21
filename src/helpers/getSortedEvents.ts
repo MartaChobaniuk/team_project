@@ -1,6 +1,26 @@
 import { EventType } from '../types/EventType';
 import { FilterSelection } from '../types/FilterType';
 
+const processDateFilter = (dateFilter: string | [string, string]): [Date, Date] | null => {
+  if (Array.isArray(dateFilter)) {
+    const [start, end] = dateFilter.map(date => new Date(date));
+    if (!isNaN(start.getTime()) && !isNaN(end.getTime())) {
+      return [start, end];
+    }
+  } else if (typeof dateFilter === 'string') {
+    const dateRange = dateFilter.split(' - ');
+    if (dateRange.length === 2) {
+      const startDate = new Date(dateRange[0]);
+      const endDate = new Date(dateRange[1]);
+      if (!isNaN(startDate.getTime()) && !isNaN(endDate.getTime())) {
+        return [startDate, endDate];
+      }
+    }
+  }
+  return null;
+};
+
+
 export const filteredEv = (
   events: EventType[],
   filters: FilterSelection,
@@ -84,7 +104,7 @@ export const filteredEv = (
     filteredEvents = filteredEvents.filter(event => {
       const eventDuration = event.duration;
 
-      switch (filters.duration as string) {
+      switch (filters.duration) {
         case 'Up to 1 hour':
           return eventDuration <= 1;
         case '1-6 hours':
@@ -102,9 +122,30 @@ export const filteredEv = (
         case 'Up to a year':
           return eventDuration > 4465 && eventDuration <= 8950;
         default:
-          return;
+          return false; // Замість `undefined`
       }
     });
+  }
+
+
+  if (filters.date) {
+    const processedDates = processDateFilter(filters.date);
+
+    if (processedDates) {
+      const [start, end] = processedDates;
+
+      filteredEvents = filteredEvents.filter(event => {
+        const eventDate = new Date(event.date);
+
+        // Перевіряємо, чи дата валідна
+        if (isNaN(eventDate.getTime())) {
+          return false;
+        }
+
+        // Порівнюємо дату події з діапазоном
+        return eventDate >= start && eventDate <= end;
+      });
+    }
   }
 
   return filteredEvents;

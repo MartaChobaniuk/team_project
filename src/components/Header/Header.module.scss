@@ -108,7 +108,9 @@
       &--about,
       &--contact,
       &--faq,
-      &--explore {
+      &--explore,
+      &--stories,
+      &--event {
         background-color: var.$white;
       }
     }
@@ -120,7 +122,9 @@
       &--home,
       &--contact,
       &--faq,
-      &--explore {
+      &--explore,
+      &--stories,
+      &--event {
         background-color: var.$white;
       }
 
@@ -138,7 +142,9 @@
       &--about,
       &--contact,
       &--faq,
-      &--explore {
+      &--explore,
+      &--stories,
+      &--event {
         background-color: var.$white;
       }
     }
@@ -177,9 +183,12 @@
       &--about,
       &--home,
       &--contact,
-      &--explore {
+      &--explore,
+      &--stories,
+      &--event {
         background-color: transparent;
         color: var.$white;
+        border: solid 0.5px var.$white;
       }
     }
 

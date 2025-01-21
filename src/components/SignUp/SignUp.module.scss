@@ -4,6 +4,7 @@
 .sign-up {
   position: relative;
   height: 100vh;
+  width: 100%;
   overflow: hidden;
 
   &__nav {
@@ -15,6 +16,7 @@
 
     @include mixin.on-mobile {
       flex-direction: column;
+      justify-content: end;
       background-position: center;
       background-size: cover;
     }
@@ -39,7 +41,7 @@
 
   &__right-side {
     @include mixin.on-mobile {
-      height: 15vh;
+      height: 10vh;
     }
 
     @include mixin.on-tablet {
@@ -65,7 +67,7 @@
 
     @include mixin.on-mobile {
       @include mixin.flex(flex, false, space-between, column);
-      height: 85vh;
+      height: 80vh;
       padding: 16px;
       border-radius: 15px 15px 0 0;
     }

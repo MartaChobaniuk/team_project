@@ -81,6 +81,48 @@
     }
   }
 
+  &__step {
+    position: relative;
+    width: max-content;
+    height: 38px;
+    cursor: pointer;
+    text-transform: uppercase;
+    overflow: hidden;
+    transition: all 0.5s ease;
+    background-color: var.$light-gray;
+    color: var.$black;
+
+    @include mixin.flex(flex, center, center, false);
+    @include mixin.responsive-property(border-radius, 60px, 60px, 80px, 80px);
+    @include mixin.responsive-property(padding, 8px, 8px, 8px 16px, 8px 16px);
+
+    &::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 50%;
+      width: 0;
+      height: 100%;
+      transform: translateY(-50%);
+      z-index: 0;
+      transition: width 0.5s ease;
+    }
+
+    &:hover::before {
+      width: 100%;
+    }
+
+    &:hover {
+      background: var.$yellow-green;
+      color: var.$black;
+    }
+
+    &--active {
+      background: var.$yellow-green;
+      color: var.$black;
+    }
+  }
+
   &__name {
     @include mixin.button-text-desktop-tablet;
 
@@ -214,7 +256,9 @@
 
     &--login,
     &--contact,
-    &--explore {
+    &--explore,
+    &--stories,
+    &--event {
       @include mixin.on-desktop {
         background-color: var.$white;
         color: var.$black;
@@ -307,7 +351,12 @@
     &--login,
     &--faq,
     &--contact,
-    &--explore {
+    &--explore,
+    &--stories,
+    &--event,
+    &--step-one,
+    &--step-two,
+    &--step-three {
       @include mixin.on-desktop {
         background-color: transparent;
         color: var.$white;

@@ -1,4 +1,4 @@
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import styles from './ProfileOpportunities.module.scss';
 import { useAuth } from 'react-oidc-context';
 import { NavLink } from 'react-router-dom';
@@ -7,6 +7,7 @@ import cn from 'classnames';
 
 export const ProfileOpportunities = () => {
   const { pathname } = useLocation();
+  const navigate = useNavigate();
   const auth = useAuth();
   const { profile } = auth.user || {};
 
@@ -55,10 +56,17 @@ export const ProfileOpportunities = () => {
 
         <div className={styles.opport__bottom}>
           <div className={styles.opport__block}>
-            <h2 className={styles.opport__subtitle}>Submitted Opportunities</h2>
-            <button className={styles['opport__create-button']}>
-              Create an opportunity
-            </button>
+            <div className={styles.opport__shell}>
+              <h2 className={styles.opport__subtitle}>
+                Submitted Opportunities
+              </h2>
+              <button
+                className={styles['opport__create-button']}
+                onClick={() => navigate(Path.StepOne)}
+              >
+                Create an opportunity
+              </button>
+            </div>
           </div>
           <div className={styles.opport__block}>
             <h2 className={styles.opport__subtitle}>Posted Opportunities</h2>

@@ -1,6 +1,6 @@
 import React from 'react';
 import cn from 'classnames';
-import { NavLink, useLocation } from 'react-router-dom';
+import { NavLink, useLocation, useParams } from 'react-router-dom';
 import styles from './NavbarLeft.module.scss';
 import { Path } from '../../utils/constants';
 import { usePathChecker } from '../../helpers/usePathChecker';
@@ -11,6 +11,9 @@ type Props = {
 
 export const NavbarLeft: React.FC<Props> = ({ className }) => {
   const { pathname } = useLocation();
+  const { eventId } = useParams();
+  const isEventPage = eventId ? pathname.includes(eventId) : false;
+
   const {
     isHome,
     isHomeAI,
@@ -25,6 +28,10 @@ export const NavbarLeft: React.FC<Props> = ({ className }) => {
     isProfileInfo,
     isActivity,
     isOpportunities,
+    isStories,
+    isStepOne,
+    isStepTwo,
+    isStepThree,
   } = usePathChecker();
 
   const navLinks = [
@@ -36,13 +43,8 @@ export const NavbarLeft: React.FC<Props> = ({ className }) => {
   const getActiveLink = ({ isActive }: { isActive: boolean }) =>
     cn(
       styles.navbar__item,
-      { [styles['navbar__item--active']]: isActive },
       { [styles['navbar__item--home']]: isHome || isExplore },
-      {
-        [styles['navbar__item--home--active']]:
-          (isHome || isExplore) && isActive,
-      },
-      { [styles['navbar__item--explore']]: isExplore },
+      { [styles['navbar__item--home--active']]: isHome && isActive },
       { [styles['navbar__item--homeAi']]: isHomeAI },
       { [styles['navbar__item--homeAi--active']]: isHomeAI && isActive },
       { [styles['navbar__item--response']]: isResponse },
@@ -56,9 +58,18 @@ export const NavbarLeft: React.FC<Props> = ({ className }) => {
       { [styles['navbar__item--faq']]: isFaq },
       { [styles['navbar__item--contact']]: isContact },
       { [styles['navbar__item--contact--active']]: isContact && isActive },
+      { [styles['navbar__item--stories']]: isStories },
+      { [styles['navbar__item--stories--active']]: isStories && isActive },
+      { [styles['navbar__item--event']]: isEventPage },
       {
         [styles['navbar__item--profile']]:
-          isProfile || isProfileInfo || isActivity || isOpportunities,
+          isProfile ||
+          isProfileInfo ||
+          isActivity ||
+          isOpportunities ||
+          isStepOne ||
+          isStepTwo ||
+          isStepThree,
       },
       className,
     );

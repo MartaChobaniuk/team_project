@@ -104,4 +104,45 @@
     flex-direction: row;
     justify-content: space-between;
   }
+
+  &__shell {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row;
+  }
+
+  &__create-button {
+    width: 336px;
+    height: 44px;
+    line-height: 44px;
+    text-transform: uppercase;
+    border-radius: 12px;
+    cursor: pointer;
+    background-color: var.$white;
+    color: var.$black;
+    border: solid 0.5px var.$black;
+    border-radius: 40px;
+    transition:
+      background-color 0.3s ease,
+      color 0.3s ease;
+    padding: 8px 16px;
+
+    @include mixin.flex(flex, center, center, row);
+
+    &:hover {
+      background-color: var.$light-gray;
+      color: var.$black;
+    }
+
+    &:active {
+      background-color: var.$light-gray;
+      color: var.$black;
+    }
+
+    &--active {
+      background-color: var.$light-gray;
+      color: var.$black;
+    }
+  }
 }

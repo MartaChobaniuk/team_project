@@ -18,6 +18,9 @@ import { ProfilePage } from './pages/ProfilePage';
 import { ProfileInfoPage } from './pages/ProfileInfoPage';
 import { ProfileActivityPage } from './pages/ProfileActivityPage';
 import { ProfileOpportunitiesPage } from './pages/ProfileOpportunitiesPage';
+import { StepOnePage } from './pages/StepOnePage';
+import { StepTwoPage } from './pages/StepTwoPage';
+import { StepThreePage } from './pages/StepThreePage';
 
 export const Root = () => (
   <Router>
@@ -49,10 +52,13 @@ export const Root = () => (
           <Route index element={<ProfilePage />} />
           <Route path={Path.ProfileInfo} element={<ProfileInfoPage />} />
           <Route path={Path.Activity} element={<ProfileActivityPage />} />
-          <Route
-            path={Path.Opportunities}
-            element={<ProfileOpportunitiesPage />}
-          />
+
+          <Route path={Path.Opportunities}>
+            <Route index element={<ProfileOpportunitiesPage />} />
+            <Route path={Path.StepOne} element={<StepOnePage />} />
+            <Route path={Path.StepTwo} element={<StepTwoPage />} />
+            <Route path={Path.StepThree} element={<StepThreePage />} />
+          </Route>
         </Route>
 
         <Route path={Path.Menu} element={<MenuPage />} />

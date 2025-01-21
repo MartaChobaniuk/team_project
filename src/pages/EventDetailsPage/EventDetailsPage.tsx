@@ -46,12 +46,11 @@ export const EventDetailsPage = () => {
 
   return (
     <div className={styles['event-details']}>
-      <h1>{event.title}</h1>
-      <img src={event.image} alt={event.title} />
+      <h1 className={styles['event-details__title']}>{event.title}</h1>
+      <p>{event.assistanceType}</p>
+      <p>{event.categoryName}</p>
       <p>{event.location}</p>
-      <p>{event.organizerName}</p>
-      <p>{event.organizerName}</p>
-      <p>{event.organizerEmail}</p>
+      <p>{event.date}</p>
     </div>
   );
 };
