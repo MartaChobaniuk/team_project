@@ -6,7 +6,6 @@ import './index.scss';
 import { Root } from './Root';
 import { EventsProvider } from './store/EventsContex';
 import { AuthProvider } from 'react-oidc-context';
-import { OpportunityProvider } from './store/OpportunityContex';
 
 const cognitoAuthConfig = {
   authority:
@@ -19,10 +18,8 @@ const cognitoAuthConfig = {
 
 createRoot(document.getElementById('root') as HTMLDivElement).render(
   <AuthProvider {...cognitoAuthConfig}>
-    <OpportunityProvider>
-      <EventsProvider>
-        <Root />
-      </EventsProvider>
-    </OpportunityProvider>
+    <EventsProvider>
+      <Root />
+    </EventsProvider>
   </AuthProvider>,
 );
