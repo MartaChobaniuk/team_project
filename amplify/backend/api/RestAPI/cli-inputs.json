@@ -1,0 +1,20 @@
+{
+  "version": 1,
+  "paths": {
+    "/events": {
+      "name": "/events",
+      "lambdaFunction": "eventsFunction",
+      "permissions": {
+        "setting": "protected",
+        "auth": [
+          "create",
+          "read",
+          "delete"
+        ],
+        "guest": [
+          "read"
+        ]
+      }
+    }
+  }
+}

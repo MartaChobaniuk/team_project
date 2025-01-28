@@ -1,6 +1,16 @@
 {
   "extends": "@mate-academy/students-ts-config",
   "include": [
-    "src"
-  ]
+    "src",
+    ".eslintrc.js"
+  ],
+  "compilerOptions": {
+    "lib": [
+      "esnext",
+      "dom"
+    ],
+    "moduleResolution": "node",
+    "esModuleInterop": true,
+    "resolveJsonModule": true
+  }
 }
