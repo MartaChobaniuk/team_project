@@ -50,7 +50,9 @@ interface OpportunityContextType {
   setStepThreeData: React.Dispatch<React.SetStateAction<StepThreeData>>;
 }
 
-const OpportunityContext = createContext<OpportunityContextType | undefined>(undefined);
+const OpportunityContext = createContext<OpportunityContextType | undefined>(
+  undefined,
+);
 
 const initialStepOneData: StepOneData = {
   organizerType: '',
@@ -87,33 +89,38 @@ const initialStepThreeData: StepThreeData = {
   documents: [{ file: null, id: 1 }],
 };
 
-
 export const OpportunityProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
   const [stepOneData, setStepOneData] = useLocalStorage<StepOneData>(
     'stepOneData',
-    initialStepOneData
+    initialStepOneData,
   );
 
   const [stepTwoData, setStepTwoData] = useLocalStorage<StepTwoData>(
     'stepTwoData',
-    initialStepTwoData
+    initialStepTwoData,
   );
 
   const [stepThreeData, setStepThreeData] = useLocalStorage<StepThreeData>(
     'stepThreeData',
-    initialStepThreeData
+    initialStepThreeData,
   );
 
   const value = useMemo(
     () => ({
       stepOneData,
-      setStepOneData: setStepOneData as React.Dispatch<React.SetStateAction<StepOneData>>,
+      setStepOneData: setStepOneData as React.Dispatch<
+        React.SetStateAction<StepOneData>
+      >,
       stepTwoData,
-      setStepTwoData: setStepTwoData as React.Dispatch<React.SetStateAction<StepTwoData>>,
+      setStepTwoData: setStepTwoData as React.Dispatch<
+        React.SetStateAction<StepTwoData>
+      >,
       stepThreeData,
-      setStepThreeData: setStepThreeData as React.Dispatch<React.SetStateAction<StepThreeData>>,
+      setStepThreeData: setStepThreeData as React.Dispatch<
+        React.SetStateAction<StepThreeData>
+      >,
     }),
     [
       stepOneData,
@@ -122,7 +129,7 @@ export const OpportunityProvider: React.FC<{ children: React.ReactNode }> = ({
       setStepTwoData,
       stepThreeData,
       setStepThreeData,
-    ]
+    ],
   );
 
   return (
