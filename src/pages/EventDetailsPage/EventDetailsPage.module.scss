@@ -193,9 +193,6 @@
     margin-bottom: 10px;
   }
 
-  &__detail {
-  }
-
   &__name {
     @include mixin.body-text-desktop-tablet;
     font-weight: 500;
@@ -211,12 +208,6 @@
   &__organizer-block {
     display: flex;
     flex-direction: row;
-  }
-
-  &__organizer-logo {
-  }
-
-  &__img-container {
   }
 
   &__organizer-details {
