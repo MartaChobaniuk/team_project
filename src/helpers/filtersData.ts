@@ -4,12 +4,12 @@ export const filterOptions: FilterOptions[] = [
   {
     id: 'opportunityType',
     nameOfFilter: 'opportunity type',
-    value: ['VOLUNTARY', 'WISHES'],
+    value: ['Voluntary', 'Wishes'],
   },
   {
     id: 'assistanceType',
     nameOfFilter: 'type of help',
-    value: ['VOLUNTEERING', 'DONATION'],
+    value: ['Volunteering', 'Donation'],
   },
   {
     id: 'categoryName',
@@ -73,9 +73,13 @@ export const filterOptions: FilterOptions[] = [
     ],
   },
   {
-    id: 'date',
-    nameOfFilter: 'date',
-    value: [],
-    calendar: true,
+    id: 'startDate',
+    nameOfFilter: 'start date',
+    value: null,
+  },
+  {
+    id: 'endDate',
+    nameOfFilter: 'end date',
+    value: null,
   },
 ];

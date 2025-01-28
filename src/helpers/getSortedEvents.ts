@@ -1,31 +1,6 @@
 import { EventType } from '../types/EventType';
 import { FilterSelection } from '../types/FilterType';
 
-const processDateFilter = (
-  dateFilter: string | [string, string],
-): [Date, Date] | null => {
-  if (Array.isArray(dateFilter)) {
-    const [start, end] = dateFilter.map(date => new Date(date));
-
-    if (!isNaN(start.getTime()) && !isNaN(end.getTime())) {
-      return [start, end];
-    }
-  } else if (typeof dateFilter === 'string') {
-    const dateRange = dateFilter.split(' - ');
-
-    if (dateRange.length === 2) {
-      const startDate = new Date(dateRange[0]);
-      const endDate = new Date(dateRange[1]);
-
-      if (!isNaN(startDate.getTime()) && !isNaN(endDate.getTime())) {
-        return [startDate, endDate];
-      }
-    }
-  }
-
-  return null;
-};
-
 export const filteredEv = (
   events: EventType[],
   filters: FilterSelection,
@@ -45,21 +20,21 @@ export const filteredEv = (
     });
   }
 
-  if (filters.opportunityType?.includes('VOLUNTARY')) {
+  if (filters.opportunityType?.includes('Voluntary')) {
     filteredEvents = filteredEvents.filter(
       event => event.opportunityType === 'VOLUNTARY',
     );
-  } else if (filters.opportunityType?.includes('WISHES')) {
+  } else if (filters.opportunityType?.includes('Wishes')) {
     filteredEvents = filteredEvents.filter(
       event => event.opportunityType === 'WISHES',
     );
   }
 
-  if (filters.assistanceType?.includes('VOLUNTEERING')) {
+  if (filters.assistanceType?.includes('Volunteering')) {
     filteredEvents = filteredEvents.filter(
       event => event.assistanceType === 'VOLUNTEERING',
     );
-  } else if (filters.assistanceType?.includes('DONATION')) {
+  } else if (filters.assistanceType?.includes('Donation')) {
     filteredEvents = filteredEvents.filter(
       event => event.assistanceType === 'DONATION',
     );
@@ -132,22 +107,83 @@ export const filteredEv = (
     });
   }
 
-  if (filters.date) {
-    const processedDates = processDateFilter(filters.date);
+  if (filters.startDate && !filters.endDate) {
+    filteredEvents = filteredEvents.filter(event => {
+      if (!event.date) {
+        return false;
+      }
 
-    if (processedDates) {
-      const [start, end] = processedDates;
+      const eventDate = new Date(event.date);
 
-      filteredEvents = filteredEvents.filter(event => {
-        const eventDate = new Date(event.date);
+      if (isNaN(eventDate.getTime())) {
+        return false;
+      }
 
-        if (isNaN(eventDate.getTime())) {
-          return false;
-        }
+      const startDate = filters.startDate ? new Date(filters.startDate) : null;
 
-        return eventDate >= start && eventDate <= end;
-      });
-    }
+      if (!startDate) {
+        return false;
+      }
+
+      const eventDateString = eventDate.toISOString().split('T')[0];
+      const startDateString = startDate.toISOString().split('T')[0];
+
+      return eventDateString === startDateString;
+    });
+  }
+
+  if (filters.endDate && !filters.startDate) {
+    filteredEvents = filteredEvents.filter(event => {
+      if (!event.date) {
+        return false;
+      }
+
+      const eventDate = new Date(event.date);
+
+      if (isNaN(eventDate.getTime())) {
+        return false;
+      }
+
+      const endDate = filters.endDate ? new Date(filters.endDate) : null;
+
+      if (!endDate) {
+        return false;
+      }
+
+      const eventDateString = eventDate.toISOString().split('T')[0];
+      const endDateString = endDate.toISOString().split('T')[0];
+
+      return eventDateString === endDateString;
+    });
+  }
+
+  if (filters.startDate && filters.endDate) {
+    filteredEvents = filteredEvents.filter(event => {
+      if (!event.date) {
+        return false;
+      }
+
+      const eventDate = new Date(event.date);
+
+      if (isNaN(eventDate.getTime())) {
+        return false;
+      }
+
+      const startDate = filters.startDate ? new Date(filters.startDate) : null;
+      const endDate = filters.endDate ? new Date(filters.endDate) : null;
+
+      if (!startDate || !endDate) {
+        return false;
+      }
+
+      const eventDateString = eventDate.toISOString().split('T')[0];
+      const startDateString = startDate.toISOString().split('T')[0];
+      const endDateString = endDate.toISOString().split('T')[0];
+
+      return (
+        eventDateString >= startDateString && eventDateString <= endDateString
+      );
+    });
   }
 
   return filteredEvents;

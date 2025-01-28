@@ -5,14 +5,28 @@ import { EventType } from '../../types/EventType';
 import image from '../../images/images.jpg';
 import { ProgressBar } from '../ProgressBar';
 import { Link } from 'react-router-dom';
+import { usePathChecker } from '../../helpers/usePathChecker';
+import { Path } from '../../utils/constants';
 
 type Props = {
   event: EventType;
 };
 
 export const EventCard: React.FC<Props> = ({ event }) => {
+  const { isExplore, isVolunteering, isWishes, isDonate } = usePathChecker();
+
+  const basePath = isExplore
+    ? Path.Explore
+    : isVolunteering
+      ? Path.Volunteering
+      : isWishes
+        ? Path.Wishes
+        : isDonate
+          ? Path.Donate
+          : '';
+
   return (
-    <Link to={`/explore/${event.id}`} className={styles.event}>
+    <Link to={`${basePath}/${event.id}`} className={styles.event}>
       <div className={styles['event__container-img']}>
         <img src={image} alt="Event" className={styles.event__img} />
         <span

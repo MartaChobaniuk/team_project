@@ -27,6 +27,9 @@ export const Header = () => {
     isFaq,
     isExplore,
     isStories,
+    isVolunteering,
+    isWishes,
+    isDonate,
   } = usePathChecker();
 
   useEffect(() => {
@@ -76,6 +79,9 @@ export const Header = () => {
             [styles['header__lang--about']]: isAbout,
             [styles['header__lang--contact']]: isContact,
             [styles['header__lang--explore']]: isExplore,
+            [styles['header__lang--volunt']]: isVolunteering,
+            [styles['header__lang--wishes']]: isWishes,
+            [styles['header__lang--donate']]: isDonate,
             [styles['header__lang--stories']]: isStories,
             [styles['header__lang--event']]: isEventPage,
           })}
@@ -99,6 +105,9 @@ export const Header = () => {
             [styles['header__button--faq']]: isFaq,
             [styles['header__button--contact']]: isContact,
             [styles['header__button--explore']]: isExplore,
+            [styles['header__button--volunt']]: isVolunteering,
+            [styles['header__button--wishes']]: isWishes,
+            [styles['header__button--donate']]: isDonate,
             [styles['header__button--stories']]: isStories,
             [styles['header__button--event']]: isEventPage,
           })}

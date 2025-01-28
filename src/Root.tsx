@@ -8,7 +8,6 @@ import { SignUpPage } from './pages/SignUpPage';
 import { Path } from './utils/constants';
 import { NotFoundPage } from './pages/NotFoundPage';
 import { HomeAIPage } from './pages/HomeAIPage';
-import { ResponsePage } from './pages/ResponsePage';
 import { MenuPage } from './pages/MenuPage';
 import { LogInPage } from './pages/LogInPage';
 import { FaqPage } from './pages/FaqPage';
@@ -21,6 +20,9 @@ import { ProfileOpportunitiesPage } from './pages/ProfileOpportunitiesPage';
 import { StepOnePage } from './pages/StepOnePage';
 import { StepTwoPage } from './pages/StepTwoPage';
 import { StepThreePage } from './pages/StepThreePage';
+import { VolunteeringPage } from './pages/VolunteeringPage';
+import { WishesPage } from './pages/WishesPage';
+import { DonatePage } from './pages/DonatePage';
 
 export const Root = () => (
   <Router>
@@ -33,9 +35,22 @@ export const Root = () => (
           <Route path=":eventId" element={<EventDetailsPage />} />
         </Route>
 
-        <Route path={Path.HomeAI} element={<HomeAIPage />} />
-        <Route path={Path.Response} element={<ResponsePage />} />
+        <Route path={Path.Volunteering}>
+          <Route index element={<VolunteeringPage />} />
+          <Route path=":eventId" element={<EventDetailsPage />} />
+        </Route>
 
+        <Route path={Path.Wishes}>
+          <Route index element={<WishesPage />} />
+          <Route path=":eventId" element={<EventDetailsPage />} />
+        </Route>
+
+        <Route path={Path.Donate}>
+          <Route index element={<DonatePage />} />
+          <Route path=":eventId" element={<EventDetailsPage />} />
+        </Route>
+
+        <Route path={Path.HomeAI} element={<HomeAIPage />} />
         <Route path={Path.Stories} element={<StoriesPage />} />
 
         <Route path={Path.About}>

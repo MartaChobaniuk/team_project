@@ -6,7 +6,15 @@ import { Header } from './components/Header';
 import { usePathChecker } from './helpers/usePathChecker';
 
 export const App: React.FC = () => {
-  const { isExplore, isAbout, isFaq, isHome } = usePathChecker();
+  const {
+    isExplore,
+    isAbout,
+    isFaq,
+    isHome,
+    isVolunteering,
+    isWishes,
+    isDonate,
+  } = usePathChecker();
 
   return (
     <div className="app">
@@ -14,6 +22,9 @@ export const App: React.FC = () => {
         <header
           className={cn('app__header', {
             'app__header--explore': isExplore,
+            'app__header--volunt': isVolunteering,
+            'app__header--wishes': isWishes,
+            'app__header--donate': isDonate,
             'app__header--about': isAbout,
             'app__header--faq': isFaq,
             'app__header--home': isHome,

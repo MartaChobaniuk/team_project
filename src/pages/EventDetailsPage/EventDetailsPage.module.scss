@@ -4,12 +4,223 @@
 .event-details {
   width: 100%;
   height: 100vh;
-  background-color: var.$black;
-  padding: 86px 24px 24px;
-  color: var.$white;
+  overflow: hidden;
+
+  &--visible {
+    overflow: visible;
+  }
+
+  @keyframes slideUp {
+    0% {
+      height: 100vh;
+    }
+    100% {
+      height: 50vh;
+    }
+  }
+
+  &__content-top {
+    position: relative;
+    z-index: 12;
+    background-color: var.$black;
+    color: var.$white;
+    border-radius: 0 0 20px 20px;
+    @include mixin.sizes(100%, 100vh);
+    @include mixin.flex(flex, false, space-between, column);
+
+    @include mixin.on-desktop {
+      padding: 86px 24px 20px;
+      animation: slideUp 0.5s ease-in-out 4s forwards;
+    }
+  }
+
+  &__block-back {
+    display: flex;
+    flex-direction: row;
+    justify-content: start;
+    align-items: center;
+    cursor: pointer;
+  }
+
+  &__img {
+    width: 22px;
+    height: 22px;
+  }
+
+  &__back {
+    @include mixin.button-text-desktop-tablet;
+    text-transform: uppercase;
+    color: var.$white;
+    margin-left: 8px;
+  }
+
+  &__block-names {
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__content-bottom {
+    &--visible {
+      @include mixin.on-desktop {
+        display: flex;
+        flex-direction: row;
+        height: 50vh;
+      }
+    }
+  }
 
   &__title {
-    @include mixin.h1-desktop-tablet;
+    @include mixin.h2-desktop-tablet;
+    text-align-last: left;
     color: var.$white;
+    margin-bottom: 20px;
+  }
+
+  &__subtitle {
+    @include mixin.small-text-desktop-tablet;
+    text-align: left;
+    color: var.$light-gray;
+    margin-bottom: 20px;
+  }
+
+  &__buttons {
+    display: flex;
+    flex-direction: row;
+    align-items: start;
+  }
+
+  &__button-pr {
+    width: 285px;
+    height: 44px;
+    line-height: 44px;
+    text-align: center;
+    text-transform: uppercase;
+    background-color: var.$white;
+    color: var.$black;
+    border: 0.5px solid var.$black;
+    border-radius: 12px;
+    cursor: pointer;
+
+    @include mixin.flex(flex, center, center, false);
+
+    &:hover {
+      background-color: var.$light-gray;
+      color: var.$black;
+    }
+  }
+
+  &__button-sec {
+    width: 285px;
+    height: 44px;
+    line-height: 44px;
+    text-align: center;
+    text-transform: uppercase;
+    background-color: transparent;
+    color: var.$white;
+    border: 0.5px solid var.$white;
+    border-radius: 12px;
+    cursor: pointer;
+
+    @include mixin.flex(flex, center, center, false);
+
+    &:hover {
+      background-color: var.$dark-gray;
+      color: var.$white;
+    }
+  }
+
+  &__shell {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  &__block-report {
+    display: flex;
+    flex-direction: row;
+    justify-content: start;
+    align-items: center;
+    cursor: pointer;
+  }
+
+  &__report {
+    @include mixin.button-text-desktop-tablet;
+    text-transform: uppercase;
+    color: var.$white;
+    margin-left: 8px;
+  }
+
+  &__block-left {
+    width: 60%;
+    height: 50vh;
+    background-color: #fff;
+    padding: 24px;
+  }
+
+  &__block-right {
+    width: 40%;
+    height: 50vh;
+    background-color: var.$black;
+    padding: 24px;
+  }
+
+  &__participants {
+    margin-bottom: 20px;
+  }
+
+  &__description {
+    width: 80%;
+    margin-bottom: 20px;
+  }
+
+  &__text-description {
+    @include mixin.body-text-desktop-tablet;
+    color: var.$dark-gray;
+    text-align: justify;
+  }
+
+  &__details {
+    display: flex;
+    flex-direction: column;
+    width: 80%;
+  }
+
+  &__title-details {
+    @include mixin.h3-desktop-tablet;
+    text-align: left;
+    color: var.$black;
+    margin-bottom: 10px;
+  }
+
+  &__detail {
+  }
+
+  &__name {
+    @include mixin.body-text-desktop-tablet;
+    font-weight: 500;
+    color: var.$dark-gray;
+  }
+
+  &__value {
+    @include mixin.body-text-desktop-tablet;
+    font-weight: 400;
+    color: var.$dark-gray;
+  }
+
+  &__organizer-block {
+    display: flex;
+    flex-direction: row;
+  }
+
+  &__organizer-logo {
+  }
+
+  &__img-container {
+  }
+
+  &__organizer-details {
+    display: flex;
+    flex-direction: column;
   }
 }

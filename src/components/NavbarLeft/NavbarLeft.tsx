@@ -17,13 +17,15 @@ export const NavbarLeft: React.FC<Props> = ({ className }) => {
   const {
     isHome,
     isHomeAI,
-    isResponse,
     isSignUp,
     isLogIn,
     isAbout,
     isFaq,
     isContact,
     isExplore,
+    isVolunteering,
+    isWishes,
+    isDonate,
     isProfile,
     isProfileInfo,
     isActivity,
@@ -43,12 +45,10 @@ export const NavbarLeft: React.FC<Props> = ({ className }) => {
   const getActiveLink = ({ isActive }: { isActive: boolean }) =>
     cn(
       styles.navbar__item,
-      { [styles['navbar__item--home']]: isHome || isExplore },
+      { [styles['navbar__item--home']]: isHome },
       { [styles['navbar__item--home--active']]: isHome && isActive },
       { [styles['navbar__item--homeAi']]: isHomeAI },
       { [styles['navbar__item--homeAi--active']]: isHomeAI && isActive },
-      { [styles['navbar__item--response']]: isResponse },
-      { [styles['navbar__item--response--active']]: isResponse && isActive },
       { [styles['navbar__item--sign']]: isSignUp },
       { [styles['navbar__item--login']]: isLogIn },
       { [styles['navbar__item--about']]: isAbout || isFaq },
@@ -60,6 +60,10 @@ export const NavbarLeft: React.FC<Props> = ({ className }) => {
       { [styles['navbar__item--contact--active']]: isContact && isActive },
       { [styles['navbar__item--stories']]: isStories },
       { [styles['navbar__item--stories--active']]: isStories && isActive },
+      { [styles['navbar__item--explore']]: isExplore },
+      { [styles['navbar__item--volunt']]: isVolunteering },
+      { [styles['navbar__item--wishes']]: isWishes },
+      { [styles['navbar__item--donate']]: isDonate },
       { [styles['navbar__item--event']]: isEventPage },
       {
         [styles['navbar__item--profile']]:

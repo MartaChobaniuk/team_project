@@ -6,6 +6,7 @@ import { Path } from '../../utils/constants';
 import user_white from '../../images/icons/account_white.svg';
 import user_black from '../../images/icons/account_black.svg';
 import { usePathChecker } from '../../helpers/usePathChecker';
+import { useAuth } from 'react-oidc-context';
 
 type Props = {
   className?: string;
@@ -15,17 +16,20 @@ export const NavbarRight: React.FC<Props> = ({ className }) => {
   const { pathname } = useLocation();
   const { eventId } = useParams();
   const isEventPage = eventId ? pathname.includes(eventId) : false;
+  const auth = useAuth();
 
   const {
     isHome,
     isHomeAI,
-    isResponse,
     isSignUp,
     isLogIn,
     isAbout,
     isFaq,
     isContact,
     isExplore,
+    isVolunteering,
+    isWishes,
+    isDonate,
     isProfile,
     isProfileInfo,
     isActivity,
@@ -36,13 +40,30 @@ export const NavbarRight: React.FC<Props> = ({ className }) => {
     isStepThree,
   } = usePathChecker();
 
+  const isProfileActive =
+    isProfile || isProfileInfo || isActivity || isOpportunities;
+
+  const isStepActive = isStepOne || isStepTwo || isStepThree;
+
+  const isVisible = auth.isAuthenticated && (isProfileActive || isStepActive);
+
+  const getClassName = ({ isActive }: { isActive: boolean }) =>
+    cn(isProfileActive ? styles.navbar__profile : styles.navbar__step, {
+      [styles['navbar__profile--active']]: isActive && isProfileActive,
+      [styles['navbar__step--active']]: isActive && isStepActive,
+    });
+
+  const iconSrc = isProfileActive ? user_white : user_black;
+  const iconClass = isProfileActive
+    ? styles.navbar__img
+    : styles['navbar__img--dark'];
+
   const getActiveLink = ({ isActive }: { isActive: boolean }) =>
     cn(
       styles.navbar__item,
       { [styles['navbar__item--active']]: isActive },
       { [styles['navbar__item--home']]: isHome },
       { [styles['navbar__item--homeAi']]: isHomeAI },
-      { [styles['navbar__item--response']]: isResponse },
       { [styles['navbar__item--about']]: isAbout },
       { [styles['navbar__item--faq']]: isFaq },
       { [styles['navbar__item--sign']]: isSignUp },
@@ -51,6 +72,9 @@ export const NavbarRight: React.FC<Props> = ({ className }) => {
       { [styles['navbar__item--login--active']]: isLogIn && isActive },
       { [styles['navbar__item--contact']]: isContact },
       { [styles['navbar__item--explore']]: isExplore },
+      { [styles['navbar__item--volunt']]: isVolunteering },
+      { [styles['navbar__item--wishes']]: isWishes },
+      { [styles['navbar__item--donate']]: isDonate },
       { [styles['navbar__item--stories']]: isStories },
       { [styles['navbar__item--event']]: isEventPage },
       className,
@@ -65,13 +89,15 @@ export const NavbarRight: React.FC<Props> = ({ className }) => {
           className={cn(styles.navbar__lang, {
             [styles['navbar__lang--home']]: isHome,
             [styles['navbar__lang--homeAi']]: isHomeAI,
-            [styles['navbar__lang--response']]: isResponse,
             [styles['navbar__lang--about']]: isAbout,
             [styles['navbar__lang--sign']]: isSignUp,
             [styles['navbar__lang--login']]: isLogIn,
             [styles['navbar__lang--faq']]: isFaq,
             [styles['navbar__lang--contact']]: isContact,
             [styles['navbar__lang--explore']]: isExplore,
+            [styles['navbar__lang--volunt']]: isVolunteering,
+            [styles['navbar__lang--wishes']]: isWishes,
+            [styles['navbar__lang--donate']]: isDonate,
             [styles['navbar__lang--stories']]: isStories,
             [styles['navbar__lang--event']]: isEventPage,
             [styles['navbar__lang--step-one']]: isStepOne,
@@ -84,28 +110,6 @@ export const NavbarRight: React.FC<Props> = ({ className }) => {
           <span className={styles['navbar__lang-name']}>ENG</span>
         </button>
 
-        {/* eslint-disable-next-line */}
-        {(isLogIn || isHome || isHomeAI || isResponse || isAbout || isFaq || isContact || isExplore || isStories || isEventPage) && (
-          <NavLink to={Path.LogIn} className={getActiveLink}>
-            <img
-              src={isHome || isAbout ? user_white : user_black}
-              alt="user"
-              className={cn(styles.navbar__img, {
-                [styles['navbar__img--dark']]:
-                  isHomeAI ||
-                  isResponse ||
-                  isSignUp ||
-                  isLogIn ||
-                  isContact ||
-                  isExplore ||
-                  isStories ||
-                  isEventPage,
-              })}
-            />
-            <span className={styles.navbar__name}>Log In</span>
-          </NavLink>
-        )}
-
         {isSignUp && (
           <NavLink to={Path.SignUp} className={getActiveLink}>
             <img
@@ -114,52 +118,44 @@ export const NavbarRight: React.FC<Props> = ({ className }) => {
               className={cn(styles.navbar__img, {
                 [styles['navbar__img--dark']]:
                   isHomeAI ||
-                  isResponse ||
                   isSignUp ||
                   isLogIn ||
                   isContact ||
-                  isExplore,
+                  isExplore ||
+                  isVolunteering ||
+                  isWishes ||
+                  isDonate,
               })}
             />
             <span className={styles.navbar__name}>Sign Up</span>
           </NavLink>
         )}
-        {(isProfile || isProfileInfo || isActivity || isOpportunities) && (
-          <NavLink
-            to={Path.Profile}
-            className={({ isActive }: { isActive: boolean }) =>
-              cn(styles.navbar__profile, {
-                [styles['navbar__profile--active']]:
-                  (isActive && isProfile) ||
-                  (isActive && isProfileInfo) ||
-                  (isActive && isActivity) ||
-                  (isActive && isOpportunities),
-              })
-            }
-          >
-            <img src={user_white} alt="user" className={styles.navbar__img} />
+
+        {isVisible ? (
+          <NavLink to={Path.Profile} className={getClassName}>
+            <img src={iconSrc} alt="user" className={iconClass} />
             <span className={styles.navbar__name}>Profile</span>
           </NavLink>
-        )}
-        {/* eslint-disable-next-line */}
-        {(isStepOne || isStepTwo || isStepThree) && (
-          <NavLink
-            to={Path.Profile}
-            className={({ isActive }: { isActive: boolean }) =>
-              cn(styles.navbar__step, {
-                [styles['navbar__step--active']]:
-                  (isActive && isStepOne) ||
-                  (isActive && isStepTwo) ||
-                  (isActive && isStepThree),
-              })
-            }
-          >
+        ) : (
+          <NavLink to={Path.LogIn} className={getActiveLink}>
             <img
-              src={user_black}
+              src={isHome || isAbout || isFaq ? user_white : user_black}
               alt="user"
-              className={styles['navbar__img--dark']}
+              className={cn(styles.navbar__img, {
+                [styles['navbar__img--dark']]:
+                  isHomeAI ||
+                  isSignUp ||
+                  isLogIn ||
+                  isContact ||
+                  isExplore ||
+                  isVolunteering ||
+                  isWishes ||
+                  isDonate ||
+                  isStories ||
+                  isEventPage,
+              })}
             />
-            <span className={styles.navbar__name}>Profile</span>
+            <span className={styles.navbar__name}>Log In</span>
           </NavLink>
         )}
       </div>

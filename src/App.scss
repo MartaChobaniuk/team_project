@@ -37,7 +37,10 @@
       padding: 24px;
     }
 
-    &--explore {
+    &--explore,
+    &--volunt,
+    &--wishes,
+    &--donate {
       background-color: var.$black;
     }
 

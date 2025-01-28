@@ -4,6 +4,7 @@
 .two {
   width: 100%;
   height: 100vh;
+  overflow: hidden;
 
   &__nav {
     height: 100vh;
@@ -74,7 +75,7 @@
   }
 
   &__content {
-    margin-top: 100px;
+    margin-top: 50px;
     @include mixin.body-text-desktop-tablet;
     color: var.$light-gray;
     text-align: justify;
@@ -83,7 +84,17 @@
   &__input {
     width: 100%;
     height: 44px;
-    margin-bottom: 5px;
+    color: var.$white;
+
+    &:placeholder-shown {
+      @include mixin.body-text-desktop-tablet;
+      color: var.$light-gray;
+    }
+  }
+
+  &__input--target {
+    width: 50%;
+    height: 44px;
     color: var.$white;
 
     &:placeholder-shown {
@@ -96,7 +107,6 @@
     width: 100%;
     height: 1px;
     background-color: var.$light-gray;
-    margin-bottom: 8px;
   }
 
   &__buttons {
@@ -148,69 +158,359 @@
     }
   }
 
-  &__dropdown-categories,
-  &__dropdown-opport {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
+  &__button--calendar {
+    width: max-content;
+    height: 44px;
+    line-height: 44px;
+    padding: 8px 16px;
+    background-color: transparent;
+    border-radius: 80px;
+    border: 0.5px solid var.$white;
+    color: var.$white;
+    text-transform: uppercase;
     cursor: pointer;
+
+    @include mixin.flex(flex, center, center, false);
+
+    &:hover {
+      background-color: var.$white;
+      color: var.$black;
+    }
+
+    &:active {
+      background-color: var.$orange-red;
+      color: var.$white;
+    }
+  }
+
+  &__remark {
+    @include mixin.small-text-desktop-tablet;
+    color: var.$grey;
+  }
+
+  &__remark--container {
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  &__remark--target {
+    width: 48%;
+    text-align: left;
+    @include mixin.small-text-desktop-tablet;
+    color: var.$grey;
+  }
+
+  &__dropdown-categories {
+    @include mixin.flex(flex, center, space-between, row);
     width: 50%;
+    cursor: pointer;
+    margin-right: 20px;
+  }
+
+  &__dropdown-opport {
+    @include mixin.flex(flex, center, space-between, row);
+    width: 50%;
+    cursor: pointer;
+  }
+
+  &__dropdown-assist {
+    @include mixin.flex(flex, center, space-between, row);
+    width: 50%;
+    cursor: pointer;
+    margin-right: 20px;
+  }
+
+  &__dropdown-region {
+    @include mixin.flex(flex, center, space-between, row);
+    width: 100%;
+    cursor: pointer;
+  }
+
+  &__dropdown-demands {
+    @include mixin.flex(flex, center, space-between, row);
+    width: 100%;
+    cursor: pointer;
   }
 
   &__dropdown {
-    position: relative;
     color: var.$grey;
-    margin-bottom: 15px;
     width: 100%;
     text-align: left;
+    cursor: pointer;
+  }
+
+  &__select {
+    color: var.$grey;
+
+    &--chosen {
+      color: var.$white;
+    }
   }
 
   &__dropdown-img-container {
-    width: 16px;
-    height: 16px;
+    @include mixin.sizes(16px, 16px);
   }
 
   &__dropdown-img {
-    width: 100%;
-    height: 100%;
+    @include mixin.sizes(100%, 100%);
     object-fit: cover;
     z-index: 15;
   }
 
-  &__dropdown-list {
-    width: 280px;
+  &__dropdown-list-categories {
+    width: 290px;
     position: absolute;
-    border: 1px solid var.$light-gray;
-    margin-top: 4px;
-    background-color: var.$dark-gray;
+    top: 100%;
+    left: 0;
     z-index: 15;
+    height: 45vh;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    border: 1px solid var.$light-gray;
+    background-color: var.$dark-gray;
+    margin-top: 4px;
     padding: 3px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
+    @include mixin.flex(flex, flex-start, center, column);
+    cursor: pointer;
+  }
+
+  &__dropdown-list-opport {
+    width: 290px;
+    position: absolute;
+    top: 100%;
+    right: 0;
+    z-index: 15;
+    border: 1px solid var.$light-gray;
+    background-color: var.$dark-gray;
+    margin-top: 4px;
+    padding: 3px;
+    @include mixin.flex(flex, flex-start, center, column);
+    cursor: pointer;
+  }
+
+  &__dropdown-list-assist {
+    width: 290px;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    z-index: 15;
+    border: 1px solid var.$light-gray;
+    background-color: var.$dark-gray;
+    margin-top: 4px;
+    padding: 3px;
+    @include mixin.flex(flex, flex-start, center, column);
+    cursor: pointer;
+  }
+
+  &__dropdown-list-region {
+    width: 600px;
+    height: 40vh;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    z-index: 15;
+    border: 1px solid var.$light-gray;
+    background-color: var.$dark-gray;
+    margin-top: 4px;
+    padding: 3px;
+    @include mixin.flex(flex, flex-start, flex-start, column);
+    flex-wrap: wrap;
+    cursor: pointer;
+  }
+
+  &__dropdown-list-demands {
+    width: 290px;
+    height: 50vh;
+    position: absolute;
+    bottom: 100%;
+    left: 0;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    z-index: 15;
+    border: 1px solid var.$light-gray;
+    background-color: var.$dark-gray;
+    margin-top: 4px;
+    padding: 3px;
+    @include mixin.flex(flex, flex-start, flex-start, column);
     cursor: pointer;
   }
 
   &__dropdown-item {
-    @include mixin.body-text-desktop-tablet;
+    text-align: left;
     height: 44px;
     color: var.$light-gray;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    text-align: left;
+    @include mixin.body-text-desktop-tablet;
+    @include mixin.flex(flex, center, center, column);
+
+    &:hover {
+      color: var.$white;
+      text-decoration: underline;
+    }
 
     &--active {
       color: var.$white;
     }
   }
 
+  &__dropdown-label {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+  }
+
+  &__dropdown-checkbox {
+    margin-right: 8px;
+    margin-left: 4px;
+    background-color: var.$grey;
+  }
+
   &__dropdowns-block {
+    position: relative;
     width: 100%;
+    height: 44px;
+    @include mixin.flex(flex, false, false, row);
+  }
+
+  &__block-region {
+    position: relative;
+    width: 100%;
+    height: 44px;
+    @include mixin.flex(flex, false, false, row);
+  }
+
+  &__block-demands {
+    position: relative;
+    width: 100%;
+    height: 44px;
+    @include mixin.flex(flex, false, false, row);
+  }
+
+  &__block-calendar {
+    position: relative;
+    width: 100%;
+    height: 44px;
+    @include mixin.flex(flex, false, false, row);
+    gap: 2%;
+  }
+
+  &__lines {
+    width: 100%;
+    @include mixin.flex(flex, false, false, row);
+  }
+
+  &__lines--assist {
+    width: 100%;
+    @include mixin.flex(flex, false, false, row);
+  }
+
+  &__line--left {
+    width: 100%;
+    height: 1px;
+    background-color: var.$light-gray;
+    margin-right: 20px;
+  }
+
+  &__line--right {
+    width: 100%;
+    height: 1px;
+    background-color: var.$light-gray;
+  }
+
+  &__lines--calendar {
+    width: 100%;
+    @include mixin.flex(flex, false, false, row);
+    gap: 2%;
+  }
+
+  &__line--big {
+    width: 61%;
+    height: 1px;
+    background-color: var.$light-gray;
+  }
+
+  &__line--small {
+    width: 12%;
+    height: 1px;
+    background-color: var.$light-gray;
+  }
+
+  &__calendar {
+    position: relative;
     display: flex;
     flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    width: 62%;
+    height: 44px;
+    cursor: pointer;
+  }
+
+  &__picker {
+    position: absolute;
+    z-index: 100;
+    bottom: 100%;
+    left: 0;
+  }
+
+  &__block-hour,
+  &__block-min {
+    width: 10%;
+    height: 44px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+  }
+
+  &__input--calendar {
+    width: 50%;
+    height: 44px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    color: var.$white;
+    -moz-appearance: textfield;
+    -webkit-appearance: none;
+    appearance: none;
+
+    &::-webkit-inner-spin-button,
+    &::-webkit-outer-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+
+    &:placeholder-shown {
+      color: var.$white;
+      @include mixin.body-text-desktop-tablet;
+    }
+  }
+
+  &__block-dots {
+    height: 44px;
+    width: 1%;
+    display: flex;
+    flex-direction: row;
+    justify-content: end;
+    align-items: center;
+  }
+
+  &__dots {
+    color: var.$white;
+    @include mixin.h3-desktop-tablet;
+  }
+
+  &__calendar-img {
+    width: 16px;
+    height: 16px;
+    margin-right: 10px;
   }
 }

@@ -1,16 +1,19 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { EventType } from '../types/EventType';
 import { getEvents } from '../services/events';
-import { Loader } from '../components/Loader';
 
 type Context = {
   events: EventType[];
   loadEvents: () => void;
+  loading: boolean;
+  errorMessage: string;
 };
 
 const State: Context = {
-  events: [],
+  events: [] as EventType[],
   loadEvents: () => {},
+  loading: false,
+  errorMessage: '',
 };
 
 export const EventsContext = React.createContext(State);
@@ -48,15 +51,13 @@ export const EventsProvider: React.FC<Props> = ({ children }) => {
     () => ({
       events,
       loadEvents,
+      errorMessage,
+      loading,
     }),
-    [events, loadEvents],
+    [events, loadEvents, errorMessage, loading],
   );
 
   return (
-    <EventsContext.Provider value={value}>
-      {loading && !errorMessage && <Loader />}
-      {!loading && errorMessage && children}
-      {!loading && !errorMessage && children}
-    </EventsContext.Provider>
+    <EventsContext.Provider value={value}>{children}</EventsContext.Provider>
   );
 };

@@ -198,23 +198,6 @@
       }
     }
 
-    &--response {
-      @include mixin.on-desktop {
-        background-color: var.$white;
-        color: var.$black;
-
-        &:hover {
-          background: var.$yellow-green;
-          color: var.$black;
-        }
-
-        &:active {
-          background: var.$yellow-green;
-          color: var.$black;
-        }
-      }
-    }
-
     &--about {
       @include mixin.on-desktop {
         background-color: var.$black;
@@ -257,6 +240,9 @@
     &--login,
     &--contact,
     &--explore,
+    &--volunt,
+    &--wishes,
+    &--donate,
     &--stories,
     &--event {
       @include mixin.on-desktop {
@@ -352,6 +338,9 @@
     &--faq,
     &--contact,
     &--explore,
+    &--volunt,
+    &--wishes,
+    &--donate,
     &--stories,
     &--event,
     &--step-one,

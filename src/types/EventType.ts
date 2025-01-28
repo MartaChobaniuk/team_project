@@ -7,7 +7,7 @@ export type EventType = {
   "categoryId": string,
   "categoryName": string,
   "location": string,
-  "date": string,
+  "date": string;
   "duration": number,
   "image": string,
   "goal": number,

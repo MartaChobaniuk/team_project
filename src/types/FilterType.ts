@@ -5,8 +5,9 @@ export interface FilterSelection {
   opportunityType?: string;
   assistanceType?: string;
   location?: string;
-  date?: string | [string, string];
   duration?: string;
+  startDate?: Date | null;
+  endDate?: Date | null;
 }
 
 export interface Value {
@@ -16,6 +17,5 @@ export interface Value {
 export interface FilterOptions {
   id: keyof FilterSelection;
   nameOfFilter: string;
-  value: string[] | Value[] | Record<string, string>[];
-  calendar?: boolean;
+  value: string | string[] | Value[] | Record<string, string>[] | Date | null;
 }

@@ -22,5 +22,8 @@ export const usePathChecker = () => {
     isStepOne: pathname === Path.StepOne,
     isStepTwo: pathname === Path.StepTwo,
     isStepThree: pathname === Path.StepThree,
+    isVolunteering: pathname === Path.Volunteering,
+    isWishes: pathname === Path.Wishes,
+    isDonate: pathname === Path.Donate,
   };
 };
