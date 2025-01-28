@@ -12,9 +12,9 @@ export const Home: React.FC = () => {
 
   useEffect(() => {
     const handleScroll = () => {
-      if (contentRef.current) {
-        const content = contentRef.current;
+      const content = contentRef.current;
 
+      if (content) {
         if (content.scrollTop + content.clientHeight >= content.scrollHeight) {
           setTimeout(() => {
             setIsScrolled(true);
@@ -25,13 +25,15 @@ export const Home: React.FC = () => {
       }
     };
 
-    if (contentRef.current) {
-      contentRef.current.addEventListener('scroll', handleScroll);
+    const content = contentRef.current;
+
+    if (content) {
+      content.addEventListener('scroll', handleScroll);
     }
 
     return () => {
-      if (contentRef.current) {
-        contentRef.current.removeEventListener('scroll', handleScroll);
+      if (content) {
+        content.removeEventListener('scroll', handleScroll);
       }
     };
   }, []);

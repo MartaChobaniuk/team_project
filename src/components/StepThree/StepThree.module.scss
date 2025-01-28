@@ -1,0 +1,327 @@
+@use "../../utils/mixins" as mixin;
+@use "../../utils/variables" as var;
+
+.custom-file-label {
+  display: flex;
+  align-items: center;
+  justify-content: start;
+  text-align: left;
+  width: 70%;
+  height: 100%;
+  background-color: var.$black;
+  color: var.$grey;
+  cursor: pointer;
+  z-index: 10;
+}
+
+[data-has-file="true"] + .custom-file-label {
+  color: var.$white;
+}
+
+.three {
+  width: 100%;
+  height: 100vh;
+
+  &__nav {
+    height: 100vh;
+    width: 100%;
+    display: flex;
+    background-image: url("../../images/wallpaper/profile_opport_bg.jpg");
+
+    @include mixin.on-desktop {
+      flex-direction: row;
+      justify-content: flex-end;
+      background-size: cover;
+      background-position: left;
+    }
+  }
+
+  &__right-side {
+    @include mixin.on-desktop {
+      margin-top: 86px;
+      padding: 0 24px 24px;
+      @include mixin.flex(flex, false, space-between, column);
+      width: 53%;
+    }
+  }
+
+  &__left-side {
+    background-color: var.$black;
+    z-index: 10;
+
+    @include mixin.on-desktop {
+      @include mixin.flex(flex, false, space-between, column);
+      padding: 40px;
+      border-radius: 20px 0 0 20px;
+      height: 100vh;
+      width: 47%;
+    }
+  }
+
+  &__bllock-top {
+    display: flex;
+    flex-direction: row;
+    justify-content: start;
+    align-items: center;
+    cursor: pointer;
+  }
+
+  &__img {
+    width: 24px;
+    height: 24px;
+  }
+
+  &__back {
+    @include mixin.button-text-desktop-tablet;
+    text-transform: uppercase;
+    color: var.$black;
+    margin-left: 8px;
+  }
+
+  &__title {
+    @include mixin.h1-desktop-tablet;
+    color: var.$black;
+    text-align: left;
+  }
+
+  &__subtitle {
+    @include mixin.h3-desktop-tablet;
+    color: var.$dark-gray;
+    text-align: left;
+  }
+
+  &__content {
+    margin-top: 100px;
+    @include mixin.body-text-desktop-tablet;
+    color: var.$light-gray;
+    text-align: justify;
+  }
+
+  &__input-shell {
+    position: relative;
+    width: 100%;
+    height: 44px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+  }
+
+  &__input {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 70%;
+    height: 100%;
+    opacity: 0;
+    cursor: pointer;
+    z-index: 9;
+  }
+
+  &__input--dosc {
+    width: 100%;
+    height: 44px;
+    color: var.$white;
+
+    &:placeholder-shown {
+      @include mixin.body-text-desktop-tablet;
+      color: var.$light-gray;
+    }
+  }
+
+  &__line {
+    width: 100%;
+    height: 1px;
+    background-color: var.$light-gray;
+
+    &--upload {
+      width: 70%;
+      height: 1px;
+      background-color: var.$light-gray;
+    }
+  }
+
+  &__line-doc {
+    width: 58%;
+    height: 1px;
+    background-color: var.$light-gray;
+  }
+
+  &__remark {
+    width: 100%;
+    text-align: left;
+    @include mixin.small-text-desktop-tablet;
+    color: var.$grey;
+  }
+
+  &__button-upload {
+    width: 180px;
+    height: 44px;
+    line-height: 44px;
+    text-align: center;
+    text-transform: uppercase;
+    background-color: var.$white;
+    color: var.$black;
+    border-radius: 12px;
+    cursor: pointer;
+
+    @include mixin.flex(flex, center, center, false);
+
+    &:hover {
+      background-color: var.$light-gray;
+      color: var.$black;
+    }
+  }
+
+  &__buttons {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    margin-top: 20px;
+  }
+
+  &__button-prev {
+    position: relative;
+    width: 300px;
+    height: 44px;
+    line-height: 44px;
+    text-align: center;
+    text-transform: uppercase;
+    background-color: var.$black;
+    color: var.$white;
+    border: 0.5px solid var.$white;
+    border-radius: 12px;
+    cursor: pointer;
+
+    @include mixin.flex(flex, center, center, false);
+
+    &:hover {
+      background-color: var.$dark-gray;
+      color: var.$white;
+    }
+  }
+
+  &__button-submit {
+    position: relative;
+    width: 300px;
+    height: 44px;
+    line-height: 44px;
+    text-align: center;
+    text-transform: uppercase;
+    background-color: var.$grey;
+    color: var.$black;
+    border: 0.5px solid var.$black;
+    border-radius: 12px;
+    cursor: pointer;
+
+    @include mixin.flex(flex, center, center, false);
+
+    &:hover {
+      background-color: var.$light-gray;
+      color: var.$black;
+    }
+  }
+
+  &__doc-block {
+    margin-top: 10px;
+  }
+
+  &__pretitle {
+    @include mixin.body-text-desktop-tablet;
+    color: var.$light-gray;
+    text-align: left;
+    margin-bottom: 10px;
+  }
+
+  &__documents {
+    height: 20vh;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+
+  &__input-doc-shell {
+    position: relative;
+    width: 100%;
+    height: 44px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+  }
+
+  &__input-doc {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 60%;
+    height: 100%;
+    opacity: 0;
+    cursor: pointer;
+    z-index: 9;
+  }
+
+  &__button-doc-upload {
+    width: 150px;
+    height: 44px;
+    line-height: 44px;
+    text-align: center;
+    text-transform: uppercase;
+    background-color: var.$white;
+    color: var.$black;
+    border: 0.5px solid var.$black;
+    border-radius: 12px;
+    cursor: pointer;
+
+    @include mixin.flex(flex, center, center, false);
+
+    &:hover {
+      background-color: var.$light-gray;
+      color: var.$black;
+    }
+  }
+
+  &__button-doc-remove {
+    width: 150px;
+    height: 44px;
+    line-height: 44px;
+    text-align: center;
+    text-transform: uppercase;
+    background-color: var.$black;
+    color: var.$white;
+    border: 0.5px solid var.$white;
+    border-radius: 12px;
+    cursor: pointer;
+
+    @include mixin.flex(flex, center, center, false);
+
+    &:hover {
+      background-color: var.$dark-gray;
+      color: var.$white;
+    }
+  }
+
+  &__block-add-button {
+    display: flex;
+    flex-direction: row;
+    justify-content: end;
+  }
+
+  &__button-add-doc {
+    width: 300px;
+    height: 44px;
+    line-height: 44px;
+    text-align: center;
+    text-transform: uppercase;
+    background-color: var.$white;
+    color: var.$black;
+    border: 0.5px solid var.$black;
+    border-radius: 12px;
+    cursor: pointer;
+
+    @include mixin.flex(flex, center, center, false);
+
+    &:hover {
+      background-color: var.$light-gray;
+      color: var.$black;
+    }
+  }
+}

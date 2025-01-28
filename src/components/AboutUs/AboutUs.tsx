@@ -29,12 +29,17 @@ export const AboutUs = () => {
       }
     };
 
-    contentRef.current?.addEventListener('scroll', handleFixed);
+    // Зберігаємо посилання на contentRef в змінній перед додаванням обробників подій
+    const currentContentRef = contentRef.current;
+
+    // Додаємо обробники подій
+    currentContentRef?.addEventListener('scroll', handleFixed);
     window.addEventListener('scroll', handleScroll);
 
+    // Очищення
     return () => {
       window.removeEventListener('scroll', handleScroll);
-      contentRef.current?.removeEventListener('scroll', handleFixed);
+      currentContentRef?.removeEventListener('scroll', handleFixed);
     };
   }, []);
 
