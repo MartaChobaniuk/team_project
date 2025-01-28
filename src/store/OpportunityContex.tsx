@@ -110,17 +110,14 @@ export const OpportunityProvider: React.FC<{ children: React.ReactNode }> = ({
   const value = useMemo(
     () => ({
       stepOneData,
-      setStepOneData: setStepOneData as React.Dispatch<
-        React.SetStateAction<StepOneData>
-      >,
+      setStepOneData:
+        setStepOneData as React.Dispatch<React.SetStateAction<StepOneData>>,
       stepTwoData,
-      setStepTwoData: setStepTwoData as React.Dispatch<
-        React.SetStateAction<StepTwoData>
-      >,
+      setStepTwoData:
+        setStepTwoData as React.Dispatch<React.SetStateAction<StepTwoData>>,
       stepThreeData,
-      setStepThreeData: setStepThreeData as React.Dispatch<
-        React.SetStateAction<StepThreeData>
-      >,
+      setStepThreeData:
+        setStepThreeData as React.Dispatch<React.SetStateAction<StepThreeData>>,
     }),
     [
       stepOneData,
