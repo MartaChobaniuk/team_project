@@ -251,39 +251,6 @@
     }
   }
 
-  &__line {
-    width: 100%;
-    height: 1px;
-    background-color: var.$light-gray;
-  }
-
-  &__line-categ-tablet {
-    @include mixin.on-mobile {
-      display: block;
-      width: 100%;
-      height: 1px;
-      background-color: var.$light-gray;
-    }
-
-    @include mixin.on-tablet {
-      display: block;
-      width: 100%;
-      height: 1px;
-      background-color: var.$light-gray;
-    }
-
-    @include mixin.on-tablet-2 {
-      display: block;
-      width: 100%;
-      height: 1px;
-      background-color: var.$light-gray;
-    }
-
-    @include mixin.on-desktop {
-      display: none;
-    }
-  }
-
   &__buttons {
     width: 100%;
     display: flex;
@@ -358,26 +325,9 @@
     }
   }
 
-  &__remark {
-    @include mixin.small-text-desktop-tablet;
-    color: var.$grey;
-  }
-
-  &__remark--container {
-    width: 100%;
-    display: flex;
-    justify-content: flex-end;
-  }
-
-  &__remark--target {
-    width: 48.5%;
-    text-align: left;
-    @include mixin.small-text-desktop-tablet;
-    color: var.$grey;
-  }
-
   &__dropdown-categories {
     @include mixin.on-mobile {
+      position: relative;
       @include mixin.flex(flex, center, space-between, row);
       width: 100%;
       height: 44px;
@@ -385,6 +335,7 @@
     }
 
     @include mixin.on-tablet {
+      position: relative;
       @include mixin.flex(flex, center, space-between, row);
       width: 100%;
       height: 44px;
@@ -392,6 +343,7 @@
     }
 
     @include mixin.on-tablet-2 {
+      position: relative;
       @include mixin.flex(flex, center, space-between, row);
       width: 100%;
       height: 44px;
@@ -408,9 +360,36 @@
   }
 
   &__dropdown-opport {
-    @include mixin.flex(flex, center, space-between, row);
-    width: 50%;
-    cursor: pointer;
+    @include mixin.on-mobile {
+      position: relative;
+      @include mixin.flex(flex, center, space-between, row);
+      width: 100%;
+      height: 44px;
+      cursor: pointer;
+    }
+
+    @include mixin.on-tablet {
+      position: relative;
+      @include mixin.flex(flex, center, space-between, row);
+      width: 100%;
+      height: 44px;
+      cursor: pointer;
+    }
+
+    @include mixin.on-tablet-2 {
+      position: relative;
+      @include mixin.flex(flex, center, space-between, row);
+      width: 100%;
+      height: 44px;
+      cursor: pointer;
+    }
+
+    @include mixin.on-desktop {
+      @include mixin.flex(flex, center, space-between, row);
+      width: 50%;
+      height: 44px;
+      cursor: pointer;
+    }
   }
 
   &__dropdown-assist {
@@ -463,7 +442,7 @@
     top: 100%;
     left: 0;
     z-index: 15;
-    height: 45vh;
+    height: 36vh;
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
     scrollbar-width: none;
@@ -477,9 +456,6 @@
 
   &__dropdown-list-opport {
     width: 290px;
-    position: absolute;
-    top: 100%;
-    right: 0;
     z-index: 15;
     border: 1px solid var.$light-gray;
     background-color: var.$dark-gray;
@@ -487,6 +463,30 @@
     padding: 3px;
     @include mixin.flex(flex, flex-start, center, column);
     cursor: pointer;
+
+    @include mixin.on-mobile {
+      position: absolute;
+      top: 100%;
+      left: 0;
+    }
+
+    @include mixin.on-tablet {
+      position: absolute;
+      top: 100%;
+      left: 0;
+    }
+
+    @include mixin.on-tablet-2 {
+      position: absolute;
+      top: 100%;
+      left: 0;
+    }
+
+    @include mixin.on-desktop {
+      position: absolute;
+      top: 100%;
+      right: 0;
+    }
   }
 
   &__dropdown-list-assist {
@@ -570,9 +570,6 @@
   }
 
   &__dropdowns-block {
-    position: relative;
-    width: 100%;
-
     @include mixin.on-mobile {
     }
 
@@ -581,11 +578,14 @@
 
     @include mixin.on-tablet-2 {
       @include mixin.flex(flex, false, false, column);
-      height: 90px;
+      width: 100%;
+      height: 115px;
     }
 
     @include mixin.on-desktop {
+      position: relative;
       @include mixin.flex(flex, false, false, row);
+      width: 100%;
       height: 44px;
     }
   }
@@ -610,74 +610,6 @@
     height: 44px;
     @include mixin.flex(flex, false, false, row);
     gap: 2%;
-  }
-
-  &__lines {
-    @include mixin.on-mobile {
-      display: none;
-    }
-
-    @include mixin.on-tablet {
-      display: none;
-    }
-
-    @include mixin.on-tablet-2 {
-      display: none;
-    }
-
-    @include mixin.on-desktop {
-      width: 100%;
-      @include mixin.flex(flex, false, false, row);
-    }
-  }
-
-  &__errors {
-    width: 100%;
-    @include mixin.flex(flex, false, false, row);
-  }
-
-  &__error-left {
-    width: 100%;
-    color: var.$error;
-    @include mixin.small-text-desktop-tablet;
-    margin-right: 20px;
-  }
-
-  &__error-right {
-    width: 100%;
-    color: var.$error;
-    @include mixin.small-text-desktop-tablet;
-  }
-
-  &__line-left {
-    width: 100%;
-    height: 1px;
-    background-color: var.$light-gray;
-    margin-right: 20px;
-  }
-
-  &__line-right {
-    width: 100%;
-    height: 1px;
-    background-color: var.$light-gray;
-  }
-
-  &__lines--calendar {
-    width: 100%;
-    @include mixin.flex(flex, false, false, row);
-    gap: 2%;
-  }
-
-  &__line--big {
-    width: 61%;
-    height: 1px;
-    background-color: var.$light-gray;
-  }
-
-  &__line--small {
-    width: 12%;
-    height: 1px;
-    background-color: var.$light-gray;
   }
 
   &__calendar {
@@ -752,5 +684,186 @@
     width: 16px;
     height: 16px;
     margin-right: 10px;
+  }
+
+  &__line {
+    width: 100%;
+    height: 1px;
+    background-color: var.$light-gray;
+  }
+
+  &__line-categ-tablet {
+    @include mixin.on-mobile {
+      display: block;
+      width: 100%;
+      height: 1px;
+      background-color: var.$light-gray;
+    }
+
+    @include mixin.on-tablet {
+      display: block;
+      width: 100%;
+      height: 1px;
+      background-color: var.$light-gray;
+    }
+
+    @include mixin.on-tablet-2 {
+      display: block;
+      width: 100%;
+      height: 1px;
+      background-color: var.$light-gray;
+    }
+
+    @include mixin.on-desktop {
+      display: none;
+    }
+  }
+
+  &__lines {
+    @include mixin.on-mobile {
+      display: none;
+    }
+
+    @include mixin.on-tablet {
+      display: none;
+    }
+
+    @include mixin.on-tablet-2 {
+      display: none;
+    }
+
+    @include mixin.on-desktop {
+      width: 100%;
+      @include mixin.flex(flex, false, false, row);
+    }
+  }
+
+  &__line-left {
+    width: 100%;
+    height: 1px;
+    background-color: var.$light-gray;
+    margin-right: 20px;
+  }
+
+  &__line-right {
+    width: 100%;
+    height: 1px;
+    background-color: var.$light-gray;
+  }
+
+  &__lines--calendar {
+    width: 100%;
+    @include mixin.flex(flex, false, false, row);
+    gap: 2%;
+  }
+
+  &__line--big {
+    width: 61%;
+    height: 1px;
+    background-color: var.$light-gray;
+  }
+
+  &__line--small {
+    width: 12%;
+    height: 1px;
+    background-color: var.$light-gray;
+  }
+
+  &__errors {
+    @include mixin.on-mobile {
+      display: none;
+    }
+
+    @include mixin.on-tablet {
+      display: none;
+    }
+
+    @include mixin.on-tablet-2 {
+      display: none;
+    }
+
+    @include mixin.on-desktop {
+      width: 100%;
+      @include mixin.flex(flex, false, false, row);
+    }
+  }
+
+  &__error-left {
+    width: 100%;
+    color: var.$error;
+    @include mixin.small-text-desktop-tablet;
+    margin-right: 20px;
+  }
+
+  &__error-right {
+    width: 100%;
+    color: var.$error;
+    @include mixin.small-text-desktop-tablet;
+  }
+
+  &__error-left-tablet {
+    @include mixin.on-mobile {
+      width: 100%;
+      color: var.$error;
+      @include mixin.small-text-desktop-tablet;
+    }
+
+    @include mixin.on-tablet {
+      width: 100%;
+      color: var.$error;
+      @include mixin.small-text-desktop-tablet;
+    }
+
+    @include mixin.on-tablet-2 {
+      width: 100%;
+      color: var.$error;
+      @include mixin.small-text-desktop-tablet;
+    }
+
+    @include mixin.on-desktop {
+      display: none;
+    }
+  }
+
+  &__error-right-tablet {
+    @include mixin.on-mobile {
+      width: 100%;
+      color: var.$error;
+      @include mixin.small-text-desktop-tablet;
+    }
+
+    @include mixin.on-tablet {
+      width: 100%;
+      color: var.$error;
+      @include mixin.small-text-desktop-tablet;
+    }
+
+    @include mixin.on-tablet-2 {
+      width: 100%;
+      color: var.$error;
+      @include mixin.small-text-desktop-tablet;
+    }
+
+    @include mixin.on-desktop {
+      display: none;
+    }
+  }
+
+  &__remark {
+    @include mixin.small-text-desktop-tablet;
+    color: var.$grey;
+  }
+
+  &__remark--container {
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  &__remark--target {
+    width: 48.5%;
+    text-align: left;
+    @include mixin.small-text-desktop-tablet;
+    color: var.$grey;
   }
 }

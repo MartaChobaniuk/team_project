@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/indent */
 /* eslint-disable prettier/prettier */
 /* eslint-disable no-console */

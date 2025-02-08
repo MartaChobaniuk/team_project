@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable no-console */
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -406,6 +407,7 @@ export const StepTwo = () => {
               <div className={styles['two__dropdowns-block']}>
                 <div className={styles['two__dropdown-categories']}>
                   <button
+                    type="button"
                     className={styles.two__dropdown}
                     onClick={e => {
                       e.preventDefault();
@@ -430,37 +432,43 @@ export const StepTwo = () => {
                       alt="Arrow Down"
                     />
                   </div>
+                  {dropdownStates.categoryId && (
+                    <ul className={styles['two__dropdown-list-categories']}>
+                      {Object.entries(categoryId).map(([id, name]) => (
+                        <li
+                          key={id}
+                          onClick={() => {
+                            selectOption('categoryId', id);
+                          }}
+                          className={cn(styles['two__dropdown-item'], {
+                            [styles['two__dropdown-item--active']]:
+                              selectedOptions.categoryId === id,
+                          })}
+                        >
+                          <label className={styles['two__dropdown-label']}>
+                            <input
+                              type="checkbox"
+                              checked={selectedOptions.categoryId === id}
+                              onChange={() => selectOption('categoryId', id)}
+                              className={styles['two__dropdown-checkbox']}
+                            />
+                            {name}
+                          </label>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
                 </div>
-                {dropdownStates.categoryId && (
-                  <ul className={styles['two__dropdown-list-categories']}>
-                    {Object.entries(categoryId).map(([id, name]) => (
-                      <li
-                        key={id}
-                        onClick={() => {
-                          selectOption('categoryId', id);
-                        }}
-                        className={cn(styles['two__dropdown-item'], {
-                          [styles['two__dropdown-item--active']]:
-                            selectedOptions.categoryId === id,
-                        })}
-                      >
-                        <label className={styles['two__dropdown-label']}>
-                          <input
-                            type="checkbox"
-                            checked={selectedOptions.categoryId === id}
-                            onChange={() => selectOption('categoryId', id)}
-                            className={styles['two__dropdown-checkbox']}
-                          />
-                          {name}
-                        </label>
-                      </li>
-                    ))}
-                  </ul>
-                )}
                 <div className={styles['two__line-categ-tablet']}></div>
+                {errors.categoryId && !stepTwoData.categoryId && (
+                  <p className={styles['two__error-left-tablet']}>
+                    {errors.categoryId}
+                  </p>
+                )}
 
                 <div className={styles['two__dropdown-opport']}>
                   <button
+                    type="button"
                     className={styles.two__dropdown}
                     onClick={e => {
                       e.preventDefault();
@@ -485,32 +493,38 @@ export const StepTwo = () => {
                       alt="Arrow Down"
                     />
                   </div>
+                  {dropdownStates.opportunityType && (
+                    <ul className={styles['two__dropdown-list-opport']}>
+                      {opportunityType.map(type => (
+                        <li
+                          key={type}
+                          onClick={() => selectOption('opportunityType', type)}
+                          className={cn(styles['two__dropdown-item'], {
+                            [styles['two__dropdown-item--active']]:
+                              selectedOptions.opportunityType === type,
+                          })}
+                        >
+                          <label className={styles['two__dropdown-label']}>
+                            <input
+                              type="checkbox"
+                              checked={selectedOptions.opportunityType === type}
+                              onChange={() =>
+                                selectOption('opportunityType', type)
+                              }
+                              className={styles['two__dropdown-checkbox']}
+                            />
+                            {type}
+                          </label>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
                 </div>
-                {dropdownStates.opportunityType && (
-                  <ul className={styles['two__dropdown-list-opport']}>
-                    {opportunityType.map(type => (
-                      <li
-                        key={type}
-                        onClick={() => selectOption('opportunityType', type)}
-                        className={cn(styles['two__dropdown-item'], {
-                          [styles['two__dropdown-item--active']]:
-                            selectedOptions.opportunityType === type,
-                        })}
-                      >
-                        <label className={styles['two__dropdown-label']}>
-                          <input
-                            type="checkbox"
-                            checked={selectedOptions.opportunityType === type}
-                            onChange={() =>
-                              selectOption('opportunityType', type)
-                            }
-                            className={styles['two__dropdown-checkbox']}
-                          />
-                          {type}
-                        </label>
-                      </li>
-                    ))}
-                  </ul>
+                <div className={styles['two__line-categ-tablet']}></div>
+                {errors.opportunityType && !stepTwoData.opportunityType && (
+                  <p className={styles['two__error-right-tablet']}>
+                    {errors.opportunityType}
+                  </p>
                 )}
               </div>
               <div className={styles.two__lines}>
@@ -529,6 +543,7 @@ export const StepTwo = () => {
                   </p>
                 )}
               </div>
+
               <div className={styles['two__dropdowns-block']}>
                 <div className={styles['two__dropdown-assist']}>
                   <button
