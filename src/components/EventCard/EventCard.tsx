@@ -1,10 +1,9 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import styles from './EventCard.module.scss';
 import cn from 'classnames';
 import { EventType } from '../../types/EventType';
-import image from '../../images/images.jpg';
 import { ProgressBar } from '../ProgressBar';
-import { Link } from 'react-router-dom';
 import { usePathChecker } from '../../helpers/usePathChecker';
 import { Path } from '../../utils/constants';
 
@@ -28,7 +27,7 @@ export const EventCard: React.FC<Props> = ({ event }) => {
   return (
     <Link to={`${basePath}/${event.id}`} className={styles.event}>
       <div className={styles['event__container-img']}>
-        <img src={image} alt="Event" className={styles.event__img} />
+        <img src={event.coverImage} alt="Event" className={styles.event__img} />
         <span
           className={cn(styles['event__help-type'], {
             [styles['event__help-type--yellow']]:
@@ -42,17 +41,19 @@ export const EventCard: React.FC<Props> = ({ event }) => {
       </div>
       <h4 className={styles.event__title}>{event.title}</h4>
       <ProgressBar
-        goal={event.goal}
+        goal={event.target}
         currentProgress={event.currentProgress}
         opportunityType={event.opportunityType}
         assistanceType={event.assistanceType}
       />
       <div className={styles.event__types}>
-        <p>{event.categoryName}</p>
+        <p>{event.categoryId}</p>
       </div>
       <div className={styles.event__details}>
-        <p>{event.location}</p> /
-        <p>{new Date(event.date).toLocaleString('uk-UA')}</p>
+        <p>{event.region}</p> /
+        <p>
+          {event.startingDate},{event.startHour} {event.startMinute}
+        </p>
       </div>
     </Link>
   );

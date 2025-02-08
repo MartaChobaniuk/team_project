@@ -1,13 +1,13 @@
-export const categories = [
-  'Military Support',
-  'Humanitarian Aid',
-  'Medical Assistance',
-  'Reconstruction & Infrastructure',
-  'Mental Health',
-  'Education & Mentorship',
-  'Community & Local Initiatives',
-  'Cultural & Historical Preservation',
-];
+export const categoryId: Record<string, string> = {
+  '4fa0ac81-9e49-43c1-8f19-99d3f4457180': 'Military Support',
+  '70bf397c-ad80-446e-9d35-a4e77f4c4513': 'Humanitarian Aid',
+  'b7717f14-944f-4642-bf30-d7c714239cd9': 'Medical Assistance',
+  '65b9e72d-6ad7-4dba-95e6-7eb8a40b1772': 'Reconstruction & Infrastructure',
+  '807af9ec-424f-4f9a-a756-e17d4b60f3a4': 'Mental Health',
+  '906431b6-07de-441a-91fb-38fa069356d9': 'Education & Mentorship',
+  '8fde5b19-bbc1-4188-b3e0-eb540a9bb644': 'Community & Local Initiatives',
+  '123': 'Cultural & Historical Preservation',
+};
 
 export const opportunityType = ['Voluntary', 'Wishes'];
 

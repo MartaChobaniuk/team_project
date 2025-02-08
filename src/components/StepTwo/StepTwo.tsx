@@ -1,14 +1,14 @@
+/* eslint-disable no-console */
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import cn from 'classnames';
 import styles from './StepTwo.module.scss';
 import { Path } from '../../utils/constants';
 import {
-  categories,
   opportunityType,
   assistanceType,
   region,
-  timeDemands,
+  categoryId,
 } from '../../helpers/dropdownsInfo';
 import arrow from '../../images/icons/arrow_back.svg';
 import arrow_up from '../../images/icons/arrow_up_white (2).svg';
@@ -18,7 +18,7 @@ import DatePicker from 'react-datepicker';
 import { useOpportunityContext } from '../../store/OpportunityContex';
 
 type DropdownId =
-  | 'categories'
+  | 'categoryId'
   | 'opportunityType'
   | 'assistanceType'
   | 'region'
@@ -29,7 +29,7 @@ export const StepTwo = () => {
   const { stepTwoData, setStepTwoData } = useOpportunityContext();
 
   const [dropdownStates, setDropdownStates] = useState({
-    categories: false,
+    categoryId: false,
     opportunityType: false,
     assistanceType: false,
     region: false,
@@ -37,70 +37,29 @@ export const StepTwo = () => {
   });
 
   const [selectedOptions, setSelectedOptions] = useState({
-    categories: stepTwoData.categories || '',
+    categoryId: stepTwoData.categoryId || '',
     opportunityType: stepTwoData.opportunityType || '',
     assistanceType: stepTwoData.assistanceType || '',
     region: stepTwoData.region || '',
     timeDemands: stepTwoData.timeDemands || '',
   });
 
-  const [startDate, setStartDate] = useState<Date | null>(
-    stepTwoData.startDate || null,
-  );
-  const [endDate, setEndDate] = useState<Date | null>(
-    stepTwoData.endDate || null,
-  );
   const [showDatePickerStart, setShowDatePickerStart] = useState(false);
   const [showDatePickerEnd, setShowDatePickerEnd] = useState(false);
-  const [startHour, setStartHour] = useState(stepTwoData.startHour || '');
-  const [startMinute, setStartMinute] = useState(stepTwoData.startMinute || '');
-  const [startPeriod, setStartPeriod] = useState(
-    stepTwoData.startPeriod || 'AM',
-  );
-  const [endHour, setEndHour] = useState(stepTwoData.endHour || '');
-  const [endMinute, setEndMinute] = useState(stepTwoData.endMinute || '');
-  const [endPeriod, setEndPeriod] = useState(stepTwoData.endPeriod || 'AM');
+  const [errors, setErrors] = useState<Record<string, string>>({});
 
   useEffect(() => {
     const storedData = localStorage.getItem('stepTwoData');
-    const storedEndDate = localStorage.getItem('endDate');
-    const storedStartDate = localStorage.getItem('startDate');
 
     if (storedData) {
-      setStepTwoData(JSON.parse(storedData));
-    }
-
-    if (storedEndDate) {
-      const [year, month, day] = storedEndDate.split('-');
-
-      const parsedEndDate = new Date(
-        Number(year),
-        Number(month) - 1,
-        Number(day),
-      );
-
-      setEndDate(parsedEndDate);
-      setStepTwoData(prevState => ({
-        ...prevState,
-        endDate: parsedEndDate,
-      }));
-    }
-
-    if (storedStartDate) {
-      const [year, month, day] = storedStartDate.split('-');
-
-      const parsedStartDate = new Date(
-        Number(year),
-        Number(month) - 1,
-        Number(day),
-      );
+      const parsedData = JSON.parse(storedData);
 
       setStepTwoData(prevState => ({
         ...prevState,
-        startDate: parsedStartDate,
+        ...parsedData,
       }));
     }
-  }, [setStepTwoData]);
+  }, []);
 
   useEffect(() => {
     if (stepTwoData) {
@@ -108,41 +67,89 @@ export const StepTwo = () => {
     }
   }, [stepTwoData]);
 
-  const toggleStartPeriod = (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
+  const getTimeDemandsText = (hours: number): string => {
+    if (hours >= 0 && hours <= 12) {
+      return '1-12 hours';
+    } else if (hours >= 13 && hours <= 24) {
+      return 'Up to a day';
+    } else if (hours >= 25 && hours <= 144) {
+      return 'Up to a week';
+    } else if (hours >= 145 && hours <= 744) {
+      return 'Up to a month';
+    } else if (hours >= 745 && hours <= 2232) {
+      return '1 - 3 months';
+    } else if (hours >= 2233 && hours <= 4464) {
+      return '3 - 6 months';
+    } else if (hours >= 4465 && hours <= 8950) {
+      return 'Up to a year';
+    } else {
+      return 'More than a year';
+    }
+  };
 
-    setStartPeriod(prevPeriod => {
-      const newPeriod = prevPeriod === 'AM' ? 'PM' : 'AM';
+  const calculateTimeDemands = () => {
+    const startDate = stepTwoData.startingDate
+      ? new Date(stepTwoData.startingDate)
+      : null;
+    const endDate = stepTwoData.endingDate
+      ? new Date(stepTwoData.endingDate)
+      : null;
+
+    if (
+      startDate &&
+      endDate &&
+      !isNaN(startDate.getTime()) &&
+      !isNaN(endDate.getTime())
+    ) {
+      const diffInMs = endDate.getTime() - startDate.getTime();
+      const diffInHours = diffInMs / (1000 * 60 * 60);
 
       setStepTwoData(prevState => ({
         ...prevState,
-        startPeriod: newPeriod,
+        timeDemands: diffInHours.toString(),
       }));
 
-      return newPeriod;
-    });
+      return getTimeDemandsText(diffInHours);
+    }
+
+    return '0 hours';
+  };
+
+  useEffect(() => {
+    const timeDemandsText = calculateTimeDemands();
+
+    setStepTwoData(prevState => ({
+      ...prevState,
+      timeDemandsText: timeDemandsText,
+    }));
+  }, [stepTwoData.startingDate, stepTwoData.endingDate]);
+
+  const toggleStartPeriod = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+
+    const newPeriod = stepTwoData.startPeriod === 'AM' ? 'PM' : 'AM';
+
+    setStepTwoData(prevState => ({
+      ...prevState,
+      startPeriod: newPeriod,
+    }));
   };
 
   const toggleEndPeriod = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
 
-    setEndPeriod(prevPeriod => {
-      const newPeriod = prevPeriod === 'AM' ? 'PM' : 'AM';
+    const newPeriod = stepTwoData.endPeriod === 'AM' ? 'PM' : 'AM';
 
-      setStepTwoData(prevState => ({
-        ...prevState,
-        endPeriod: newPeriod,
-      }));
-
-      return newPeriod;
-    });
+    setStepTwoData(prevState => ({
+      ...prevState,
+      endPeriod: newPeriod,
+    }));
   };
 
   const handleStartHourChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
 
-    if (value === '' || (Number(value) >= 0 && Number(value) <= 23)) {
-      setStartHour(value);
+    if (value === '' || (Number(value) >= 1 && Number(value) <= 12)) {
       setStepTwoData(prevState => ({
         ...prevState,
         startHour: value,
@@ -151,10 +158,9 @@ export const StepTwo = () => {
   };
 
   const handleStartHourBlur = () => {
-    if (startHour !== '' && startHour.length < 2) {
-      const paddedHour = startHour.padStart(2, '0');
+    if (stepTwoData.startHour !== '' && stepTwoData.startHour.length < 2) {
+      const paddedHour = stepTwoData.startHour.padStart(2, '0');
 
-      setStartHour(paddedHour);
       setStepTwoData(prevState => ({
         ...prevState,
         startHour: paddedHour,
@@ -166,7 +172,6 @@ export const StepTwo = () => {
     const value = e.target.value;
 
     if (value === '' || (Number(value) >= 0 && Number(value) <= 59)) {
-      setStartMinute(value);
       setStepTwoData(prevState => ({
         ...prevState,
         startMinute: value,
@@ -175,10 +180,9 @@ export const StepTwo = () => {
   };
 
   const handleStartMinuteBlur = () => {
-    if (startMinute !== '' && startMinute.length < 2) {
-      const paddedMinute = startMinute.padStart(2, '0');
+    if (stepTwoData.startMinute !== '' && stepTwoData.startMinute.length < 2) {
+      const paddedMinute = stepTwoData.startMinute.padStart(2, '0');
 
-      setStartMinute(paddedMinute);
       setStepTwoData(prevState => ({
         ...prevState,
         startMinute: paddedMinute,
@@ -189,8 +193,7 @@ export const StepTwo = () => {
   const handleEndHourChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
 
-    if (value === '' || (Number(value) >= 0 && Number(value) <= 23)) {
-      setEndHour(value);
+    if (value === '' || (Number(value) >= 0 && Number(value) <= 12)) {
       setStepTwoData(prevState => ({
         ...prevState,
         endHour: value,
@@ -199,10 +202,9 @@ export const StepTwo = () => {
   };
 
   const handleEndHourBlur = () => {
-    if (endHour !== '' && endHour.length < 2) {
-      const paddedHour = endHour.padStart(2, '0');
+    if (stepTwoData.endHour !== '' && stepTwoData.endHour.length < 2) {
+      const paddedHour = stepTwoData.endHour.padStart(2, '0');
 
-      setEndHour(paddedHour);
       setStepTwoData(prevState => ({
         ...prevState,
         endHour: paddedHour,
@@ -214,7 +216,6 @@ export const StepTwo = () => {
     const value = e.target.value;
 
     if (value === '' || (Number(value) >= 0 && Number(value) <= 59)) {
-      setEndMinute(value);
       setStepTwoData(prevState => ({
         ...prevState,
         endMinute: value,
@@ -223,51 +224,13 @@ export const StepTwo = () => {
   };
 
   const handleEndMinuteBlur = () => {
-    if (endMinute !== '' && endMinute.length < 2) {
-      const paddedMinute = endMinute.padStart(2, '0');
+    if (stepTwoData.endMinute !== '' && stepTwoData.endMinute.length < 2) {
+      const paddedMinute = stepTwoData.endMinute.padStart(2, '0');
 
-      setEndMinute(paddedMinute);
       setStepTwoData(prevState => ({
         ...prevState,
         endMinute: paddedMinute,
       }));
-    }
-  };
-
-  const handleStartDateChange = (date: Date | null) => {
-    if (date instanceof Date) {
-      const normalizedDate = new Date(date);
-
-      normalizedDate.setHours(0, 0, 0, 0);
-      setStartDate(normalizedDate);
-      setStepTwoData(prevState => ({
-        ...prevState,
-        startDate: normalizedDate,
-      }));
-
-      const dateToStore = normalizedDate.toISOString().split('T')[0];
-
-      localStorage.setItem('startDate', dateToStore);
-      setShowDatePickerStart(false);
-    }
-  };
-
-  const handleEndDateChange = (date: Date | null) => {
-    if (date instanceof Date) {
-      const normalizedDate = new Date(date);
-
-      normalizedDate.setHours(0, 0, 0, 0);
-
-      setEndDate(normalizedDate);
-      setStepTwoData(prevState => ({
-        ...prevState,
-        endDate: normalizedDate,
-      }));
-
-      const dateToStore = normalizedDate.toISOString().split('T')[0];
-
-      localStorage.setItem('endDate', dateToStore);
-      setShowDatePickerEnd(false);
     }
   };
 
@@ -301,6 +264,108 @@ export const StepTwo = () => {
     setStepTwoData(prev => ({ ...prev, [name]: value }));
   };
 
+  const handleStartingDateChange = (date: Date | null) => {
+    if (!date) {
+      return;
+    }
+
+    const localDate = new Date(
+      date.getTime() - date.getTimezoneOffset() * 60000,
+    );
+
+    const day = String(localDate.getDate()).padStart(2, '0');
+    const month = String(localDate.getMonth() + 1).padStart(2, '0');
+    const year = localDate.getFullYear();
+    const formattedDate = `${day}-${month}-${year}`;
+
+    setStepTwoData(prev => ({
+      ...prev,
+      startingDate: localDate.toISOString(),
+      formattedStartingDate: formattedDate,
+    }));
+
+    setShowDatePickerStart(false);
+  };
+
+  const handleEndingDateChange = (date: Date | null) => {
+    if (!date) {
+      return;
+    }
+
+    const localDate = new Date(
+      date.getTime() - date.getTimezoneOffset() * 60000,
+    );
+
+    const day = String(localDate.getDate()).padStart(2, '0');
+    const month = String(localDate.getMonth() + 1).padStart(2, '0');
+    const year = localDate.getFullYear();
+    const formattedDate = `${day}-${month}-${year}`;
+
+    setStepTwoData(prev => ({
+      ...prev,
+      endingDate: localDate.toISOString(),
+      formattedEndingDate: formattedDate,
+    }));
+
+    setShowDatePickerEnd(false);
+  };
+
+  const validateFields = () => {
+    const newErrors: Record<string, string> = {};
+
+    if (!stepTwoData.title.trim()) {
+      newErrors.title = 'Opportunity name is required';
+    }
+
+    if (!stepTwoData.categoryId) {
+      newErrors.categoryId = 'Category is required';
+    }
+
+    if (!stepTwoData.opportunityType) {
+      newErrors.opportunityType = 'Opportunity type is required';
+    }
+
+    if (!stepTwoData.assistanceType) {
+      newErrors.assistanceType = 'Assistance type is required';
+    }
+
+    if (!stepTwoData.target) {
+      newErrors.target = 'Target is required';
+    }
+
+    if (!stepTwoData.region) {
+      newErrors.region = 'Region is required';
+    }
+
+    if (!stepTwoData.address) {
+      newErrors.address = 'Address is required';
+    }
+
+    if (!stepTwoData.startingDate) {
+      newErrors.startingDate =
+        'Please choose a starting date and time (hour and minute)';
+    }
+
+    if (!stepTwoData.endingDate) {
+      newErrors.endingDate =
+        'Please choose an ending date and time (hour and minute)';
+    }
+
+    setErrors(newErrors);
+
+    return Object.keys(newErrors).length === 0;
+  };
+
+  const handleNextStep = (
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+  ) => {
+    e.preventDefault();
+
+    if (validateFields()) {
+      navigate(Path.StepThree);
+    }
+  };
+
   return (
     <div className={styles.two}>
       <div className={styles.two__nav}>
@@ -324,16 +389,19 @@ export const StepTwo = () => {
             filters and search tools.
           </p>
           <div className={styles.two__form}>
-            <form action="">
+            <form>
               <input
                 className={styles.two__input}
                 type="text"
                 placeholder="Opportunity Name"
-                name="oppotunityName"
-                value={stepTwoData.oppotunityName}
+                name="title"
+                value={stepTwoData.title}
                 onChange={handleChange}
               />
               <div className={styles.two__line}></div>
+              {errors.title && !stepTwoData.title && (
+                <p className={styles.two__error}>{errors.title}</p>
+              )}
               <p className={styles.two__remark}>*Required</p>
               <div className={styles['two__dropdowns-block']}>
                 <div className={styles['two__dropdown-categories']}>
@@ -341,52 +409,55 @@ export const StepTwo = () => {
                     className={styles.two__dropdown}
                     onClick={e => {
                       e.preventDefault();
-                      toggleDropdown('categories');
+                      toggleDropdown('categoryId');
                     }}
                   >
                     <span
                       className={cn(styles.two__select, {
                         [styles['two__select--chosen']]:
-                          selectedOptions.categories,
+                          selectedOptions.categoryId,
                       })}
                     >
-                      {selectedOptions.categories || 'Category'}
+                      {selectedOptions.categoryId
+                        ? categoryId[selectedOptions.categoryId]
+                        : 'Category'}
                     </span>
                   </button>
                   <div className={styles['two__dropdown-img-container']}>
                     <img
                       className={styles['two__dropdown-img']}
-                      src={dropdownStates.categories ? arrow_up : arrow_down}
+                      src={dropdownStates.categoryId ? arrow_up : arrow_down}
                       alt="Arrow Down"
                     />
                   </div>
                 </div>
-                {dropdownStates.categories && (
+                {dropdownStates.categoryId && (
                   <ul className={styles['two__dropdown-list-categories']}>
-                    {categories.map(category => (
+                    {Object.entries(categoryId).map(([id, name]) => (
                       <li
-                        key={category}
-                        onClick={() => selectOption('categories', category)}
+                        key={id}
+                        onClick={() => {
+                          selectOption('categoryId', id);
+                        }}
                         className={cn(styles['two__dropdown-item'], {
                           [styles['two__dropdown-item--active']]:
-                            selectedOptions.categories === category,
+                            selectedOptions.categoryId === id,
                         })}
                       >
                         <label className={styles['two__dropdown-label']}>
                           <input
                             type="checkbox"
-                            checked={selectedOptions.categories === category}
-                            onChange={() =>
-                              selectOption('categories', category)
-                            }
+                            checked={selectedOptions.categoryId === id}
+                            onChange={() => selectOption('categoryId', id)}
                             className={styles['two__dropdown-checkbox']}
                           />
-                          {category}
+                          {name}
                         </label>
                       </li>
                     ))}
                   </ul>
                 )}
+                <div className={styles['two__line-categ-tablet']}></div>
 
                 <div className={styles['two__dropdown-opport']}>
                   <button
@@ -443,8 +514,20 @@ export const StepTwo = () => {
                 )}
               </div>
               <div className={styles.two__lines}>
-                <div className={styles['two__line--left']}></div>
-                <div className={styles['two__line--right']}></div>
+                <div className={styles['two__line-left']}></div>
+                <div className={styles['two__line-right']}></div>
+              </div>
+              <div className={styles.two__errors}>
+                {errors.categoryId && !stepTwoData.categoryId && (
+                  <p className={styles['two__error-left']}>
+                    {errors.categoryId}
+                  </p>
+                )}
+                {errors.opportunityType && !stepTwoData.opportunityType && (
+                  <p className={styles['two__error-right']}>
+                    {errors.opportunityType}
+                  </p>
+                )}
               </div>
               <div className={styles['two__dropdowns-block']}>
                 <div className={styles['two__dropdown-assist']}>
@@ -509,9 +592,19 @@ export const StepTwo = () => {
                   onChange={handleChange}
                 />
               </div>
-              <div className={styles['two__lines--assist']}>
-                <div className={styles['two__line--left']}></div>
-                <div className={styles['two__line--right']}></div>
+              <div className={styles.two__lines}>
+                <div className={styles['two__line-left']}></div>
+                <div className={styles['two__line-right']}></div>
+              </div>
+              <div className={styles.two__errors}>
+                {errors.assistanceType && !stepTwoData.assistanceType && (
+                  <p className={styles['two__error-left']}>
+                    {errors.assistanceType}
+                  </p>
+                )}
+                {errors.target && !stepTwoData.target && (
+                  <p className={styles['two__error-right']}>{errors.target}</p>
+                )}
               </div>
               <div className={styles['two__remark--container']}>
                 <p className={styles['two__remark--target']}>
@@ -569,15 +662,21 @@ export const StepTwo = () => {
                 )}
               </div>
               <div className={styles.two__line}></div>
+              {errors.region && !stepTwoData.region && (
+                <p className={styles.two__error}>{errors.region}</p>
+              )}
               <input
                 className={styles.two__input}
                 type="text"
-                placeholder="Adress"
-                name="adress"
-                value={stepTwoData.adress}
+                placeholder="Address"
+                name="address"
+                value={stepTwoData.address}
                 onChange={handleChange}
               />
               <div className={styles.two__line}></div>
+              {errors.address && !stepTwoData.address && (
+                <p className={styles.two__error}>{errors.address}</p>
+              )}
               <p className={styles.two__remark}>
                 Give a full address. If there can be difficulties in finding it,
                 provide instructions.
@@ -588,20 +687,21 @@ export const StepTwo = () => {
                     type="text"
                     placeholder="Choose a starting date"
                     className={styles.two__input}
-                    name="startDate"
-                    value={
-                      stepTwoData.startDate instanceof Date
-                        ? stepTwoData.startDate.toLocaleDateString('en-US')
-                        : ''
-                    }
+                    name="startingDate"
                     readOnly
+                    value={stepTwoData.formattedStartingDate || ''}
                     onClick={() => setShowDatePickerStart(true)}
                   />
                   {showDatePickerStart && (
                     <div className={styles.two__picker}>
                       <DatePicker
-                        selected={startDate}
-                        onChange={handleStartDateChange}
+                        selected={
+                          stepTwoData.startingDate
+                            ? new Date(stepTwoData.startingDate)
+                            : null
+                        }
+                        onChange={handleStartingDateChange}
+                        onClickOutside={() => setShowDatePickerStart(false)}
                         inline
                         minDate={new Date()}
                       />
@@ -616,7 +716,7 @@ export const StepTwo = () => {
                 </div>
                 <div className={styles['two__block-hour']}>
                   <input
-                    value={startHour}
+                    value={stepTwoData.startHour}
                     onChange={handleStartHourChange}
                     onBlur={handleStartHourBlur}
                     type="number"
@@ -630,7 +730,7 @@ export const StepTwo = () => {
                 </div>
                 <div className={styles['two__block-min']}>
                   <input
-                    value={startMinute}
+                    value={stepTwoData.startMinute}
                     onChange={handleStartMinuteChange}
                     onBlur={handleStartMinuteBlur}
                     type="number"
@@ -640,10 +740,11 @@ export const StepTwo = () => {
                   />
                 </div>
                 <button
+                  type="button"
                   className={styles['two__button--calendar']}
                   onClick={toggleStartPeriod}
                 >
-                  {startPeriod}
+                  {stepTwoData.startPeriod}
                 </button>
               </div>
               <div className={styles['two__lines--calendar']}>
@@ -651,28 +752,31 @@ export const StepTwo = () => {
                 <div className={styles['two__line--small']}></div>
                 <div className={styles['two__line--small']}></div>
               </div>
+              {errors.startingDate && !stepTwoData.startingDate && (
+                <p className={styles.two__error}>{errors.startingDate}</p>
+              )}
               <div className={styles['two__block-calendar']}>
                 <div className={styles.two__calendar}>
                   <input
                     type="text"
-                    placeholder="Choose an ending date"
+                    placeholder="Choose a ending date"
                     className={styles.two__input}
-                    name="endDate"
-                    value={
-                      stepTwoData.endDate instanceof Date
-                        ? stepTwoData.endDate.toLocaleDateString('en-GB')
-                        : ''
-                    }
+                    name="endingDate"
                     readOnly
+                    value={stepTwoData.formattedEndingDate || ''}
                     onClick={() => setShowDatePickerEnd(true)}
                   />
                   {showDatePickerEnd && (
                     <div className={styles.two__picker}>
                       <DatePicker
-                        selected={endDate}
-                        onChange={handleEndDateChange}
+                        selected={
+                          stepTwoData.endingDate
+                            ? new Date(stepTwoData.endingDate)
+                            : null
+                        }
+                        onChange={handleEndingDateChange}
+                        onClickOutside={() => setShowDatePickerEnd(false)}
                         inline
-                        minDate={new Date()}
                       />
                     </div>
                   )}
@@ -685,7 +789,7 @@ export const StepTwo = () => {
                 </div>
                 <div className={styles['two__block-hour']}>
                   <input
-                    value={endHour}
+                    value={stepTwoData.endHour}
                     onChange={handleEndHourChange}
                     onBlur={handleEndHourBlur}
                     type="number"
@@ -699,7 +803,7 @@ export const StepTwo = () => {
                 </div>
                 <div className={styles['two__block-min']}>
                   <input
-                    value={endMinute}
+                    value={stepTwoData.endMinute}
                     onChange={handleEndMinuteChange}
                     onBlur={handleEndMinuteBlur}
                     type="number"
@@ -709,10 +813,11 @@ export const StepTwo = () => {
                   />
                 </div>
                 <button
+                  type="button"
                   className={styles['two__button--calendar']}
                   onClick={toggleEndPeriod}
                 >
-                  {endPeriod}
+                  {stepTwoData.endPeriod}
                 </button>
               </div>
               <div className={styles['two__lines--calendar']}>
@@ -720,66 +825,22 @@ export const StepTwo = () => {
                 <div className={styles['two__line--small']}></div>
                 <div className={styles['two__line--small']}></div>
               </div>
-              <div className={styles['two__block-demands']}>
-                <div className={styles['two__dropdown-demands']}>
-                  <button
-                    className={styles.two__dropdown}
-                    onClick={e => {
-                      e.preventDefault();
-                      toggleDropdown('timeDemands');
-                    }}
-                  >
-                    <span
-                      className={cn(styles.two__select, {
-                        [styles['two__select--chosen']]:
-                          selectedOptions.timeDemands,
-                      })}
-                    >
-                      {selectedOptions.timeDemands || 'Time Demands'}
-                    </span>
-                  </button>
-                  <div className={styles['two__dropdown-img-container']}>
-                    <img
-                      className={styles['two__dropdown-img']}
-                      src={dropdownStates.timeDemands ? arrow_up : arrow_down}
-                      alt="Arrow Down"
-                    />
-                  </div>
-                </div>
-                {dropdownStates.timeDemands && (
-                  <ul className={styles['two__dropdown-list-demands']}>
-                    {timeDemands.map(demands => (
-                      <li
-                        key={demands}
-                        onClick={() => selectOption('timeDemands', demands)}
-                        className={cn(styles['two__dropdown-item'], {
-                          [styles['two__dropdown-item--active']]:
-                            selectedOptions.timeDemands === demands,
-                        })}
-                      >
-                        <label className={styles['two__dropdown-label']}>
-                          <input
-                            type="checkbox"
-                            checked={selectedOptions.timeDemands === demands}
-                            onChange={() =>
-                              selectOption('timeDemands', demands)
-                            }
-                            className={styles['two__dropdown-checkbox']}
-                          />
-                          {demands}
-                        </label>
-                      </li>
-                    ))}
-                  </ul>
-                )}
-              </div>
+              {errors.endingDate && !stepTwoData.endingDate && (
+                <p className={styles.two__error}>{errors.endingDate}</p>
+              )}
+              <input
+                type="text"
+                className={styles.two__input}
+                value={stepTwoData.timeDemandsText || ''}
+                readOnly
+              />
               <div className={styles.two__line}></div>
               <input
                 className={styles.two__input}
-                name="requiredMaterialsSkills"
+                name="skills"
                 type="text"
                 placeholder="Required materials and skills"
-                value={stepTwoData.requiredMaterialsSkills}
+                value={stepTwoData.skills}
                 onChange={handleChange}
               />
               <div className={styles.two__line}></div>
@@ -789,6 +850,7 @@ export const StepTwo = () => {
               </p>
               <div className={styles.two__buttons}>
                 <button
+                  type="button"
                   className={styles['two__button-prev']}
                   onClick={e => {
                     e.preventDefault();
@@ -798,8 +860,9 @@ export const StepTwo = () => {
                   Previous Step
                 </button>
                 <button
+                  type="button"
                   className={styles['two__button-continue']}
-                  onClick={() => navigate(Path.StepThree)}
+                  onClick={handleNextStep}
                 >
                   Continue
                 </button>

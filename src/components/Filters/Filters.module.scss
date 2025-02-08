@@ -82,14 +82,24 @@
     }
   }
 
-  &__item {
-    cursor: pointer;
+  &__group {
+    position: relative;
+    width: 100%;
   }
 
-  &__toggle-button {
+  &__dropdown {
     @include mixin.flex(flex, center, space-between, row);
     width: 100%;
     cursor: pointer;
+  }
+
+  &__dropdown-button {
+    color: var.$grey;
+    width: 100%;
+    text-align: left;
+    cursor: pointer;
+
+    @include mixin.flex(flex, center, space-between, row);
 
     @include mixin.on-mobile {
       margin-bottom: 5px;
@@ -100,34 +110,31 @@
     }
   }
 
-  &__group {
-    position: relative;
+  &__select {
+    color: var.$grey;
+    opacity: 0.8;
+
+    &--chosen {
+      color: var.$white;
+      opacity: 1;
+    }
   }
 
-  &__calendar {
-    position: absolute;
-    bottom: 100%;
-    z-index: 1000;
-    display: block;
-    max-height: 300px;
-    overflow-y: auto;
+  &__dropdown-img-container {
+    @include mixin.sizes(16px, 16px);
+  }
+
+  &__dropdown-img {
+    @include mixin.sizes(100%, 100%);
+    object-fit: cover;
+    z-index: 15;
+  }
+
+  &__dropdown-list {
     width: 100%;
-  }
-
-  &__dropdown-label {
-    display: flex;
-    align-items: center;
-    cursor: pointer;
-  }
-
-  &__dropdown-checkbox {
-    margin-right: 8px;
-    margin-left: 4px;
-    background-color: var.$black;
-    cursor: pointer;
-  }
-
-  &__list {
+    position: absolute;
+    top: 100%;
+    left: 0;
     z-index: 15;
     background-color: var.$black;
     padding: 3px;
@@ -135,11 +142,10 @@
     cursor: pointer;
   }
 
-  &__item {
+  &__dropdown-item {
     text-align: left;
     height: 44px;
     color: var.$light-gray;
-    cursor: pointer;
     @include mixin.body-text-desktop-tablet;
     @include mixin.flex(flex, center, center, column);
 
@@ -153,14 +159,17 @@
     }
   }
 
-  &__select {
-    color: var.$grey;
-    opacity: 0.8;
+  &__dropdown-label {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+  }
 
-    &--chosen {
-      color: var.$white;
-      opacity: 1;
-    }
+  &__dropdown-checkbox {
+    margin-right: 8px;
+    margin-left: 4px;
+    background-color: var.$black;
+    cursor: pointer;
   }
 
   &__buttons {
@@ -236,5 +245,35 @@
       background-color: var.$white;
       color: var.$black;
     }
+  }
+
+  &__toggle-button {
+    @include mixin.flex(flex, center, space-between, row);
+    width: 100%;
+    cursor: pointer;
+
+    @include mixin.on-mobile {
+      margin-bottom: 5px;
+    }
+
+    @include mixin.on-desktop {
+      margin-bottom: 10px;
+    }
+  }
+
+  &__calendar {
+    position: absolute;
+    bottom: 100%;
+    z-index: 1000;
+    display: block;
+    max-height: 300px;
+    overflow-y: auto;
+    width: 100%;
+  }
+
+  &__calendar-img {
+    width: 16px;
+    height: 16px;
+    margin-right: 10px;
   }
 }

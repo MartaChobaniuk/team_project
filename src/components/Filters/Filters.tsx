@@ -1,33 +1,68 @@
+/* eslint-disable prettier/prettier */
 import React, { useEffect, useState } from 'react';
 import styles from './Filters.module.scss';
 import cn from 'classnames';
-import { filterOptions } from '../../helpers/filtersData';
+import arrow_up from '../../images/icons/arrow_up_white (2).svg';
 import arrow_down from '../../images/icons/arrow_down_white.svg';
-import arrow_up from '../../images/icons/arrow_up_white.svg';
 import calendar from '../../images/icons/calendar-filled.svg';
 import { FilterSelection } from '../../types/FilterType';
 import 'react-datepicker/dist/react-datepicker.css';
 import DatePicker from 'react-datepicker';
 import { usePathChecker } from '../../helpers/usePathChecker';
+import {
+  assistanceType,
+  categoryId,
+  opportunityType,
+  region,
+  timeDemands,
+} from '../../helpers/dropdownsInfo';
 
 interface FiltersProps {
   onFilterChange: (newFilters: FilterSelection) => void;
   setIsFiltersOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
+type DropdownId =
+  | 'categoryId'
+  | 'opportunityType'
+  | 'assistanceType'
+  | 'region'
+  | 'timeDemands';
+
+const initialDropdowns = {
+  categoryId: false,
+  opportunityType: false,
+  assistanceType: false,
+  region: false,
+  timeDemands: false,
+};
+
+const initialCategories = {
+  categoryId: '',
+  opportunityType: '',
+  assistanceType: '',
+  region: '',
+  timeDemands: '',
+};
+
 export const Filters: React.FC<FiltersProps> = ({
   onFilterChange,
   setIsFiltersOpen,
 }) => {
   const { isVolunteering, isWishes, isDonate } = usePathChecker();
-  const [dropdownState, setDropdownState] = useState<{
-    [key: string]: boolean;
-  }>({});
-  const [selectedOptions, setSelectedOptions] = useState<FilterSelection>({});
+  const [dropdownStates, setDropdownStates] = useState(initialDropdowns);
+  const [selectedOptions, setSelectedOptions] = useState<{
+    categoryId: string;
+    opportunityType: string;
+    assistanceType: string;
+    region: string;
+    timeDemands: string;
+  }>(initialCategories);
+
   const [startDate, setStartDate] = useState<Date | null>(null);
   const [endDate, setEndDate] = useState<Date | null>(null);
-  const [calendarStartOpen, setCalendarStartOpen] = useState(false);
-  const [calendarEndOpen, setCalendarEndOpen] = useState(false);
+  const [showDatePickerStart, setShowDatePickerStart] = useState(false);
+  const [showDatePickerEnd, setShowDatePickerEnd] = useState(false);
   const [isApplyActive, setApplyActive] = useState(false);
   const [isCancelActive, setCancelActive] = useState(false);
 
@@ -94,23 +129,22 @@ export const Filters: React.FC<FiltersProps> = ({
     }
   }, [isDonate, selectedOptions, startDate, endDate, onFilterChange]);
 
-  const toggleDropdown = (filterId: string) => {
-    setDropdownState(prevState => ({
+  const toggleDropdown = (dropdownId: DropdownId) => {
+    setDropdownStates(prevState => ({
       ...prevState,
-      [filterId]: !prevState[filterId],
+      [dropdownId]: !prevState[dropdownId],
     }));
   };
 
-  const selectOption = (filterId: keyof FilterSelection, option: string) => {
-    setSelectedOptions(prevSelectedOptions => {
-      const newSelectedOptions = { ...prevSelectedOptions, [filterId]: option };
-
-      return newSelectedOptions;
-    });
-
-    setDropdownState(prevState => ({
+  const selectOption = (field: string, value: string) => {
+    setSelectedOptions(prevState => ({
       ...prevState,
-      [filterId]: false,
+      [field]: value,
+    }));
+
+    setDropdownStates(prevState => ({
+      ...prevState,
+      [field]: false,
     }));
   };
 
@@ -128,14 +162,13 @@ export const Filters: React.FC<FiltersProps> = ({
   };
 
   const cancelFilters = () => {
-    setSelectedOptions({});
-    setDropdownState({});
+    setSelectedOptions(initialCategories);
+    setDropdownStates(initialDropdowns);
     setStartDate(null);
     setEndDate(null);
     onFilterChange({});
     setApplyActive(false);
     setCancelActive(true);
-    setIsFiltersOpen(false);
   };
 
   const handleHideFilters = () => {
@@ -144,7 +177,7 @@ export const Filters: React.FC<FiltersProps> = ({
 
   const renderDatePicker = (
     date: Date | null,
-    setDate: React.Dispatch<React.SetStateAction<Date | null>>,
+    handleChange: (v: Date | null) => void,
     calendarOpen: boolean,
     setCalendarOpen: React.Dispatch<React.SetStateAction<boolean>>,
     label: string,
@@ -170,16 +203,12 @@ export const Filters: React.FC<FiltersProps> = ({
           alt="Toggle dropdown"
         />
       </button>
-      <div className={styles.filters__line}></div>
       {calendarOpen && (
         <>
           <div className={styles.filters__calendar}>
             <DatePicker
               selected={date}
-              onChange={selectedDate => {
-                setDate(selectedDate);
-                setCalendarOpen(false);
-              }}
+              onChange={handleChange}
               inline
             />
           </div>
@@ -188,128 +217,319 @@ export const Filters: React.FC<FiltersProps> = ({
     </div>
   );
 
+  const handleStartingDateChange = (date: Date | null) => {
+    setStartDate(date);
+    setShowDatePickerStart(false);
+  };
+
+  const handleEndingDateChange = (date: Date | null) => {
+    setEndDate(date);
+    setShowDatePickerEnd(false);
+  };
+
   return (
     <div className={styles.filters}>
       <div className={styles.filters__content}>
-        {filterOptions.map(filter => (
-          <div key={filter.id} className={styles.filters__group}>
-            <p className={styles.filters__name}>{filter.nameOfFilter}</p>
-            {filter.id === 'startDate' ? (
-              renderDatePicker(
-                startDate,
-                setStartDate,
-                calendarStartOpen,
-                setCalendarStartOpen,
-                'Select start date',
-              )
-            ) : filter.id === 'endDate' ? (
-              renderDatePicker(
-                endDate,
-                setEndDate,
-                calendarEndOpen,
-                setCalendarEndOpen,
-                'Select end date',
-              )
-            ) : (
-              <>
-                <button
-                  className={styles['filters__toggle-button']}
-                  onClick={() => toggleDropdown(filter.id)}
-                >
-                  <p
-                    className={cn(styles.filters__select, {
-                      [styles['filters__select--chosen']]:
-                        selectedOptions[filter.id],
-                    })}
-                  >
-                    {selectedOptions[filter.id] || 'Select an option'}
-                  </p>
-                  <img
-                    className={styles.filters__img}
-                    src={dropdownState[filter.id] ? arrow_up : arrow_down}
-                    alt="Toggle dropdown"
-                  />
-                </button>
-                <div className={styles.filters__line}></div>
-                {dropdownState[filter.id] && filter.value && (
-                  <>
-                    <ul className={styles.filters__list}>
-                      {Array.isArray(filter.value) &&
-                        filter.value.map(option => {
-                          if (typeof option === 'string') {
-                            return (
-                              <li
-                                key={option}
-                                onClick={() => selectOption(filter.id, option)}
-                                className={cn(styles.filters__item, {
-                                  [styles['filters__item--active']]:
-                                    selectedOptions[filter.id] === option,
-                                })}
-                              >
-                                <label
-                                  className={styles['filters__dropdown-label']}
-                                >
-                                  <input
-                                    type="checkbox"
-                                    checked={
-                                      selectedOptions[filter.id] === option
-                                    }
-                                    onChange={() =>
-                                      selectOption(filter.id, option)
-                                    }
-                                    className={
-                                      styles['filters__dropdown-checkbox']
-                                    }
-                                  />
-                                  {option}
-                                </label>
-                              </li>
-                            );
-                          }
-
-                          if (typeof option === 'object' && option !== null) {
-                            const [key, value] = Object.entries(option)[0];
-
-                            return (
-                              <li
-                                key={key}
-                                onClick={() => selectOption(filter.id, value)}
-                                className={cn(styles.filters__item, {
-                                  [styles['filters__item--active']]:
-                                    selectedOptions[filter.id] === value,
-                                })}
-                              >
-                                <label
-                                  className={styles['filters__dropdown-label']}
-                                >
-                                  <input
-                                    type="checkbox"
-                                    checked={
-                                      selectedOptions[filter.id] === value
-                                    }
-                                    onChange={() =>
-                                      selectOption(filter.id, value)
-                                    }
-                                    className={
-                                      styles['filters__dropdown-checkbox']
-                                    }
-                                  />
-                                  {value}
-                                </label>
-                              </li>
-                            );
-                          }
-
-                          return null;
-                        })}
-                    </ul>
-                    <div className={styles.filters__line}></div>
-                  </>
-                )}
-              </>
-            )}
+        <div className={styles.filters__group}>
+          <h3 className={styles.filters__name}>Opportunity Type</h3>
+          <div className={styles.filters__dropdown}>
+            <button
+              className={styles['filters__dropdown-button']}
+              onClick={e => {
+                e.preventDefault();
+                toggleDropdown('opportunityType');
+              }}
+            >
+              <span
+                className={cn(styles.filters__select, {
+                  [styles['filters__select--chosen']]:
+                    selectedOptions.opportunityType,
+                })}
+              >
+                {selectedOptions.opportunityType || 'Opportunity Type'}
+              </span>
+            </button>
+            <div className={styles['filters__dropdown-img-container']}>
+              <img
+                className={styles['filters__dropdown-img']}
+                src={
+                  dropdownStates.opportunityType ? arrow_up : arrow_down
+                }
+                alt="Arrow Down"
+              />
+            </div>
           </div>
-        ))}
+          {dropdownStates.opportunityType && (
+            <ul className={styles['filters__dropdown-list']}>
+              {opportunityType.map(type => (
+                <li
+                  key={type}
+                  onClick={() => selectOption('opportunityType', type)}
+                  className={cn(styles['filters__dropdown-item'], {
+                    [styles['filters__dropdown-item--active']]:
+                      selectedOptions.opportunityType === type,
+                  })}
+                >
+                  <label className={styles['filters__dropdown-label']}>
+                    <input
+                      type="checkbox"
+                      checked={selectedOptions.opportunityType === type}
+                      onChange={() =>
+                        selectOption('opportunityType', type)
+                      }
+                      className={styles['filters__dropdown-checkbox']}
+                    />
+                    {type}
+                  </label>
+                </li>
+              ))}
+            </ul>
+          )}
+          <div className={styles.filters__line}></div>
+        </div>
+        <div className={styles.filters__group}>
+          <h3 className={styles.filters__name}>Assistance Type</h3>
+          <div className={styles.filters__dropdown}>
+            <button
+              className={styles['filters__dropdown-button']}
+              onClick={e => {
+                e.preventDefault();
+                toggleDropdown('assistanceType');
+              }}
+            >
+              <span
+                className={cn(styles.filters__select, {
+                  [styles['filters__select--chosen']]:
+                    selectedOptions.assistanceType,
+                })}
+              >
+                {selectedOptions.assistanceType || 'Assistance Type'}
+              </span>
+            </button>
+            <div className={styles['filters__dropdown-img-container']}>
+              <img
+                className={styles['filters__dropdown-img']}
+                src={
+                  dropdownStates.assistanceType ? arrow_up : arrow_down
+                }
+                alt="Arrow Down"
+              />
+            </div>
+          </div>
+          {dropdownStates.assistanceType && (
+            <ul className={styles['filters__dropdown-list']}>
+              {assistanceType.map(type => (
+                <li
+                  key={type}
+                  onClick={() => selectOption('assistanceType', type)}
+                  className={cn(styles['filters__dropdown-item'], {
+                    [styles['filters__dropdown-item--active']]:
+                      selectedOptions.assistanceType === type,
+                  })}
+                >
+                  <label className={styles['filters__dropdown-label']}>
+                    <input
+                      type="checkbox"
+                      checked={selectedOptions.assistanceType === type}
+                      onChange={() =>
+                        selectOption('assistanceType', type)
+                      }
+                      className={styles['filters__dropdown-checkbox']}
+                    />
+                    {type}
+                  </label>
+                </li>
+              ))}
+            </ul>
+          )}
+          <div className={styles.filters__line}></div>
+        </div>
+        <div className={styles.filters__group}>
+          <h3 className={styles.filters__name}>Category</h3>
+          <div className={styles.filters__dropdown}>
+            <button
+              className={styles['filters__dropdown-button']}
+              onClick={e => {
+                e.preventDefault();
+                toggleDropdown('categoryId');
+              }}
+            >
+              <span
+                className={cn(styles.filters__select, {
+                  [styles['filters__select--chosen']]:
+                    selectedOptions.categoryId,
+                })}
+              >
+                {selectedOptions.categoryId
+                  ? categoryId[selectedOptions.categoryId]
+                  : 'Category'}
+              </span>
+            </button>
+            <div className={styles['filters__dropdown-img-container']}>
+              <img
+                className={styles['filters__dropdown-img']}
+                src={dropdownStates.categoryId ? arrow_up : arrow_down}
+                alt="Arrow Down"
+              />
+            </div>
+          </div>
+          {dropdownStates.categoryId && (
+            <ul className={styles['filters__dropdown-list']}>
+              {Object.entries(categoryId).map(([id, name]) => (
+                <li
+                  key={id}
+                  onClick={() => {
+                    selectOption('categoryId', id);
+                  }}
+                  className={cn(styles['filters__dropdown-item'], {
+                    [styles['filters__dropdown-item--active']]:
+                      selectedOptions.categoryId === id,
+                  })}
+                >
+                  <label className={styles['filters__dropdown-label']}>
+                    <input
+                      type="checkbox"
+                      checked={selectedOptions.categoryId === id}
+                      onChange={() => selectOption('categoryId', id)}
+                      className={styles['filters__dropdown-checkbox']}
+                    />
+                    {name}
+                  </label>
+                </li>
+              ))}
+            </ul>
+          )}
+          <div className={styles.filters__line}></div>
+        </div>
+        <div className={styles.filters__group}>
+          <h3 className={styles.filters__name}>Location</h3>
+          <div className={styles.filters__dropdown}>
+            <button
+              className={styles['filters__dropdown-button']}
+              onClick={e => {
+                e.preventDefault();
+                toggleDropdown('region');
+              }}
+            >
+              <span
+                className={cn(styles.filters__select, {
+                  [styles['filters__select--chosen']]: selectedOptions.region,
+                })}
+              >
+                {selectedOptions.region || 'Region'}
+              </span>
+            </button>
+            <div className={styles['filters__dropdown-img-container']}>
+              <img
+                className={styles['filters__dropdown-img']}
+                src={dropdownStates.region ? arrow_up : arrow_down}
+                alt="Arrow Down"
+              />
+            </div>
+          </div>
+          {dropdownStates.region && (
+            <ul className={styles['filters__dropdown-list']}>
+              {region.map(reg => (
+                <li
+                  key={reg}
+                  onClick={() => selectOption('region', reg)}
+                  className={cn(styles['filters__dropdown-item'], {
+                    [styles['filters__dropdown-item--active']]:
+                      selectedOptions.region === reg,
+                  })}
+                >
+                  <label className={styles['filters__dropdown-label']}>
+                    <input
+                      type="checkbox"
+                      checked={selectedOptions.region === reg}
+                      onChange={() => selectOption('region', reg)}
+                      className={styles['filters__dropdown-checkbox']}
+                    />
+                    {reg}
+                  </label>
+                </li>
+              ))}
+            </ul>
+          )}
+          <div className={styles.filters__line}></div>
+        </div>
+        <div className={styles.filters__group}>
+          <h3 className={styles.filters__name}>Time Demands</h3>
+          <div className={styles.filters__dropdown}>
+            <button
+              className={styles['filters__dropdown-button']}
+              onClick={e => {
+                e.preventDefault();
+                toggleDropdown('timeDemands');
+              }}
+            >
+              <span
+                className={cn(styles.filters__select, {
+                  [styles['filters__select--chosen']]:
+                    selectedOptions.timeDemands,
+                })}
+              >
+                {selectedOptions.timeDemands || 'Time Demands'}
+              </span>
+            </button>
+            <div className={styles['filters__dropdown-img-container']}>
+              <img
+                className={styles['filters__dropdown-img']}
+                src={dropdownStates.timeDemands ? arrow_up : arrow_down}
+                alt="Arrow Down"
+              />
+            </div>
+          </div>
+          {dropdownStates.timeDemands && (
+            <ul className={styles['filters__dropdown-list']}>
+              {timeDemands.map(demands => (
+                <li
+                  key={demands}
+                  onClick={() => selectOption('timeDemands', demands)}
+                  className={cn(styles['filters__dropdown-item'], {
+                    [styles['filters__dropdown-item--active']]:
+                      selectedOptions.timeDemands === demands,
+                  })}
+                >
+                  <label className={styles['filters__dropdown-label']}>
+                    <input
+                      type="checkbox"
+                      checked={selectedOptions.timeDemands === demands}
+                      onChange={() =>
+                        selectOption('timeDemands', demands)
+                      }
+                      className={styles['filters__dropdown-checkbox']}
+                    />
+                    {demands}
+                  </label>
+                </li>
+              ))}
+            </ul>
+          )}
+          <div className={styles.filters__line}></div>
+        </div>
+        <div className={styles.filters__group}>
+          <h3 className={styles.filters__name}>Start Date</h3>
+          {renderDatePicker(
+            startDate,
+            handleStartingDateChange,
+            showDatePickerStart,
+            setShowDatePickerStart,
+            'Choose a starting date',
+          )}
+        </div>
+        <div className={styles.filters__line}></div>
+        <div className={styles.filters__group}>
+          <h3 className={styles.filters__name}>End Date</h3>
+          {renderDatePicker(
+            endDate,
+            handleEndingDateChange,
+            showDatePickerEnd,
+            setShowDatePickerEnd,
+            'Choose a ending date',
+          )}
+        </div>
+        <div className={styles.filters__line}></div>
       </div>
       <div className={styles.filters__buttons}>
         <button

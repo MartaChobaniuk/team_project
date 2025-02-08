@@ -9,13 +9,8 @@ export interface FilterSelection {
   startDate?: Date | null;
   endDate?: Date | null;
 }
-
-export interface Value {
-  [key: string]: string;
-}
-
 export interface FilterOptions {
   id: keyof FilterSelection;
   nameOfFilter: string;
-  value: string | string[] | Value[] | Record<string, string>[] | Date | null;
+  value: string | string[] | Record<string, string> | Date | null;
 }

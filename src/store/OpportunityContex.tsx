@@ -1,45 +1,51 @@
 /* eslint-disable @typescript-eslint/indent */
-import React, { createContext, useContext, useMemo } from 'react';
+import React, { createContext, useCallback, useContext, useMemo } from 'react';
 import { useLocalStorage } from '../hooks/useLocalStorage';
 
 interface StepOneData {
-  phone: string;
   organizerType: string;
-  fullName: string;
-  email: string;
-  website: string;
-  photo: string;
+  organizerName: string;
+  organizerEmail: string;
+  phone: string;
+  link: string;
+  organizerPhotoFile: File | null;
+  photoUrl: string | null;
 }
 
 interface StepTwoData {
-  oppotunityName: string;
-  categories: string;
+  title: string;
+  categoryId: string;
   opportunityType: string;
   assistanceType: string;
   target: string | number;
   region: string;
-  adress: string;
-  startDate: Date | null;
-  endDate: Date | null;
+  address: string;
   startHour: string;
+  startingDate: Date | null | string;
+  formattedStartingDate: string;
+  endingDate: Date | null | string;
+  formattedEndingDate: string;
   startMinute: string;
   endHour: string;
   endMinute: string;
   startPeriod: string;
   endPeriod: string;
   timeDemands: string;
-  requiredMaterialsSkills: string;
+  timeDemandsText: string;
+  skills: string;
 }
 
 type DocumentType = {
   file: File | null;
-  id: number;
+  id: string;
 };
 
 interface StepThreeData {
-  firstFile: File | null;
-  secondFile: File | null;
-  documents: DocumentType[];
+  coverImageFile: File | null;
+  coverUrl: string;
+  description: string;
+  descriptionLink: string;
+  documentFile: DocumentType[];
 }
 
 interface OpportunityContextType {
@@ -49,6 +55,7 @@ interface OpportunityContextType {
   setStepTwoData: React.Dispatch<React.SetStateAction<StepTwoData>>;
   stepThreeData: StepThreeData;
   setStepThreeData: React.Dispatch<React.SetStateAction<StepThreeData>>;
+  resetOpportunityData: () => void;
 }
 
 const OpportunityContext = createContext<OpportunityContextType | undefined>(
@@ -57,37 +64,43 @@ const OpportunityContext = createContext<OpportunityContextType | undefined>(
 
 const initialStepOneData: StepOneData = {
   organizerType: '',
-  fullName: '',
-  email: '',
+  organizerName: '',
+  organizerEmail: '',
   phone: '',
-  website: '',
-  photo: '',
+  link: '',
+  organizerPhotoFile: null,
+  photoUrl: null,
 };
 
 const initialStepTwoData: StepTwoData = {
-  oppotunityName: '',
-  categories: '',
+  title: '',
+  categoryId: '',
   opportunityType: '',
   assistanceType: '',
   target: '',
   region: '',
-  adress: '',
-  startDate: null,
-  endDate: null,
+  address: '',
+  startingDate: null,
+  formattedStartingDate: '',
+  endingDate: null,
+  formattedEndingDate: '',
   startHour: '',
   startMinute: '',
   endHour: '',
   endMinute: '',
-  startPeriod: '',
-  endPeriod: '',
+  startPeriod: 'AM',
+  endPeriod: 'AM',
   timeDemands: '',
-  requiredMaterialsSkills: '',
+  timeDemandsText: '',
+  skills: '',
 };
 
 const initialStepThreeData: StepThreeData = {
-  firstFile: null,
-  secondFile: null,
-  documents: [{ file: null, id: 1 }],
+  coverImageFile: null,
+  coverUrl: '',
+  description: '',
+  descriptionLink: '',
+  documentFile: [],
 };
 
 export const OpportunityProvider: React.FC<{ children: React.ReactNode }> = ({
@@ -108,6 +121,12 @@ export const OpportunityProvider: React.FC<{ children: React.ReactNode }> = ({
     initialStepThreeData,
   );
 
+  const resetOpportunityData = useCallback(() => {
+    setStepOneData(initialStepOneData);
+    setStepTwoData(initialStepTwoData);
+    setStepThreeData(initialStepThreeData);
+  }, [setStepOneData, setStepTwoData, setStepThreeData]);
+
   const value = useMemo(
     () => ({
       stepOneData,
@@ -122,6 +141,7 @@ export const OpportunityProvider: React.FC<{ children: React.ReactNode }> = ({
       setStepThreeData: setStepThreeData as React.Dispatch<
         React.SetStateAction<StepThreeData>
       >,
+      resetOpportunityData,
     }),
     [
       stepOneData,
@@ -130,6 +150,7 @@ export const OpportunityProvider: React.FC<{ children: React.ReactNode }> = ({
       setStepTwoData,
       stepThreeData,
       setStepThreeData,
+      resetOpportunityData,
     ],
   );
 

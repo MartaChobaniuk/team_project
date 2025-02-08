@@ -14,16 +14,7 @@ export const filterOptions: FilterOptions[] = [
   {
     id: 'categoryName',
     nameOfFilter: 'category',
-    value: [
-      'Military Support',
-      'Humanitarian Aid',
-      'Medical Assistance',
-      'Reconstruction & Infrastructure',
-      'Mental Health',
-      'Education & Mentorship',
-      'Community & Local Initiatives',
-      'Cultural & Historical Preservation',
-    ],
+    value: [],
   },
   {
     id: 'location',
@@ -56,20 +47,6 @@ export const filterOptions: FilterOptions[] = [
       'Lutsk',
       'Kremenchuk',
       'Online',
-    ],
-  },
-  {
-    id: 'duration',
-    nameOfFilter: 'time demands',
-    value: [
-      { '0-1': 'Up to 1 hour' },
-      { '2-6': '1-6 hours' },
-      { '7-24': 'Up to a day' },
-      { '25-144': 'Up to a week' },
-      { '145-744': 'Up to a month' },
-      { '745-2232': '1 - 3 months' },
-      { '2233-4464': '3 - 6 months' },
-      { '4465-8950': 'Up to a year ' },
     ],
   },
   {

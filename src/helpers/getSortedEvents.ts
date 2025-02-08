@@ -1,13 +1,21 @@
-import { EventType } from '../types/EventType';
-import { FilterSelection } from '../types/FilterType';
+import { EventType } from "../types/EventType";
+import { FilterSelection } from "../types/FilterType";
+import { categoryId } from "./dropdownsInfo";
 
 export const filteredEv = (
-  events: EventType[],
+  events: EventType[] | null | undefined, // Додаємо перевірку на null або undefined
   filters: FilterSelection,
   query: string,
 ): EventType[] => {
+  if (!Array.isArray(events)) {
+    console.error("events не є масивом або є недійсним значенням:", events);
+
+    return []; // Повертаємо порожній масив, якщо events не є масивом
+  }
+
   let filteredEvents = [...events];
 
+  // Ваша логіка фільтрації
   if (query) {
     const queryLowerCase = query.toLowerCase();
 
@@ -15,7 +23,7 @@ export const filteredEv = (
       return (
         event.title.toLowerCase().includes(queryLowerCase) ||
         event.description.toLowerCase().includes(queryLowerCase) ||
-        event.location.toLowerCase().includes(queryLowerCase)
+        event.region.toLowerCase().includes(queryLowerCase)
       );
     });
   }
@@ -40,86 +48,37 @@ export const filteredEv = (
     );
   }
 
-  if (filters.categoryName === 'Reconstruction & Infrastructure') {
-    filteredEvents = filteredEvents.filter(
-      event => event.categoryName === 'Reconstruction & Infrastructure',
+  if (filters.categoryName) {
+    const selectedCategoryId = Object.keys(categoryId).find(
+      key => categoryId[key] === filters.categoryName,
     );
-  } else if (filters.categoryName === 'Military Support') {
-    filteredEvents = filteredEvents.filter(
-      event => event.categoryName === 'Military Support',
-    );
-  } else if (filters.categoryName === 'Humanitarian Aid') {
-    filteredEvents = filteredEvents.filter(
-      event => event.categoryName === 'Humanitarian Aid',
-    );
-  } else if (filters.categoryName === 'Medical Assistance') {
-    filteredEvents = filteredEvents.filter(
-      event => event.categoryName === 'Medical Assistance',
-    );
-  } else if (filters.categoryName === 'Mental Health') {
-    filteredEvents = filteredEvents.filter(
-      event => event.categoryName === 'Mental Health',
-    );
-  } else if (filters.categoryName === 'Education & Mentorship') {
-    filteredEvents = filteredEvents.filter(
-      event => event.categoryName === 'Education & Mentorship',
-    );
-  } else if (filters.categoryName === 'Community & Local Initiatives') {
-    filteredEvents = filteredEvents.filter(
-      event => event.categoryName === 'Community & Local Initiatives',
-    );
-  } else if (filters.categoryName === 'Cultural & Historical Preservation') {
-    filteredEvents = filteredEvents.filter(
-      event => event.categoryName === 'Cultural & Historical Preservation',
-    );
+
+    if (selectedCategoryId) {
+      filteredEvents = filteredEvents.filter(
+        event => event.categoryId === selectedCategoryId,
+      );
+    }
   }
 
   if (filters.location) {
     filteredEvents = filteredEvents.filter(event => {
-      return event.location === filters.location;
-    });
-  }
-
-  if (filters.duration?.length) {
-    filteredEvents = filteredEvents.filter(event => {
-      const eventDuration = event.duration;
-
-      switch (filters.duration) {
-        case 'Up to 1 hour':
-          return eventDuration <= 1;
-        case '1-6 hours':
-          return eventDuration > 1 && eventDuration <= 6;
-        case 'Up to a day':
-          return eventDuration > 7 && eventDuration <= 24;
-        case 'Up to a week':
-          return eventDuration > 25 && eventDuration <= 144;
-        case 'Up to a month':
-          return eventDuration > 145 && eventDuration <= 744;
-        case '1 - 3 months':
-          return eventDuration > 745 && eventDuration <= 2232;
-        case '3 - 6 months':
-          return eventDuration > 2233 && eventDuration <= 4464;
-        case 'Up to a year':
-          return eventDuration > 4465 && eventDuration <= 8950;
-        default:
-          return false;
-      }
+      return event.address === filters.location;
     });
   }
 
   if (filters.startDate && !filters.endDate) {
     filteredEvents = filteredEvents.filter(event => {
-      if (!event.date) {
+      if (!event.startingDate) {
         return false;
       }
 
-      const eventDate = new Date(event.date);
+      const eventDate = new Date(event.startingDate);
 
       if (isNaN(eventDate.getTime())) {
         return false;
       }
 
-      const startDate = filters.startDate ? new Date(filters.startDate) : null;
+      const startDate = filters.startDate;
 
       if (!startDate) {
         return false;
@@ -134,17 +93,17 @@ export const filteredEv = (
 
   if (filters.endDate && !filters.startDate) {
     filteredEvents = filteredEvents.filter(event => {
-      if (!event.date) {
+      if (!event.endingDate) {
         return false;
       }
 
-      const eventDate = new Date(event.date);
+      const eventDate = new Date(event.endingDate);
 
       if (isNaN(eventDate.getTime())) {
         return false;
       }
 
-      const endDate = filters.endDate ? new Date(filters.endDate) : null;
+      const endDate = filters.endDate;
 
       if (!endDate) {
         return false;
@@ -159,18 +118,18 @@ export const filteredEv = (
 
   if (filters.startDate && filters.endDate) {
     filteredEvents = filteredEvents.filter(event => {
-      if (!event.date) {
+      if (!event.startingDate) {
         return false;
       }
 
-      const eventDate = new Date(event.date);
+      const eventDate = new Date(event.startingDate);
 
       if (isNaN(eventDate.getTime())) {
         return false;
       }
 
-      const startDate = filters.startDate ? new Date(filters.startDate) : null;
-      const endDate = filters.endDate ? new Date(filters.endDate) : null;
+      const startDate = filters.startDate;
+      const endDate = filters.endDate;
 
       if (!startDate || !endDate) {
         return false;

@@ -1,22 +1,21 @@
-export type EventType = {
-  id: string;
+export type NewOpportunityType = {
   organizerType: string;
   organizerName: string;
-  organizerEmail: string;
   phone: string;
   link: string;
+  eventLink: string;
   organizerPhoto: string;
   title: string;
-  categoryId: string;
+  categoryName: string;
   opportunityType: string;
   assistanceType: string;
   target: string | number;
   region: string;
   address: string;
-  startingDate: string;
+  startDate: Date | null;
+  endDate: Date | null;
   startHour: string;
   startMinute: string;
-  endingDate: string;
   endHour: string;
   endMinute: string;
   startPeriod: string;
@@ -24,9 +23,8 @@ export type EventType = {
   timeDemands: string;
   skills: string;
   coverImage: string;
-  coverUrl: string;
   description: string;
   descriptionLink: string;
-  documentFile: string;
+  document: string;
   currentProgress: string | number;
 };

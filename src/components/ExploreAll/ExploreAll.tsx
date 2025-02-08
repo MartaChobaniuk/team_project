@@ -238,11 +238,12 @@ export const ExploreAll = () => {
               <p className={styles['explore__error-text']}>{errorMessage}</p>
             </div>
           )}
-          {filteredEvent.length > 0 ? (
+          {filteredEvent.length > 0 &&
             filteredEvent.map(event => (
               <EventCard key={event.id} event={event} />
-            ))
-          ) : (
+            ))}
+
+          {!errorMessage && filteredEvent.length === 0 && (
             <div className={styles.explore__error}>
               <p className={styles['explore__error-text']}>No matched events</p>
             </div>

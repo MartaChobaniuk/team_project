@@ -22,8 +22,7 @@
   &__content-top {
     position: relative;
     z-index: 12;
-    background-color: var.$black;
-    color: var.$white;
+    color: var.$black;
     border-radius: 0 0 20px 20px;
     @include mixin.sizes(100%, 100vh);
     @include mixin.flex(flex, false, space-between, column);
@@ -31,6 +30,10 @@
     @include mixin.on-desktop {
       padding: 86px 24px 20px;
       animation: slideUp 0.5s ease-in-out 4s forwards;
+
+      &--is-dark {
+        color: var.$white;
+      }
     }
   }
 
@@ -69,7 +72,7 @@
     }
   }
 
-  &__title {
+  &__main-title {
     @include mixin.h2-desktop-tablet;
     text-align-last: left;
     color: var.$white;
@@ -163,14 +166,96 @@
     height: 50vh;
     background-color: var.$black;
     padding: 24px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  &__block-participants {
+    display: flex;
+    flex-direction: row;
+    justify-content: start;
+    align-items: center;
+  }
+
+  &__participants-info {
+    margin-left: 25%;
+    height: 44px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  &__participants-text {
+    @include mixin.body-text-desktop-tablet;
+    color: var.$dark-gray;
+    text-transform: uppercase;
   }
 
   &__participants {
-    margin-bottom: 20px;
+    height: 44px;
+    display: flex;
+    position: relative;
+  }
+
+  &__participant {
+    width: 40px;
+    height: 40px;
+    background-color: var.$dark-gray;
+    border-radius: 50%;
+    border: 2px solid white;
+    position: absolute;
+    top: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    &:nth-child(1) {
+      left: 0;
+    }
+
+    &:nth-child(2) {
+      left: 25px;
+    }
+
+    &:nth-child(3) {
+      left: 50px;
+    }
+
+    &:nth-child(4) {
+      left: 75px;
+    }
+
+    &:nth-child(5) {
+      left: 100px;
+    }
+
+    &:nth-child(6) {
+      left: 125px;
+    }
+  }
+
+  &__participant-span {
+    color: var.$light-gray;
+  }
+
+  &__donate-block {
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    height: 44px;
+    gap: 10%;
+  }
+
+  &__donate-text {
+    @include mixin.body-text-desktop-tablet;
+    color: var.$dark-gray;
+    text-transform: uppercase;
   }
 
   &__description {
     width: 80%;
+    margin-top: 20px;
     margin-bottom: 20px;
   }
 
@@ -208,10 +293,123 @@
   &__organizer-block {
     display: flex;
     flex-direction: row;
+    justify-content: space-between;
+    width: 100%;
   }
 
   &__organizer-details {
     display: flex;
     flex-direction: column;
+    width: 50%;
+  }
+
+  &__organizer-logo {
+    width: 194px;
+    height: 194px;
+    border-radius: 50%;
+  }
+
+  &__title {
+    @include mixin.small-text-desktop-tablet;
+    color: var.$light-gray;
+  }
+
+  &__organizer-name {
+    @include mixin.h3-desktop-tablet;
+    color: var.$light-gray;
+    margin-bottom: 20px;
+  }
+
+  &__organizer-phone {
+    @include mixin.body-text-desktop-tablet;
+    color: var.$light-gray;
+  }
+
+  &__organizer-email {
+    @include mixin.body-text-desktop-tablet;
+    color: var.$light-gray;
+  }
+
+  &__organizer-link {
+    @include mixin.body-text-desktop-tablet;
+    color: var.$light-gray;
+  }
+
+  &__organizer-buttons {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+  }
+
+  &__organizer-button {
+    width: 100%;
+    height: 44px;
+    line-height: 44px;
+    text-align: center;
+    text-transform: uppercase;
+    background-color: var.$white;
+    color: var.$black;
+    border: 0.5px solid var.$black;
+    border-radius: 12px;
+    cursor: pointer;
+
+    @include mixin.flex(flex, center, center, false);
+
+    &:hover {
+      background-color: var.$light-gray;
+      color: var.$black;
+    }
+  }
+
+  &__part-title {
+    color: var.$light-gray;
+    @include mixin.body-text-desktop-tablet;
+    text-align: center;
+  }
+
+  &__part-buttons {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+  }
+
+  &__part-send {
+    width: 100%;
+    height: 44px;
+    line-height: 44px;
+    text-align: center;
+    text-transform: uppercase;
+    background-color: var.$grey;
+    color: var.$black;
+    border: 0.5px solid var.$black;
+    border-radius: 12px;
+    cursor: pointer;
+
+    @include mixin.flex(flex, center, center, false);
+
+    &:hover {
+      background-color: var.$light-gray;
+      color: var.$black;
+    }
+  }
+
+  &__part-cancel {
+    width: 100%;
+    height: 44px;
+    line-height: 44px;
+    text-align: center;
+    text-transform: uppercase;
+    background-color: var.$black;
+    color: var.$white;
+    border: 0.5px solid var.$white;
+    border-radius: 12px;
+    cursor: pointer;
+
+    @include mixin.flex(flex, center, center, false);
+
+    &:hover {
+      background-color: var.$dark-gray;
+      color: var.$white;
+    }
   }
 }
