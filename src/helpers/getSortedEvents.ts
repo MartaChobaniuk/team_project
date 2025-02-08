@@ -1,18 +1,12 @@
-import { EventType } from "../types/EventType";
-import { FilterSelection } from "../types/FilterType";
-import { categoryId } from "./dropdownsInfo";
+import { EventType } from '../types/EventType';
+import { FilterSelection } from '../types/FilterType';
+import { categoryId } from './dropdownsInfo';
 
 export const filteredEv = (
-  events: EventType[] | null | undefined, // Додаємо перевірку на null або undefined
+  events: EventType[],
   filters: FilterSelection,
   query: string,
 ): EventType[] => {
-  if (!Array.isArray(events)) {
-    console.error("events не є масивом або є недійсним значенням:", events);
-
-    return []; // Повертаємо порожній масив, якщо events не є масивом
-  }
-
   let filteredEvents = [...events];
 
   // Ваша логіка фільтрації
