@@ -23,6 +23,7 @@ import { StepThreePage } from './pages/StepThreePage';
 import { VolunteeringPage } from './pages/VolunteeringPage';
 import { WishesPage } from './pages/WishesPage';
 import { DonatePage } from './pages/DonatePage';
+import { CallbackPage } from './pages/CallbackPage';
 
 export const Root = () => (
   <Router>
@@ -65,6 +66,7 @@ export const Root = () => (
 
         <Route path={Path.Profile}>
           <Route index element={<ProfilePage />} />
+          <Route path="callback" element={<CallbackPage />} />
           <Route path={Path.ProfileInfo} element={<ProfileInfoPage />} />
           <Route path={Path.Activity} element={<ProfileActivityPage />} />
 
