@@ -1,4 +1,4 @@
-import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
+import { Route, HashRouter as Router, Routes } from 'react-router-dom';
 import { App } from './App';
 import { HomePage } from './pages/HomePage';
 import { StoriesPage } from './pages/StoriesPage';
@@ -25,7 +25,7 @@ import { WishesPage } from './pages/WishesPage';
 import { DonatePage } from './pages/DonatePage';
 
 export const Root = () => (
-  <Router basename="/team_project">
+  <Router>
     <Routes>
       <Route path={Path.Home} element={<App />}>
         <Route index element={<HomePage />} />
