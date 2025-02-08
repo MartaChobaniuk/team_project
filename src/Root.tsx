@@ -25,7 +25,7 @@ import { WishesPage } from './pages/WishesPage';
 import { DonatePage } from './pages/DonatePage';
 
 export const Root = () => (
-  <Router>
+  <Router basename="/team_project">
     <Routes>
       <Route path={Path.Home} element={<App />}>
         <Route index element={<HomePage />} />
