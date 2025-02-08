@@ -9,7 +9,7 @@ export const CallbackPage = () => {
     const code = urlParams.get('code');
 
     if (code) {
-      navigate('/profile/info?code=${code}', { replace: true });
+      navigate(`/profile/info?code=${code}`, { replace: true });
     }
   }, [navigate]);
 
