@@ -139,16 +139,25 @@ export const NavbarRight: React.FC<Props> = ({ className }) => {
           </NavLink>
         )}
 
-        {(auth.isAuthenticated && isProfileActive) ||
-          (auth.isAuthenticated && isStepActive) && (
-            <button
-              className={
-                isProfileActive ? styles.navbar__profile : styles.navbar__step
-              }
-            >
-              Logout
-            </button>
-          )}
+        {(auth.isAuthenticated && isStepActive) && (
+          <button
+            className={
+              isProfileActive ? styles.navbar__profile : styles.navbar__step
+            }
+          >
+            Logout
+          </button>
+        )}
+
+        {(auth.isAuthenticated && isProfileActive) && (
+          <button
+            className={
+              isProfileActive ? styles.navbar__profile : styles.navbar__step
+            }
+          >
+            Logout
+          </button>
+        )}
       </div>
     </section>
   );

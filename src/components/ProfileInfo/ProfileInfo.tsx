@@ -29,22 +29,12 @@ export const ProfileInfo = () => {
 
   useEffect(() => {
     const params = new URLSearchParams(location.search);
+    const code = params.get('code');
 
-    if (params.has('token')) {
-      const token = params.get('token');
+    if (code) {
+      localStorage.setItem('accessToken', code);
 
-      if (token) {
-        localStorage.setItem('accessToken', token);
-      }
-
-      params.delete('token');
-      navigate(
-        {
-          pathname: location.pathname,
-          search: params.toString(),
-        },
-        { replace: true },
-      );
+      navigate('/profile/info', { replace: true });
     }
   }, [location, navigate]);
 
