@@ -141,7 +141,7 @@ export const ProfileInfo = () => {
       localStorage.getItem('userPicture') || profileData.profileImage;
 
     fetch(
-      'https://dewvdtfd5m.execute-api.eu-north-1.amazonaws.com/dev/account/update',
+      'https://dewvdtfd5m.execute-api.eu-north-1.amazonaws.com/dev/account',
       {
         method: 'PUT',
         headers: {

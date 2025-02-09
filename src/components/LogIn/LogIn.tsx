@@ -1,9 +1,25 @@
-import styles from './LogIn.module.scss';
+/* eslint-disable no-console */
+import { useEffect } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from 'react-oidc-context';
+import styles from './LogIn.module.scss';
 import { Loader } from '../Loader';
 
 export const LogIn = () => {
   const auth = useAuth();
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  useEffect(() => {
+    const url = new URL(window.location.href);
+
+    if (url.searchParams.has('code') || url.searchParams.has('state')) {
+      url.searchParams.delete('code');
+      url.searchParams.delete('state');
+
+      navigate(url.pathname + url.hash, { replace: true });
+    }
+  }, [navigate, location]);
 
   if (auth.isLoading) {
     return <Loader />;
@@ -27,10 +43,6 @@ export const LogIn = () => {
 
     localStorage.setItem('idToken', idToken);
     localStorage.setItem('accessToken', accessToken);
-    /* eslint-disable no-console */
-    console.log('ID Token saved to localStorage:', idToken);
-    /* eslint-disable no-console */
-    console.log('Access Token saved to localStorage:', accessToken);
 
     fetch(
       'https://dewvdtfd5m.execute-api.eu-north-1.amazonaws.com/dev/account',
@@ -44,7 +56,7 @@ export const LogIn = () => {
     )
       .then(response => {
         if (!response.ok) {
-          new Error(`HTTP error! Status: ${response.status}`);
+          throw new Error(`HTTP error! Status: ${response.status}`);
         }
 
         return response.json();
