@@ -30,32 +30,46 @@ export const ProfileInfo = () => {
     let code: string | null = null;
 
     if (window.location.search) {
-      // Якщо code є у search (рідко буває при хеш-роутингу)
       const searchParams = new URLSearchParams(window.location.search);
 
       code = searchParams.get('code');
     }
 
     if (!code) {
-      // Якщо code немає у search, шукаємо в хеші (hash routing issue)
       const hash = window.location.hash;
       const hashParams = new URLSearchParams(hash.split('?')[1]);
 
       code = hashParams.get('code');
     }
 
-    console.log('Code from URL:', code); // Дивимось, чи знайшли код
-
     if (code) {
       localStorage.setItem('accessToken', code);
+
+      // Очищаємо URL від параметра `code`
+      const newUrl = window.location.pathname + window.location.hash;
+
+      window.history.replaceState({}, '', newUrl);
 
       console.log(
         'Saved to localStorage:',
         localStorage.getItem('accessToken'),
       );
-
-      // Очищаємо URL від `code`
       navigate('/profile/info', { replace: true });
+    }
+  }, [navigate]);
+
+  useEffect(() => {
+    // Перевірка наявності токену в localStorage
+    const token = localStorage.getItem('accessToken');
+
+    if (token) {
+      // Якщо токен є, продовжуємо з авторизованим користувачем
+      console.log('Session restored with token:', token);
+      navigate('/profile/info');
+    } else {
+      // Якщо токен відсутній, редирект на сторінку логіну або іншу відповідну
+      console.log('No token found. Redirecting to login...');
+      navigate('/login');
     }
   }, [navigate]);
 
