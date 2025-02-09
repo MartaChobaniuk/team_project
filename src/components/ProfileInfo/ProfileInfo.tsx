@@ -31,9 +31,16 @@ export const ProfileInfo = () => {
     const params = new URLSearchParams(location.search);
     const code = params.get('code');
 
+    console.log('Code from URL:', code); // Перевіряємо чи є код
+
     if (code) {
       localStorage.setItem('accessToken', code);
+      console.log(
+        'Saved to localStorage:',
+        localStorage.getItem('accessToken'),
+      ); // Перевіряємо збереження
 
+      // Очищаємо URL
       navigate('/profile/info', { replace: true });
     }
   }, [location, navigate]);
