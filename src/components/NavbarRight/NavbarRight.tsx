@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import React from 'react';
 import cn from 'classnames';
 import { NavLink, useLocation, useParams } from 'react-router-dom';
@@ -137,6 +138,17 @@ export const NavbarRight: React.FC<Props> = ({ className }) => {
             <span className={styles.navbar__name}>Log In</span>
           </NavLink>
         )}
+
+        {(auth.isAuthenticated && isProfileActive) ||
+          (auth.isAuthenticated && isStepActive) && (
+            <button
+              className={
+                isProfileActive ? styles.navbar__profile : styles.navbar__step
+              }
+            >
+              Logout
+            </button>
+          )}
       </div>
     </section>
   );

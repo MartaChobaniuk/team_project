@@ -1,6 +1,6 @@
 /* eslint-disable no-console */
 /* eslint-disable max-len */
-import { NavLink, useLocation } from 'react-router-dom';
+import { NavLink, useLocation, useNavigate } from 'react-router-dom';
 import styles from './ProfileInfo.module.scss';
 import { Path } from '../../utils/constants';
 import cn from 'classnames';
@@ -24,64 +24,88 @@ export const ProfileInfo = () => {
     profileImage: default_user,
   });
 
-  // Fetch the profile data when the component is mounted
+  const location = useLocation();
+  const navigate = useNavigate();
+
   useEffect(() => {
-    fetch(
-      'https://dewvdtfd5m.execute-api.eu-north-1.amazonaws.com/dev/account',
-      {
-        method: 'GET',
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('accessToken')}`, // Use your token here
-          'Content-Type': 'application/json',
+    const params = new URLSearchParams(location.search);
+
+    if (params.has('token')) {
+      const token = params.get('token');
+
+      if (token) {
+        localStorage.setItem('accessToken', token);
+      }
+
+      params.delete('token');
+      navigate(
+        {
+          pathname: location.pathname,
+          search: params.toString(),
         },
-      },
-    )
-      .then(response => response.json())
-      .then(data => {
-        setProfileData({
-          name: data.name || '',
-          email: data.email || '',
-          phone: data.phone || '',
-          profileImage: data.profileImage || default_user,
-        });
-      })
-      .catch(error => {
-        console.error('Error fetching profile data:', error);
-      });
-  }, []);
+        { replace: true },
+      );
+    }
+  }, [location, navigate]);
 
-  useEffect(() => {
-    const storedImage = localStorage.getItem('profileImage');
+  const fetchProfileData = async () => {
+    const token = localStorage.getItem('accessToken');
 
-    if (storedImage) {
-      setProfileData(prevData => ({
-        ...prevData,
-        profileImage: storedImage,
-      }));
+    if (!token) {
+      console.warn('No access token found');
+
+      return;
     }
 
-    fetch(
-      'https://dewvdtfd5m.execute-api.eu-north-1.amazonaws.com/dev/account',
-      {
-        method: 'GET',
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
-          'Content-Type': 'application/json',
+    try {
+      const response = await fetch(
+        'https://dewvdtfd5m.execute-api.eu-north-1.amazonaws.com/dev/account',
+        {
+          method: 'GET',
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          },
         },
-      },
-    )
-      .then(response => response.json())
-      .then(data => {
-        setProfileData({
-          name: data.name || '',
-          email: data.email || '',
-          phone: data.phone || '',
-          profileImage: data.profileImage || storedImage || default_user,
-        });
-      })
-      .catch(error => {
-        console.error('Error fetching profile data:', error);
-      });
+      );
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+
+      const text = await response.text();
+
+      if (!text) {
+        console.warn('Empty response body');
+
+        return;
+      }
+
+      const data = JSON.parse(text);
+
+      const updatedProfile = {
+        name: data.name || '',
+        email: data.email || '',
+        phone: data.phone || '',
+        profileImage:
+          data.profileImage ||
+          localStorage.getItem('profileImage') ||
+          'default_user.png',
+      };
+
+      setProfileData(updatedProfile);
+
+      localStorage.setItem('userName', updatedProfile.name);
+      localStorage.setItem('userEmail', updatedProfile.email);
+      localStorage.setItem('userPhone', updatedProfile.phone);
+      localStorage.setItem('profileImage', updatedProfile.profileImage);
+    } catch (error) {
+      console.error('Error fetching profile data:', error);
+    }
+  };
+
+  useEffect(() => {
+    fetchProfileData();
   }, []);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -89,80 +113,117 @@ export const ProfileInfo = () => {
 
     setProfileData(prevData => ({
       ...prevData,
-      [name]: value,
+      [name]: value.trim(),
     }));
   };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
 
-    if (file) {
-      const validTypes = ['image/png', 'image/jpeg', 'image/svg+xml'];
-
-      if (!validTypes.includes(file.type)) {
-        alert('Only PNG, JPG, or SVG image formats are supported!');
-
-        return;
-      }
-
-      const reader = new FileReader();
-
-      reader.onloadend = () => {
-        const imageUrl = reader.result as string;
-
-        localStorage.setItem('profileImage', imageUrl);
-
-        setProfileData(prevData => ({
-          ...prevData,
-          profileImage: imageUrl,
-        }));
-      };
-
-      reader.readAsDataURL(file);
+    if (!file) {
+      return;
     }
+
+    const validTypes = [
+      'image/png',
+      'image/jpeg',
+      'image/svg+xml',
+      'image/webp',
+    ];
+    const maxSize = 2 * 1024 * 1024;
+
+    if (!validTypes.includes(file.type)) {
+      alert('Only PNG, JPG, SVG, or WebP image formats are supported!');
+
+      return;
+    }
+
+    if (file.size > maxSize) {
+      alert('File size should not exceed 2MB!');
+
+      return;
+    }
+
+    const reader = new FileReader();
+
+    reader.onloadend = () => {
+      const imageUrl = reader.result as string;
+
+      localStorage.setItem('profileImage', imageUrl);
+
+      setProfileData(prevData => ({
+        ...prevData,
+        profileImage: imageUrl,
+      }));
+    };
+
+    reader.readAsDataURL(file);
   };
 
   const handleEditClick = () => {
     if (isEditing) {
       setProfileData(prevData => ({
         ...prevData,
-        picture: default_user,
+        profileImage: default_user,
       }));
     }
 
-    setIsEditing(!isEditing);
+    setIsEditing(prev => !prev);
   };
 
-  const handleSaveClick = () => {
-    const accessToken = localStorage.getItem('accessToken');
-    const storedName = localStorage.getItem('userName') || profileData.name;
-    const storedPhone = localStorage.getItem('userPhone') || profileData.phone;
-    const storedPicture =
-      localStorage.getItem('userPicture') || profileData.profileImage;
+  const handleSaveClick = async () => {
+    if (!profileData.name || !profileData.phone) {
+      alert('Name and phone are required!');
 
-    fetch(
-      'https://dewvdtfd5m.execute-api.eu-north-1.amazonaws.com/dev/account',
-      {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${accessToken}`,
+      return;
+    }
+
+    const updatedProfile = {
+      name: profileData.name.trim(),
+      email: profileData.email.trim(),
+      phone: profileData.phone.trim(),
+      profileImage: profileData.profileImage,
+    };
+
+    try {
+      const accessToken = localStorage.getItem('accessToken');
+
+      if (!accessToken) {
+        console.warn('No access token found');
+
+        return;
+      }
+
+      const response = await fetch(
+        'https://dewvdtfd5m.execute-api.eu-north-1.amazonaws.com/dev/account',
+        {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${accessToken}`,
+          },
+          body: JSON.stringify(updatedProfile),
         },
-        body: JSON.stringify({
-          name: storedName,
-          phone: storedPhone,
-          profileImage: storedPicture,
-        }),
-      },
-    )
-      .then(response => response.json())
-      .then(data => {
-        console.log('Profile updated:', data);
-      })
-      .catch(error => {
-        console.error('Error saving profile:', error);
-      });
-    setIsEditing(false);
+      );
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+
+      const data = await response.json();
+
+      console.log('Profile updated:', data);
+
+      localStorage.setItem('userName', updatedProfile.name);
+      localStorage.setItem('userEmail', updatedProfile.email);
+      localStorage.setItem('userPhone', updatedProfile.phone);
+      localStorage.setItem('profileImage', updatedProfile.profileImage);
+
+      setProfileData(updatedProfile);
+      setIsEditing(false);
+    } catch (error) {
+      console.error('Error saving profile:', error);
+    }
   };
 
   return (
