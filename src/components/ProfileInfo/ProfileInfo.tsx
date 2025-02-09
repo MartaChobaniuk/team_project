@@ -24,26 +24,40 @@ export const ProfileInfo = () => {
     profileImage: default_user,
   });
 
-  const location = useLocation();
   const navigate = useNavigate();
 
   useEffect(() => {
-    const params = new URLSearchParams(location.search);
-    const code = params.get('code');
+    let code: string | null = null;
 
-    console.log('Code from URL:', code); // Перевіряємо чи є код
+    if (window.location.search) {
+      // Якщо code є у search (рідко буває при хеш-роутингу)
+      const searchParams = new URLSearchParams(window.location.search);
+
+      code = searchParams.get('code');
+    }
+
+    if (!code) {
+      // Якщо code немає у search, шукаємо в хеші (hash routing issue)
+      const hash = window.location.hash;
+      const hashParams = new URLSearchParams(hash.split('?')[1]);
+
+      code = hashParams.get('code');
+    }
+
+    console.log('Code from URL:', code); // Дивимось, чи знайшли код
 
     if (code) {
       localStorage.setItem('accessToken', code);
+
       console.log(
         'Saved to localStorage:',
         localStorage.getItem('accessToken'),
-      ); // Перевіряємо збереження
+      );
 
-      // Очищаємо URL
+      // Очищаємо URL від `code`
       navigate('/profile/info', { replace: true });
     }
-  }, [location, navigate]);
+  }, [navigate]);
 
   const fetchProfileData = async () => {
     const token = localStorage.getItem('accessToken');
