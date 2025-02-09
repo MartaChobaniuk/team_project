@@ -32,10 +32,10 @@
     @include mixin.sizes(12px, 12px);
 
     z-index: 5;
-    margin-right: 4px;
+    margin-right: 6px;
 
     &--dark {
-      @include mixin.sizes(20px, 20px);
+      @include mixin.sizes(22px, 22px);
     }
   }
 
@@ -164,7 +164,7 @@
       background: var.$yellow-green;
     }
 
-    &--home {
+    &--dark-bg {
       @include mixin.on-desktop {
         background-color: var.$black;
         color: var.$white;
@@ -181,7 +181,7 @@
       }
     }
 
-    &--homeAi {
+    &--white-bg {
       @include mixin.on-desktop {
         background-color: var.$white;
         color: var.$black;
@@ -195,90 +195,6 @@
           background: var.$yellow-green;
           color: var.$black;
         }
-      }
-    }
-
-    &--about {
-      @include mixin.on-desktop {
-        background-color: var.$black;
-        color: var.$white;
-
-        &:hover {
-          background: var.$orange-red;
-          color: var.$white;
-        }
-
-        &:active {
-          background: var.$orange-red;
-          color: var.$white;
-        }
-      }
-    }
-
-    &--sign {
-      @include mixin.on-desktop {
-        background-color: var.$white;
-        color: var.$black;
-
-        &--active {
-          background: var.$yellow-green;
-          color: var.$black;
-        }
-
-        &:hover {
-          background: var.$yellow-green;
-          color: var.$black;
-        }
-
-        &:active {
-          background: var.$yellow-green;
-          color: var.$black;
-        }
-      }
-    }
-
-    &--login,
-    &--contact,
-    &--explore,
-    &--volunt,
-    &--wishes,
-    &--donate,
-    &--stories,
-    &--event {
-      @include mixin.on-desktop {
-        background-color: var.$white;
-        color: var.$black;
-
-        &--active {
-          background: var.$yellow-green;
-          color: var.$black;
-        }
-
-        &:hover {
-          background: var.$yellow-green;
-          color: var.$black;
-        }
-
-        &:active {
-          background: var.$yellow-green;
-          color: var.$black;
-        }
-      }
-    }
-
-    &--faq {
-      background-color: transparent;
-      color: var.$white;
-      border: 0.5px solid var.$white;
-
-      &:hover {
-        background: var.$orange-red;
-        color: var.$white;
-      }
-
-      &:active {
-        background: var.$orange-red;
-        color: var.$white;
       }
     }
   }
@@ -311,9 +227,7 @@
       width: 100%;
     }
 
-    &--home,
-    &--about,
-    &--profile {
+    &--dark-bg {
       @include mixin.on-desktop {
         background-color: transparent;
         color: var.$black;
@@ -331,21 +245,7 @@
       }
     }
 
-    &--homeAi,
-    &--response,
-    &--sign,
-    &--login,
-    &--faq,
-    &--contact,
-    &--explore,
-    &--volunt,
-    &--wishes,
-    &--donate,
-    &--stories,
-    &--event,
-    &--step-one,
-    &--step-two,
-    &--step-three {
+    &--transparent-bg {
       @include mixin.on-desktop {
         background-color: transparent;
         color: var.$white;

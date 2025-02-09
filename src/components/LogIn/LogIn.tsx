@@ -1,6 +1,4 @@
 import styles from './LogIn.module.scss';
-import { NavLink } from 'react-router-dom';
-import { Path } from '../../utils/constants';
 import { useAuth } from 'react-oidc-context';
 import { Loader } from '../Loader';
 
@@ -127,11 +125,6 @@ export const LogIn = () => {
             >
               Log In
             </button>
-            <div className={styles['log-in__link-container']}>
-              <NavLink to={Path.SignUp} className={styles['log-in__acc-link']}>
-                Don&apos;t have an account yet? Sign Up here!
-              </NavLink>
-            </div>
           </div>
         </div>
       </section>

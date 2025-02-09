@@ -31,10 +31,10 @@ export const Menu = () => {
               [styles['menu__sign--active']]: isActive,
             })
           }
-          to={Path.SignUp}
+          to={Path.LogIn}
         >
           <img src={user} alt="user" className={styles.menu__img} />
-          <span className={styles['menu__name--sign']}>Sign Up</span>
+          <span className={styles['menu__name--sign']}>Log In</span>
         </NavLink>
       </div>
     </section>
