@@ -226,7 +226,10 @@ export const ProfileInfo = () => {
 
       const formData = new FormData();
 
-      formData.append('account', JSON.stringify(userInfo));
+      formData.append(
+        'account',
+        new Blob([JSON.stringify(userInfo)], { type: 'application/json' }),
+      );
 
       if (profileImageFile instanceof File) {
         formData.append('profileImageFile', profileImageFile);
