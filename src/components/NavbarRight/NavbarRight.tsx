@@ -1,13 +1,14 @@
 /* eslint-disable prettier/prettier */
 import React from 'react';
 import cn from 'classnames';
-import { NavLink, useLocation, useParams } from 'react-router-dom';
+import { NavLink, useLocation, useNavigate, useParams } from 'react-router-dom';
 import styles from './NavbarRight.module.scss';
 import { Path } from '../../utils/constants';
 import user_white from '../../images/icons/account_white.svg';
 import user_black from '../../images/icons/account_black.svg';
 import { usePathChecker } from '../../helpers/usePathChecker';
 import { useAuth } from 'react-oidc-context';
+import { deleteImgFromIndexedDB } from '../../helpers/deleteImageFromIndexedDB';
 
 type Props = {
   className?: string;
@@ -15,6 +16,7 @@ type Props = {
 
 export const NavbarRight: React.FC<Props> = ({ className }) => {
   const { pathname } = useLocation();
+  const navigate = useNavigate();
   const { eventId } = useParams();
   const isEventPage = eventId ? pathname.includes(eventId) : false;
   const auth = useAuth();
@@ -44,6 +46,18 @@ export const NavbarRight: React.FC<Props> = ({ className }) => {
     isProfile || isProfileInfo || isActivity || isOpportunities;
 
   const isStepActive = isStepOne || isStepTwo || isStepThree;
+
+  const isOtherPathActive = isHome ||
+    isHomeAI ||
+    isLogIn ||
+    isAbout ||
+    isFaq ||
+    isContact ||
+    isExplore ||
+    isVolunteering ||
+    isWishes ||
+    isStories ||
+    isDonate;
 
   const getClassName = ({ isActive }: { isActive: boolean }) =>
     cn(isProfileActive ? styles.navbar__profile : styles.navbar__step, {
@@ -78,6 +92,19 @@ export const NavbarRight: React.FC<Props> = ({ className }) => {
       className,
     );
 
+  const handleLogout = async () => {
+    localStorage.removeItem('accessToken');
+    localStorage.removeItem('userName');
+    localStorage.removeItem('userPhone');
+    localStorage.removeItem('email');
+
+    await deleteImgFromIndexedDB('profileImage');
+
+    await auth.removeUser();
+
+    navigate(Path.Home);
+  };
+
   return (
     <section className={styles.navbar}>
       <div className={styles.navbar__left}></div>
@@ -111,12 +138,14 @@ export const NavbarRight: React.FC<Props> = ({ className }) => {
           <span className={styles['navbar__lang-name']}>ENG</span>
         </button>
 
-        {auth.isAuthenticated ? (
+        {auth.isAuthenticated && isOtherPathActive && (
           <NavLink to={Path.Profile} className={getClassName}>
             <img src={iconSrc} alt="user" className={iconClass} />
             <span className={styles.navbar__name}>Profile</span>
           </NavLink>
-        ) : (
+        )}
+
+        {!auth.isAuthenticated && isOtherPathActive && (
           <NavLink to={Path.LogIn} className={getActiveLink}>
             <img
               src={isHome || isAbout ? user_white : user_black}
@@ -144,6 +173,7 @@ export const NavbarRight: React.FC<Props> = ({ className }) => {
             className={
               isProfileActive ? styles.navbar__profile : styles.navbar__step
             }
+            onClick={handleLogout}
           >
             Logout
           </button>
@@ -154,6 +184,7 @@ export const NavbarRight: React.FC<Props> = ({ className }) => {
             className={
               isProfileActive ? styles.navbar__profile : styles.navbar__step
             }
+            onClick={handleLogout}
           >
             Logout
           </button>

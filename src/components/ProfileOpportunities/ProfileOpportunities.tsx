@@ -23,7 +23,7 @@ export const ProfileOpportunities = () => {
       const scrollY = window.scrollY;
 
       setIsScrolled(scrollY > 50);
-      setIsFixed(scrollY > 100);
+      setIsFixed(scrollY > 150);
     };
 
     window.addEventListener('scroll', handleScroll);
@@ -50,9 +50,27 @@ export const ProfileOpportunities = () => {
             [styles['opport__top--fixed']]: isFixed,
           })}
         >
-          <p className={styles.opport__greeting}>Hello, {profile?.name}</p>
-          <h1 className={styles.opport__title}>All You Need, In One Place</h1>
-          <div className={styles.opport__buttons}>
+          <p
+            className={cn(styles.opport__greeting, {
+              [styles['opport__greeting--scrolled']]: isScrolled,
+            })}
+          >
+            Hello, {profile?.name}
+          </p>
+          <h1
+            className={cn(styles.opport__title, {
+              [styles['opport__title--scrolled']]: isScrolled,
+              [styles['opport__title--fixed']]: isFixed,
+            })}
+          >
+            All You Need, In One Place
+          </h1>
+          <div
+            className={cn(styles.opport__buttons, {
+              [styles['opport__buttons--scrolled']]: isScrolled,
+              [styles['opport__buttons--fixed']]: isFixed,
+            })}
+          >
             <NavLink
               to={Path.ProfileInfo}
               className={({ isActive }: { isActive: boolean }) =>

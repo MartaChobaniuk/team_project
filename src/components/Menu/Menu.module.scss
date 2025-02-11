@@ -145,4 +145,16 @@
     margin-right: 10px;
     z-index: 5;
   }
+
+  &__out {
+    width: 16px;
+    height: 16px;
+    margin-right: 10px;
+    z-index: 5;
+  }
+
+  &__buttons {
+    display: flex;
+    flex-direction: column;
+  }
 }

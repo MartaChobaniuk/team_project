@@ -334,7 +334,7 @@ export const StepThree = () => {
 
       if (response.ok) {
         setSubmitSuccess(true);
-        setSuccessMessage('your event has been successfully created');
+        setSuccessMessage('Your event has been successfully created');
 
         localStorage.removeItem('stepOneData');
         localStorage.removeItem('stepTwoData');

@@ -1,4 +1,4 @@
-import { Route, HashRouter as Router, Routes } from 'react-router-dom';
+import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
 import { App } from './App';
 import { HomePage } from './pages/HomePage';
 import { StoriesPage } from './pages/StoriesPage';
@@ -23,10 +23,9 @@ import { StepThreePage } from './pages/StepThreePage';
 import { VolunteeringPage } from './pages/VolunteeringPage';
 import { WishesPage } from './pages/WishesPage';
 import { DonatePage } from './pages/DonatePage';
-import { CallbackPage } from './pages/CallbackPage';
 
 export const Root = () => (
-  <Router>
+  <Router basename="/team_project">
     <Routes>
       <Route path={Path.Home} element={<App />}>
         <Route index element={<HomePage />} />
@@ -66,7 +65,6 @@ export const Root = () => (
 
         <Route path={Path.Profile}>
           <Route index element={<ProfilePage />} />
-          <Route path="callback" element={<CallbackPage />} />
           <Route path={Path.ProfileInfo} element={<ProfileInfoPage />} />
           <Route path={Path.Activity} element={<ProfileActivityPage />} />
 

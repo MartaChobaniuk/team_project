@@ -1,25 +1,10 @@
 /* eslint-disable no-console */
-import { useEffect } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from 'react-oidc-context';
 import styles from './LogIn.module.scss';
 import { Loader } from '../Loader';
 
 export const LogIn = () => {
   const auth = useAuth();
-  const navigate = useNavigate();
-  const location = useLocation();
-
-  useEffect(() => {
-    const url = new URL(window.location.href);
-
-    if (url.searchParams.has('code') || url.searchParams.has('state')) {
-      url.searchParams.delete('code');
-      url.searchParams.delete('state');
-
-      navigate(url.pathname + url.hash, { replace: true });
-    }
-  }, [navigate, location]);
 
   if (auth.isLoading) {
     return <Loader />;
@@ -31,44 +16,6 @@ export const LogIn = () => {
         Encountering error... {auth.error.message}
       </div>
     );
-  }
-
-  if (auth.isAuthenticated) {
-    const idToken = auth.user?.id_token;
-    const accessToken = auth.user?.access_token;
-
-    if (!idToken || !accessToken) {
-      return <div>Error: Tokens not found</div>;
-    }
-
-    localStorage.setItem('idToken', idToken);
-    localStorage.setItem('accessToken', accessToken);
-
-    fetch(
-      'https://dewvdtfd5m.execute-api.eu-north-1.amazonaws.com/dev/account',
-      {
-        method: 'GET',
-        headers: {
-          Authorization: `Bearer ${idToken}`,
-          'Content-Type': 'application/json',
-        },
-      },
-    )
-      .then(response => {
-        if (!response.ok) {
-          throw new Error(`HTTP error! Status: ${response.status}`);
-        }
-
-        return response.json();
-      })
-      .then(data => {
-        console.log('Data from backend:', data);
-      })
-      .catch(error => {
-        console.error('Error:', error);
-      });
-
-    return <div className={styles.message}>Welcome, you are logged in!</div>;
   }
 
   return (
