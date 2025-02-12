@@ -231,7 +231,6 @@ export const ProfileInfo = () => {
         phone: prev.phone.trim(),
       }));
 
-      // Збереження даних в localStorage
       localStorage.setItem('profileName', profileData.name.trim());
       localStorage.setItem('profilePhone', profileData.phone.trim());
 
@@ -310,36 +309,7 @@ export const ProfileInfo = () => {
 
   const savedName = localStorage.getItem('profileName');
   const savedPhone = localStorage.getItem('profilePhone');
-  const savedImageUrl = localStorage.getItem('profileImageUrl');
   const savedEmail = localStorage.getItem('email');
-
-  if (savedEmail) {
-    setProfileData(prev => ({
-      ...prev,
-      email: savedEmail,
-    }));
-  }
-
-  if (savedName) {
-    setProfileData(prev => ({
-      ...prev,
-      name: savedName,
-    }));
-  }
-
-  if (savedPhone) {
-    setProfileData(prev => ({
-      ...prev,
-      phone: savedPhone,
-    }));
-  }
-
-  if (savedImageUrl) {
-    setProfileData(prev => ({
-      ...prev,
-      profileImageUrl: savedImageUrl,
-    }));
-  }
 
   return (
     <div className={styles.info}>
