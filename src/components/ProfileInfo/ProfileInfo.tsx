@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable prefer-const */
 /* eslint-disable no-console */
 /* eslint-disable max-len */
@@ -205,11 +206,6 @@ export const ProfileInfo = () => {
 
       if (profileData.profileImage instanceof File) {
         formData.append('profileImageFile', profileData.profileImage);
-      }
-
-      // Виведення перед відправкою
-      for (let pair of formData.entries()) {
-        console.log(pair[0], pair[1]);
       }
 
       const response = await fetch(
