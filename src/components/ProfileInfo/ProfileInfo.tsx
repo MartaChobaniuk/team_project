@@ -1,7 +1,4 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable prefer-const */
 /* eslint-disable no-console */
-/* eslint-disable max-len */
 import { NavLink, useLocation, useNavigate } from 'react-router-dom';
 import styles from './ProfileInfo.module.scss';
 import { Path } from '../../utils/constants';
