@@ -10,7 +10,7 @@ interface ProfileData {
   name: string;
   email: string;
   phone: string;
-  profileImage: string;
+  profileImage: string | null;
 }
 
 export const ProfileInfo = () => {
@@ -138,6 +138,8 @@ export const ProfileInfo = () => {
 
     const imageUrl = URL.createObjectURL(file);
 
+    localStorage.setItem('profileImage', imageUrl);
+
     setProfileData(prev => ({
       ...prev,
       profileImage: imageUrl,
@@ -203,11 +205,15 @@ export const ProfileInfo = () => {
 
       console.log('Profile updated:', data);
 
-      setProfileData({
-        ...profileData,
-        name: profileData.name.trim(),
-        phone: profileData.phone.trim(),
-      });
+      localStorage.setItem('name', profileData.name);
+      localStorage.setItem('phone', profileData.phone);
+
+      const storedProfileImage = localStorage.getItem('profileImage');
+
+      setProfileData(prev => ({
+        ...prev,
+        profileImage: storedProfileImage,
+      }));
 
       setIsEditing(false);
     } catch (error) {
