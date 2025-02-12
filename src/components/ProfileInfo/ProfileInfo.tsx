@@ -99,7 +99,7 @@ export const ProfileInfo = () => {
 
     setProfileData(prevData => ({
       ...prevData,
-      [name]: value.trim(),
+      [name]: value,
     }));
   };
 
@@ -222,6 +222,17 @@ export const ProfileInfo = () => {
       setIsSaving(false);
     }
   };
+
+  useEffect(() => {
+    const storedProfileImage = localStorage.getItem('profileImage');
+
+    if (storedProfileImage) {
+      setProfileData(prev => ({
+        ...prev,
+        profileImage: storedProfileImage,
+      }));
+    }
+  }, []);
 
   const handleDeleteClick = async () => {
     setIsDeleting(true);
