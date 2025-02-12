@@ -7,14 +7,14 @@ import cn from 'classnames';
 import default_user from '../../images/icons/profile-default.svg';
 import { useEffect, useRef, useState } from 'react';
 import { useAuth } from 'react-oidc-context';
-import { initIndexedDB } from '../../helpers/initIndexedDB';
 import { deleteImgFromIndexedDB } from '../../helpers/deleteImageFromIndexedDB';
 
 interface ProfileData {
   name: string;
   email: string;
   phone: string;
-  profileImage: string;
+  profileImage: File | null;
+  profileImageUrl?: string;
 }
 
 export const ProfileInfo = () => {
@@ -36,98 +36,67 @@ export const ProfileInfo = () => {
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
   useEffect(() => {
-    let code: string | null = null;
-
     const searchParams = new URLSearchParams(window.location.search);
-
-    code = searchParams.get('code');
+    const code =
+      searchParams.get('code') ||
+      new URLSearchParams(window.location.hash.split('?')[1]).get('code');
 
     if (code) {
       window.history.replaceState({}, '', window.location.pathname);
-      navigate('/', { replace: true });
-    }
-
-    if (!code) {
-      const hash = window.location.hash;
-      const hashParams = new URLSearchParams(hash.split('?')[1]);
-
-      code = hashParams.get('code');
-    }
-
-    if (code) {
-      const newUrl = window.location.pathname + window.location.hash;
-
-      window.history.replaceState({}, '', newUrl);
       navigate('/profile/info', { replace: true });
     }
   }, [navigate]);
 
   useEffect(() => {
-    let isMounted = true;
+    if (!auth.isAuthenticated || !auth.user) {
+      return;
+    }
 
     const updateProfile = async () => {
-      if (auth.isAuthenticated && auth.user) {
-        const accessToken = auth.user.access_token;
-
-        console.log('auth', auth);
+      try {
+        const accessToken = auth.user?.access_token;
 
         if (!accessToken) {
           setErrorMessage('Authorization token is missing');
 
-          return;
+          throw new Error('Authorization token is missing');
         }
 
-        initIndexedDB();
-
-        try {
-          const response = await fetch(
-            'https://dewvdtfd5m.execute-api.eu-north-1.amazonaws.com/dev/account',
-            {
-              method: 'GET',
-              headers: {
-                'Content-Type': 'application/json',
-                Authorization: `Bearer ${accessToken}`,
-              },
+        const response = await fetch(
+          'https://dewvdtfd5m.execute-api.eu-north-1.amazonaws.com/dev/account',
+          {
+            method: 'GET',
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${accessToken}`,
             },
-          );
+          },
+        );
 
-          if (!response.ok) {
-            throw new Error(`HTTP error! Status: ${response.status}`);
-          }
-
-          const data = await response.json();
-
-          if (isMounted) {
-            setProfileData(prevData => ({
-              ...prevData,
-              name: data.name,
-              email: data.email,
-              phone: data.phone,
-              profileImage: default_user || data.profileImage,
-            }));
-
-            localStorage.setItem('accessToken', accessToken);
-            localStorage.setItem('email', data.email);
-          }
-        } catch (error) {
-          console.error('Error with token request:', error);
-          if (isMounted) {
-            setErrorMessage(
-              'Sorry, there was an issue loading your profile. Please try again later.',
-            );
-          }
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
         }
+
+        const data = await response.json();
+
+        setProfileData(prev => ({
+          ...prev,
+          name: data.name,
+          email: data.email,
+          phone: data.phone,
+          profileImage: default_user || data.profileImage,
+        }));
+
+        localStorage.setItem('accessToken', accessToken);
+        localStorage.setItem('email', data.email);
+      } catch (error) {
+        console.error('Error loading profile:', error);
+        setErrorMessage('Failed to load profile. Please try again later.');
       }
     };
 
-    if (auth.isAuthenticated && auth.user) {
-      updateProfile();
-    }
-
-    return () => {
-      isMounted = false;
-    };
-  }, [auth, auth.isAuthenticated, auth.user]);
+    updateProfile();
+  }, [auth.isAuthenticated, auth.user]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -139,6 +108,8 @@ export const ProfileInfo = () => {
   };
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setErrorMessage(null);
+
     const file = event.target.files?.[0];
 
     if (!file) {
@@ -146,8 +117,6 @@ export const ProfileInfo = () => {
 
       return;
     }
-
-    setErrorMessage(null);
 
     const validTypes = [
       'image/png',
@@ -175,8 +144,11 @@ export const ProfileInfo = () => {
 
     setProfileData(prev => ({
       ...prev,
-      profileImage: imageUrl,
+      profileImage: file,
+      profileImageUrl: imageUrl,
     }));
+
+    return () => URL.revokeObjectURL(imageUrl);
   };
 
   const handleEditClick = () => {
@@ -193,6 +165,10 @@ export const ProfileInfo = () => {
     setIsEditing(prev => !prev);
   };
 
+  const getAccessToken = () => {
+    return localStorage.getItem('accessToken');
+  };
+
   const handleSaveClick = async () => {
     if (!profileData.name || !profileData.phone) {
       setErrorMessage('Name and phone are required!');
@@ -203,12 +179,12 @@ export const ProfileInfo = () => {
     try {
       setIsSaving(true);
       setErrorMessage(null);
-      const accessToken = localStorage.getItem('accessToken');
+
+      const accessToken = getAccessToken();
 
       if (!accessToken) {
         console.warn('No access token found');
         setErrorMessage('Authorization failed. Please log in again.');
-
         setIsSaving(false);
 
         return;
@@ -226,8 +202,7 @@ export const ProfileInfo = () => {
         new Blob([JSON.stringify(userInfo)], { type: 'application/json' }),
       );
 
-      // Додаємо зображення, якщо воно є
-      if (profileData.profileImage) {
+      if (profileData.profileImage instanceof File) {
         formData.append('profileImageFile', profileData.profileImage);
       }
 
@@ -243,14 +218,20 @@ export const ProfileInfo = () => {
       );
 
       if (!response.ok) {
+        if (response.status === 401) {
+          setErrorMessage('Session expired. Please log in again.');
+          localStorage.removeItem('accessToken');
+
+          return;
+        }
+
         throw new Error(`HTTP error! Status: ${response.status}`);
       }
 
       const data = await response.json();
 
       console.log('Profile updated:', data);
-
-      console.log('token', accessToken);
+      console.log('token:', accessToken);
 
       setProfileData(prev => ({
         ...prev,
@@ -260,7 +241,17 @@ export const ProfileInfo = () => {
 
       setIsEditing(false);
     } catch (error) {
-      setErrorMessage('Failed to save profile. Please try again.');
+      console.error('Error updating profile:', error);
+
+      const err = error as Error;
+
+      if (err.message.includes('Failed to fetch')) {
+        setErrorMessage('Network error. Check your connection.');
+      } else {
+        setErrorMessage(
+          err.message || 'Failed to save profile. Please try again.',
+        );
+      }
     } finally {
       setIsSaving(false);
     }
@@ -413,7 +404,7 @@ export const ProfileInfo = () => {
                   >
                     {profileData.profileImage ? (
                       <img
-                        src={profileData.profileImage}
+                        src={profileData.profileImageUrl}
                         alt="profile"
                         className={styles.info__photo}
                       />
@@ -424,7 +415,7 @@ export const ProfileInfo = () => {
                 </>
               ) : (
                 <img
-                  src={profileData.profileImage}
+                  src={profileData.profileImageUrl}
                   alt="profile"
                   className={styles.info__photo}
                 />
