@@ -1,3 +1,4 @@
+/* eslint-disable prefer-const */
 /* eslint-disable no-console */
 /* eslint-disable max-len */
 import { NavLink, useLocation, useNavigate } from 'react-router-dom';
@@ -204,6 +205,11 @@ export const ProfileInfo = () => {
 
       if (profileData.profileImage instanceof File) {
         formData.append('profileImageFile', profileData.profileImage);
+      }
+
+      // Виведення перед відправкою
+      for (let pair of formData.entries()) {
+        console.log(pair[0], pair[1]);
       }
 
       const response = await fetch(
