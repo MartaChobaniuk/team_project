@@ -1,19 +1,16 @@
 /* eslint-disable no-console */
+import { useEffect, useRef, useState } from 'react';
+import { useAuth } from 'react-oidc-context';
 import { NavLink, useLocation, useNavigate } from 'react-router-dom';
 import styles from './ProfileInfo.module.scss';
 import { Path } from '../../utils/constants';
 import cn from 'classnames';
 import default_user from '../../images/icons/profile-default.svg';
-import { useEffect, useRef, useState } from 'react';
-import { useAuth } from 'react-oidc-context';
-import { deleteImgFromIndexedDB } from '../../helpers/deleteImageFromIndexedDB';
-
 interface ProfileData {
   name: string;
   email: string;
   phone: string;
-  profileImage: File | null;
-  profileImageUrl?: string;
+  profileImage: string;
 }
 
 export const ProfileInfo = () => {
@@ -107,8 +104,6 @@ export const ProfileInfo = () => {
   };
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setErrorMessage(null);
-
     const file = event.target.files?.[0];
 
     if (!file) {
@@ -116,6 +111,8 @@ export const ProfileInfo = () => {
 
       return;
     }
+
+    setErrorMessage(null);
 
     const validTypes = [
       'image/png',
@@ -143,11 +140,8 @@ export const ProfileInfo = () => {
 
     setProfileData(prev => ({
       ...prev,
-      profileImage: file,
-      profileImageUrl: imageUrl,
+      profileImage: imageUrl,
     }));
-
-    return () => URL.revokeObjectURL(imageUrl);
   };
 
   const handleEditClick = () => {
@@ -164,10 +158,6 @@ export const ProfileInfo = () => {
     setIsEditing(prev => !prev);
   };
 
-  const getAccessToken = () => {
-    return localStorage.getItem('accessToken');
-  };
-
   const handleSaveClick = async () => {
     if (!profileData.name || !profileData.phone) {
       setErrorMessage('Name and phone are required!');
@@ -178,8 +168,7 @@ export const ProfileInfo = () => {
     try {
       setIsSaving(true);
       setErrorMessage(null);
-
-      const accessToken = getAccessToken();
+      const accessToken = localStorage.getItem('accessToken');
 
       if (!accessToken) {
         console.warn('No access token found');
@@ -189,70 +178,40 @@ export const ProfileInfo = () => {
         return;
       }
 
-      const formData = new FormData();
-
-      formData.append('name', profileData.name.trim());
-      formData.append('phone', profileData.phone.trim());
-
-      if (profileData.profileImage instanceof File) {
-        formData.append('profileImageFile', profileData.profileImage);
-      }
+      const userInfo = {
+        name: profileData.name,
+        phone: profileData.phone,
+      };
 
       const response = await fetch(
         'https://dewvdtfd5m.execute-api.eu-north-1.amazonaws.com/dev/account',
         {
           method: 'PUT',
           headers: {
+            'Content-Type': 'application/json',
             Authorization: `Bearer ${accessToken}`,
           },
-          body: formData,
+          body: JSON.stringify(userInfo),
         },
       );
 
       if (!response.ok) {
-        if (response.status === 401) {
-          setErrorMessage('Session expired. Please log in again.');
-          localStorage.removeItem('accessToken');
-
-          return;
-        }
-
         throw new Error(`HTTP error! Status: ${response.status}`);
       }
 
       const data = await response.json();
 
       console.log('Profile updated:', data);
-      console.log('token:', accessToken);
 
-      setProfileData(prev => ({
-        ...prev,
-        name: prev.name.trim(),
-        phone: prev.phone.trim(),
-      }));
-
-      localStorage.setItem('profileName', profileData.name.trim());
-      localStorage.setItem('profilePhone', profileData.phone.trim());
-
-      if (profileData.profileImage instanceof File) {
-        const imageUrl = URL.createObjectURL(profileData.profileImage);
-
-        localStorage.setItem('profileImageUrl', imageUrl);
-      }
+      setProfileData({
+        ...profileData,
+        name: profileData.name.trim(),
+        phone: profileData.phone.trim(),
+      });
 
       setIsEditing(false);
     } catch (error) {
-      console.error('Error updating profile:', error);
-
-      const err = error as Error;
-
-      if (err.message.includes('Failed to fetch')) {
-        setErrorMessage('Network error. Check your connection.');
-      } else {
-        setErrorMessage(
-          err.message || 'Failed to save profile. Please try again.',
-        );
-      }
+      setErrorMessage('Failed to save profile. Please try again.');
     } finally {
       setIsSaving(false);
     }
@@ -294,8 +253,6 @@ export const ProfileInfo = () => {
       localStorage.removeItem('userPhone');
       localStorage.removeItem('email');
 
-      await deleteImgFromIndexedDB('profileImage');
-
       await auth.removeUser();
 
       navigate(Path.Home);
@@ -306,10 +263,6 @@ export const ProfileInfo = () => {
       setIsDeleting(false);
     }
   };
-
-  const savedName = localStorage.getItem('profileName');
-  const savedPhone = localStorage.getItem('profilePhone');
-  const savedEmail = localStorage.getItem('email');
 
   return (
     <div className={styles.info}>
@@ -405,7 +358,7 @@ export const ProfileInfo = () => {
                   >
                     {profileData.profileImage ? (
                       <img
-                        src={profileData.profileImageUrl}
+                        src={profileData.profileImage || default_user}
                         alt="profile"
                         className={styles.info__photo}
                       />
@@ -416,7 +369,7 @@ export const ProfileInfo = () => {
                 </>
               ) : (
                 <img
-                  src={profileData.profileImageUrl}
+                  src={profileData.profileImage || default_user}
                   alt="profile"
                   className={styles.info__photo}
                 />
@@ -433,7 +386,7 @@ export const ProfileInfo = () => {
                 />
               ) : (
                 <p className={styles.info__input}>
-                  {profileData.name || savedName || 'Name'}
+                  {profileData.name || 'Name'}
                 </p>
               )}
               <div className={styles.info__line}></div>
@@ -447,7 +400,7 @@ export const ProfileInfo = () => {
                 />
               ) : (
                 <p className={styles.info__input}>
-                  {profileData.email || savedEmail || 'Email'}
+                  {profileData.email || 'Email'}
                 </p>
               )}
               <div className={styles.info__line}></div>
@@ -461,7 +414,7 @@ export const ProfileInfo = () => {
                 />
               ) : (
                 <p className={styles.info__input}>
-                  {profileData.phone || savedPhone || 'Phone Number'}
+                  {profileData.phone || 'Phone Number'}
                 </p>
               )}
               <div className={styles.info__line}></div>
