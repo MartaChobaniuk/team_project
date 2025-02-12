@@ -7,8 +7,6 @@ import cn from 'classnames';
 import default_user from '../../images/icons/profile-default.svg';
 import { useEffect, useRef, useState } from 'react';
 import { useAuth } from 'react-oidc-context';
-import { saveImageToIndexedDB } from '../../helpers/saveImageToIndexedDB';
-import { getImageFromIndexedDB } from '../../helpers/getImageFromIndexedDB';
 import { initIndexedDB } from '../../helpers/initIndexedDB';
 import { deleteImgFromIndexedDB } from '../../helpers/deleteImageFromIndexedDB';
 
@@ -179,8 +177,6 @@ export const ProfileInfo = () => {
       ...prev,
       profileImage: imageUrl,
     }));
-
-    saveImageToIndexedDB(file, 'profileImage');
   };
 
   const handleEditClick = () => {
@@ -212,12 +208,11 @@ export const ProfileInfo = () => {
       if (!accessToken) {
         console.warn('No access token found');
         setErrorMessage('Authorization failed. Please log in again.');
+
         setIsSaving(false);
 
         return;
       }
-
-      const profileImageFile = await getImageFromIndexedDB('profileImage');
 
       const userInfo = {
         name: profileData.name.trim(),
@@ -231,8 +226,9 @@ export const ProfileInfo = () => {
         new Blob([JSON.stringify(userInfo)], { type: 'application/json' }),
       );
 
-      if (profileImageFile instanceof File) {
-        formData.append('profileImageFile', profileImageFile);
+      // Додаємо зображення, якщо воно є
+      if (profileData.profileImage) {
+        formData.append('profileImageFile', profileData.profileImage);
       }
 
       const response = await fetch(
@@ -254,14 +250,13 @@ export const ProfileInfo = () => {
 
       console.log('Profile updated:', data);
 
-      setProfileData({
-        ...profileData,
-        name: profileData.name.trim(),
-        phone: profileData.phone.trim(),
-        profileImage: profileImageFile
-          ? URL.createObjectURL(profileImageFile)
-          : profileData.profileImage,
-      });
+      console.log('token', accessToken);
+
+      setProfileData(prev => ({
+        ...prev,
+        name: prev.name.trim(),
+        phone: prev.phone.trim(),
+      }));
 
       setIsEditing(false);
     } catch (error) {

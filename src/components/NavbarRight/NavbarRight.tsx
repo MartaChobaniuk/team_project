@@ -57,7 +57,8 @@ export const NavbarRight: React.FC<Props> = ({ className }) => {
     isVolunteering ||
     isWishes ||
     isStories ||
-    isDonate;
+    isDonate ||
+    isEventPage;
 
   const getClassName = ({ isActive }: { isActive: boolean }) =>
     cn(isProfileActive ? styles.navbar__profile : styles.navbar__step, {
