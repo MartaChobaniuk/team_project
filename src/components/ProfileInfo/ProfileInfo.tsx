@@ -189,17 +189,10 @@ export const ProfileInfo = () => {
         return;
       }
 
-      const userInfo = {
-        name: profileData.name.trim(),
-        phone: profileData.phone.trim(),
-      };
-
       const formData = new FormData();
 
-      formData.append(
-        'account',
-        new Blob([JSON.stringify(userInfo)], { type: 'application/json' }),
-      );
+      formData.append('name', profileData.name.trim());
+      formData.append('phone', profileData.phone.trim());
 
       if (profileData.profileImage instanceof File) {
         formData.append('profileImageFile', profileData.profileImage);
@@ -237,6 +230,16 @@ export const ProfileInfo = () => {
         name: prev.name.trim(),
         phone: prev.phone.trim(),
       }));
+
+      // Збереження даних в localStorage
+      localStorage.setItem('profileName', profileData.name.trim());
+      localStorage.setItem('profilePhone', profileData.phone.trim());
+
+      if (profileData.profileImage instanceof File) {
+        const imageUrl = URL.createObjectURL(profileData.profileImage);
+
+        localStorage.setItem('profileImageUrl', imageUrl);
+      }
 
       setIsEditing(false);
     } catch (error) {
@@ -305,9 +308,38 @@ export const ProfileInfo = () => {
     }
   };
 
-  const storedName = localStorage.getItem('userName');
-  const storedPhone = localStorage.getItem('userPhone');
-  const storedEmail = localStorage.getItem('email');
+  const savedName = localStorage.getItem('profileName');
+  const savedPhone = localStorage.getItem('profilePhone');
+  const savedImageUrl = localStorage.getItem('profileImageUrl');
+  const savedEmail = localStorage.getItem('email');
+
+  if (savedEmail) {
+    setProfileData(prev => ({
+      ...prev,
+      email: savedEmail,
+    }));
+  }
+
+  if (savedName) {
+    setProfileData(prev => ({
+      ...prev,
+      name: savedName,
+    }));
+  }
+
+  if (savedPhone) {
+    setProfileData(prev => ({
+      ...prev,
+      phone: savedPhone,
+    }));
+  }
+
+  if (savedImageUrl) {
+    setProfileData(prev => ({
+      ...prev,
+      profileImageUrl: savedImageUrl,
+    }));
+  }
 
   return (
     <div className={styles.info}>
@@ -431,7 +463,7 @@ export const ProfileInfo = () => {
                 />
               ) : (
                 <p className={styles.info__input}>
-                  {profileData.name || storedName || 'Name'}
+                  {profileData.name || savedName || 'Name'}
                 </p>
               )}
               <div className={styles.info__line}></div>
@@ -445,7 +477,7 @@ export const ProfileInfo = () => {
                 />
               ) : (
                 <p className={styles.info__input}>
-                  {profileData.email || storedEmail || 'Email'}
+                  {profileData.email || savedEmail || 'Email'}
                 </p>
               )}
               <div className={styles.info__line}></div>
@@ -459,7 +491,7 @@ export const ProfileInfo = () => {
                 />
               ) : (
                 <p className={styles.info__input}>
-                  {profileData.phone || storedPhone || 'Phone Number'}
+                  {profileData.phone || savedPhone || 'Phone Number'}
                 </p>
               )}
               <div className={styles.info__line}></div>
