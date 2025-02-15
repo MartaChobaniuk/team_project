@@ -6,7 +6,7 @@
   align-items: center;
   justify-content: start;
   text-align: left;
-  width: 70%;
+  width: 100%;
   height: 100%;
   background-color: var.$black;
   color: var.$grey;
@@ -59,62 +59,84 @@
     background-position: center;
     color: var.$black;
     border-radius: 0 0 20px 20px;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-end;
+    @include mixin.flex(flex, false, flex-end, column);
 
     @include mixin.on-mobile {
-      height: 35vh;
+      position: sticky;
+      top: 0;
+      min-height: 340px;
       padding: 70px 20px 24px;
+
+      &--scrolled {
+        min-height: 230px;
+        transition: height 0.3s ease;
+      }
     }
 
     @include mixin.on-tablet {
-      height: 30vh;
+      position: sticky;
+      top: 0;
+      min-height: 300px;
       padding: 86px 20px 24px;
+      transition: height 0.3s ease;
+
+      &--scrolled {
+        min-height: 240px;
+        transition: height 0.3s ease;
+      }
     }
 
     @include mixin.on-tablet-2 {
-      height: 30vh;
+      position: sticky;
+      top: 0;
+      width: 100%;
+      min-height: 250px;
       padding: 86px 20px 24px;
+      transition: height 0.3s ease;
+
+      &--scrolled {
+        min-height: 130px;
+        transition: height 0.3s ease;
+      }
     }
 
     @include mixin.on-desktop {
-      height: 35vh;
+      min-height: 240px;
       padding: 86px 24px 24px;
     }
   }
 
   &__bottom {
+    flex: 1 1 auto;
     overflow: auto;
     scrollbar-width: none;
+    background-color: var.$black;
+    @include mixin.flex(flex, false, false, column);
+    gap: 15px;
 
     @include mixin.on-mobile {
-      height: 75vh;
       padding: 20px 24px;
-      display: flex;
-      flex-direction: column;
-      gap: 15px;
+
+      &--scrolled {
+        padding-top: 230px;
+      }
     }
 
     @include mixin.on-tablet {
-      height: 80vh;
       padding: 20px 24px;
-      display: flex;
-      flex-direction: column;
-      gap: 15px;
+      height: max-content;
     }
 
     @include mixin.on-tablet-2 {
-      height: 70vh;
       padding: 20px 24px;
-      display: flex;
-      flex-direction: column;
-      gap: 15px;
+
+      &--scrolled {
+        padding-top: 150px;
+      }
     }
 
     @include mixin.on-desktop {
       padding: 30px 24px;
-      height: 65vh;
     }
   }
 
@@ -176,11 +198,31 @@
 
   &__greeting {
     @include mixin.on-mobile {
-      display: none;
+      display: block;
+      @include mixin.body-text-desktop-tablet;
+      color: var.$dark-gray;
+      margin-bottom: 10px;
+      opacity: 1;
+      transition: opacity 0.3s ease;
+
+      &--scrolled {
+        opacity: 0;
+        transition: opacity 0.3s ease;
+      }
     }
 
     @include mixin.on-tablet {
-      display: none;
+      display: block;
+      @include mixin.body-text-desktop-tablet;
+      color: var.$dark-gray;
+      margin-bottom: 10px;
+      opacity: 1;
+      transition: opacity 0.3s ease;
+
+      &--scrolled {
+        opacity: 0;
+        transition: opacity 0.3s ease;
+      }
     }
 
     @include mixin.on-tablet-2 {
@@ -188,6 +230,13 @@
       @include mixin.body-text-desktop-tablet;
       color: var.$dark-gray;
       margin-bottom: 10px;
+      opacity: 1;
+      transition: opacity 0.3s ease;
+
+      &--scrolled {
+        opacity: 0;
+        transition: opacity 0.3s ease;
+      }
     }
 
     @include mixin.on-desktop {
@@ -195,16 +244,38 @@
       @include mixin.body-text-desktop-tablet;
       color: var.$dark-gray;
       margin-bottom: 10px;
+      opacity: 1;
+      transition: opacity 0.3s ease;
     }
   }
 
   &__title {
     @include mixin.on-mobile {
-      display: none;
+      display: block;
+      color: var.$dark-gray;
+      @include mixin.h2-desktop-tablet;
+      margin-bottom: 10px;
+      opacity: 1;
+      transition: opacity 0.3s ease;
+
+      &--scrolled {
+        opacity: 0;
+        transition: opasity 0.3s ease;
+      }
     }
 
     @include mixin.on-tablet {
-      display: none;
+      display: block;
+      color: var.$dark-gray;
+      @include mixin.h2-desktop-tablet;
+      margin-bottom: 10px;
+      opacity: 1;
+      transition: opacity 0.3s ease;
+
+      &--scrolled {
+        opacity: 0;
+        transition: opasity 0.3s ease;
+      }
     }
 
     @include mixin.on-tablet-2 {
@@ -212,6 +283,13 @@
       color: var.$dark-gray;
       @include mixin.h1-desktop-tablet;
       margin-bottom: 10px;
+      opacity: 1;
+      transition: opacity 0.3s ease;
+
+      &--scrolled {
+        opacity: 0;
+        transition: opasity 0.3s ease;
+      }
     }
 
     @include mixin.on-desktop {
@@ -219,6 +297,9 @@
       color: var.$dark-gray;
       @include mixin.h1-desktop-tablet;
       margin-bottom: 10px;
+      opacity: 1;
+      will-change: opacity;
+      transition: opacity 0.3s ease;
     }
   }
 
@@ -246,22 +327,25 @@
 
   &__photo-container {
     @include mixin.on-mobile {
-      width: 100%;
+      width: 300px;
+      height: 300px;
     }
 
     @include mixin.on-tablet {
-      width: 100%;
-      height: 250px;
+      width: 300px;
+      height: 300px;
     }
 
     @include mixin.on-tablet-2 {
       width: 300px;
-      height: 200px;
+      height: 230px;
+      margin-right: 40px;
     }
 
     @include mixin.on-desktop {
-      width: 310px;
-      height: 250px;
+      width: 300px;
+      height: 240px;
+      margin-right: 40px;
     }
   }
 
@@ -299,6 +383,7 @@
     color: var.$light-gray;
     @include mixin.body-text-desktop-tablet;
     padding: 10px 8px;
+    cursor: pointer;
   }
 
   &__details {
@@ -306,21 +391,23 @@
     width: 100%;
 
     @include mixin.on-mobile {
+      height: 580px;
+      @include mixin.flex(flex, center, center, column);
     }
 
     @include mixin.on-tablet {
+      height: 480px;
       @include mixin.flex(flex, center, center, column);
-      gap: 20px;
     }
 
     @include mixin.on-tablet-2 {
+      height: 350px;
       @include mixin.flex(flex, center, center, row);
-      gap: 40px;
     }
 
     @include mixin.on-desktop {
+      height: 400px;
       @include mixin.flex(flex, center, center, row);
-      gap: 40px;
     }
   }
 

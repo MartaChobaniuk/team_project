@@ -29,7 +29,24 @@ export const ProfileInfo = () => {
   const [isSaving, setIsSaving] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [isScrolled, setIsScrolled] = useState(false);
+
   const fileInputRef = useRef<HTMLInputElement | null>(null);
+  const bottomRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (bottomRef.current) {
+        setIsScrolled(bottomRef.current.scrollTop > 50);
+      }
+    };
+
+    const bottomDiv = bottomRef.current;
+
+    bottomDiv?.addEventListener('scroll', handleScroll);
+
+    return () => bottomDiv?.removeEventListener('scroll', handleScroll);
+  }, []);
 
   useEffect(() => {
     const searchParams = new URLSearchParams(window.location.search);
@@ -223,17 +240,6 @@ export const ProfileInfo = () => {
     }
   };
 
-  useEffect(() => {
-    const storedProfileImage = localStorage.getItem('profileImage');
-
-    if (storedProfileImage) {
-      setProfileData(prev => ({
-        ...prev,
-        profileImage: storedProfileImage,
-      }));
-    }
-  }, []);
-
   const handleDeleteClick = async () => {
     setIsDeleting(true);
 
@@ -281,12 +287,30 @@ export const ProfileInfo = () => {
     }
   };
 
+  const storedProfileImage = localStorage.getItem('profileImage');
+
   return (
     <div className={styles.info}>
       <div className={styles.info__nav}>
-        <div className={styles.info__top}>
-          <p className={styles.info__greeting}>Hello, {profileData.name}</p>
-          <h1 className={styles.info__title}>All You Need, In One Place</h1>
+        <div
+          className={cn(styles.info__top, {
+            [styles['info__top--scrolled']]: isScrolled,
+          })}
+        >
+          <p
+            className={cn(styles.info__greeting, {
+              [styles['info__greeting--scrolled']]: isScrolled,
+            })}
+          >
+            Hello, {profileData.name}
+          </p>
+          <h1
+            className={cn(styles.info__title, {
+              [styles['info__title--scrolled']]: isScrolled,
+            })}
+          >
+            All You Need, In One Place
+          </h1>
           <div className={styles.info__buttons}>
             <NavLink
               to={Path.ProfileInfo}
@@ -324,7 +348,12 @@ export const ProfileInfo = () => {
           </div>
         </div>
 
-        <div className={styles.info__bottom}>
+        <div
+          ref={bottomRef}
+          className={cn(styles.info__bottom, {
+            [styles['info__bottom--scrolled']]: isScrolled,
+          })}
+        >
           <div className={styles.info__block}>
             <h2 className={styles.info__subtitle}>Profile Information</h2>
             <div className={styles['info__buttons-bottom']}>
@@ -367,6 +396,7 @@ export const ProfileInfo = () => {
                     id="profileImage"
                     accept=".jpg,.jpeg,.png,.svg"
                     onChange={handleFileChange}
+                    title="Click for change photo"
                     hidden
                   />
                   <label
@@ -375,7 +405,11 @@ export const ProfileInfo = () => {
                   >
                     {profileData.profileImage ? (
                       <img
-                        src={profileData.profileImage || default_user}
+                        src={
+                          profileData.profileImage ||
+                          storedProfileImage ||
+                          default_user
+                        }
                         alt="profile"
                         className={styles.info__photo}
                       />
@@ -386,7 +420,11 @@ export const ProfileInfo = () => {
                 </>
               ) : (
                 <img
-                  src={profileData.profileImage || default_user}
+                  src={
+                    profileData.profileImage ||
+                    storedProfileImage ||
+                    default_user
+                  }
                   alt="profile"
                   className={styles.info__photo}
                 />
@@ -397,6 +435,7 @@ export const ProfileInfo = () => {
                 <input
                   type="text"
                   name="name"
+                  placeholder="Name"
                   value={profileData.name}
                   onChange={handleInputChange}
                   className={styles.info__input}
@@ -411,6 +450,7 @@ export const ProfileInfo = () => {
                 <input
                   type="email"
                   name="email"
+                  placeholder="Email"
                   value={profileData.email}
                   onChange={handleInputChange}
                   className={styles.info__input}
@@ -425,6 +465,7 @@ export const ProfileInfo = () => {
                 <input
                   type="tel"
                   name="phone"
+                  placeholder="Phone"
                   value={profileData.phone}
                   onChange={handleInputChange}
                   className={styles.info__input}

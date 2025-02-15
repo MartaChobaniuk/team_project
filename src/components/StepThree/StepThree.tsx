@@ -377,13 +377,13 @@ export const StepThree = () => {
           </div>
         </div>
         <div className={styles['three__left-side']}>
-          <p className={styles.three__content}>
-            Upload a description (file or link to Google Docs), supporting
-            documents (like permits or plans), and a cover image to attract
-            attention. These extras help users understand the impact of your
-            opportunity and how they can get involved.
-          </p>
           <div className={styles.three__form}>
+            <p className={styles.three__content}>
+              Upload a description (file or link to Google Docs), supporting
+              documents (like permits or plans), and a cover image to attract
+              attention. These extras help users understand the impact of your
+              opportunity and how they can get involved.
+            </p>
             <form onSubmit={handleSubmit}>
               {stepThreeData.coverUrl ? (
                 <div className={styles['three__upload-shell']}>

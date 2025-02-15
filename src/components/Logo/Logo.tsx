@@ -17,8 +17,6 @@ export const Logo: React.FC<Props> = ({ className }) => {
   const {
     isHome,
     isHomeAI,
-    isResponse,
-    isSignUp,
     isLogIn,
     isAbout,
     isFaq,
@@ -43,9 +41,7 @@ export const Logo: React.FC<Props> = ({ className }) => {
         className={cn(styles.logo__text, {
           [styles['logo__text--home']]: isHome,
           [styles['logo__text--homeAi']]: isHomeAI,
-          [styles['logo__text--response']]: isResponse,
           [styles['logo__text--about']]: isAbout,
-          [styles['logo__text--sign']]: isSignUp,
           [styles['logo__text--login']]: isLogIn,
           [styles['logo__text--contact']]: isContact,
           [styles['logo__text--faq']]: isFaq,

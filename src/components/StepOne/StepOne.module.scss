@@ -176,7 +176,7 @@
     }
 
     @include mixin.on-tablet-2 {
-      @include mixin.flex(flex, false, space-between, column);
+      @include mixin.flex(flex, false, flex-end, column);
       padding: 24px;
       border-radius: 20px 0 0 20px;
       height: 100vh;
@@ -184,7 +184,7 @@
     }
 
     @include mixin.on-desktop {
-      @include mixin.flex(flex, false, space-between, column);
+      @include mixin.flex(flex, false, flex-end, column);
       padding: 40px;
       border-radius: 20px 0 0 20px;
       height: 100vh;
@@ -193,11 +193,28 @@
   }
 
   &__bllock-top {
-    display: flex;
-    flex-direction: row;
-    justify-content: start;
-    align-items: center;
+    @include mixin.flex(flex, center, start, row);
     cursor: pointer;
+  }
+
+  &__bllock-bottom {
+    @include mixin.flex(flex, start, start, column);
+
+    @include mixin.on-mobile {
+      margin-bottom: 0;
+    }
+
+    @include mixin.on-tablet {
+      margin-bottom: 0;
+    }
+
+    @include mixin.on-tablet-2 {
+      margin-bottom: 20px;
+    }
+
+    @include mixin.on-desktop {
+      margin-bottom: 20px;
+    }
   }
 
   &__form {
@@ -206,19 +223,23 @@
     scrollbar-width: none;
 
     @include mixin.on-mobile {
-      height: 52vh;
+      margin-top: 0;
+      height: 600px;
     }
 
     @include mixin.on-tablet {
-      height: 52vh;
+      margin-top: 0;
+      height: 600px;
     }
 
     @include mixin.on-tablet-2 {
-      height: 60vh;
+      margin-top: 50px;
+      height: 600px;
     }
 
     @include mixin.on-desktop {
-      height: 51vh;
+      margin-top: 40px;
+      height: 600px;
     }
   }
 
@@ -285,19 +306,19 @@
     text-align: justify;
 
     @include mixin.on-mobile {
-      margin-top: 0;
+      margin-bottom: 20px;
     }
 
     @include mixin.on-tablet {
-      margin-top: 0;
+      margin-bottom: 20px;
     }
 
     @include mixin.on-tablet-2 {
-      margin-top: 86px;
+      margin-bottom: 40px;
     }
 
     @include mixin.on-desktop {
-      margin-top: 100px;
+      margin-bottom: 40px;
     }
   }
 
@@ -543,6 +564,7 @@
     display: flex;
     flex-direction: row;
     margin-top: 20px;
+    margin-bottom: 10px;
   }
 
   &__button-cancel {

@@ -14,6 +14,7 @@ export const App: React.FC = () => {
     isVolunteering,
     isWishes,
     isDonate,
+    isOpportunities,
   } = usePathChecker();
 
   return (
@@ -28,6 +29,7 @@ export const App: React.FC = () => {
             'app__header--about': isAbout,
             'app__header--faq': isFaq,
             'app__header--home': isHome,
+            'app__header--opport': isOpportunities,
           })}
         >
           <Header />

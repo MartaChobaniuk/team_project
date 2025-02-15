@@ -199,13 +199,13 @@ export const StepOne = () => {
           </div>
         </div>
         <div className={styles['one__left-side']}>
-          <p className={styles.one__content}>
-            Tell us about yourself or your organization! Share basic details
-            like your name or organization name, contact information, and your
-            photo or the organization logo. This helps us verify your
-            credibility and ensure transparency for participants.
-          </p>
           <div className={styles.one__form}>
+            <p className={styles.one__content}>
+              Tell us about yourself or your organization! Share basic details
+              like your name or organization name, contact information, and your
+              photo or the organization logo. This helps us verify your
+              credibility and ensure transparency for participants.
+            </p>
             <form>
               <div className={styles['one__dropdown-shell']}>
                 <button

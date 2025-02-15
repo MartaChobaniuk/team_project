@@ -97,182 +97,298 @@
     cursor: pointer;
     overflow: hidden;
     transition: all 0.5s ease;
-
     @include mixin.flex(flex, center, center, false);
 
+    &--open {
+      &::before {
+        content: url("../../images/icons/cross_white_bg.svg");
+        @include mixin.sizes(44px, 44px);
+      }
+    }
+
     @include mixin.on-mobile {
-      &--sign,
-      &--login,
-      &--homeAi,
-      &--home,
-      &--about,
-      &--contact,
-      &--faq,
-      &--explore,
-      &--volunt,
-      &--wishes,
-      &--donate,
-      &--stories,
-      &--event {
-        background-color: var.$white;
+      &--white-bg {
+        &::before {
+          content: url("../../images/icons/menu_white_bg.svg");
+          @include mixin.sizes(44px, 44px);
+        }
+      }
+
+      &--about {
+        &::before {
+          content: url("../../images/icons/menu_white_bg.svg");
+          @include mixin.sizes(44px, 44px);
+        }
+      }
+
+      &--homeAI {
+        &::before {
+          content: url("../../images/icons/menu_black.svg");
+          @include mixin.sizes(44px, 44px);
+        }
+      }
+
+      &--contact {
+        &::before {
+          content: url("../../images/icons/menu_black.svg");
+          @include mixin.sizes(44px, 44px);
+        }
+      }
+
+      &--login {
+        &::before {
+          content: url("../../images/icons/menu_black.svg");
+          @include mixin.sizes(44px, 44px);
+        }
+      }
+
+      &--profile {
+        &::before {
+          content: url("../../images/icons/menu_black.svg");
+          @include mixin.sizes(44px, 44px);
+        }
+      }
+
+      &--step {
+        &::before {
+          content: url("../../images/icons/menu_black.svg");
+          @include mixin.sizes(44px, 44px);
+        }
       }
     }
 
     @include mixin.on-tablet {
-      &--sign,
-      &--login,
-      &--homeAi,
-      &--home,
-      &--contact,
-      &--faq,
-      &--explore,
-      &--volunt,
-      &--wishes,
-      &--donate,
-      &--stories,
-      &--event {
-        background-color: var.$white;
+      &--white-bg {
+        &::before {
+          content: url("../../images/icons/menu_white_bg.svg");
+          @include mixin.sizes(44px, 44px);
+        }
       }
 
       &--about {
-        border: 0.5px solid var.$black;
-        background-color: var.$white;
+        &::before {
+          content: url("../../images/icons/menu_black.svg");
+          @include mixin.sizes(44px, 44px);
+        }
+      }
+
+      &--homeAI {
+        &::before {
+          content: url("../../images/icons/menu_black.svg");
+          @include mixin.sizes(44px, 44px);
+        }
+      }
+
+      &--contact {
+        &::before {
+          content: url("../../images/icons/menu_black.svg");
+          @include mixin.sizes(44px, 44px);
+        }
+      }
+
+      &--login {
+        &::before {
+          content: url("../../images/icons/menu_black.svg");
+          @include mixin.sizes(44px, 44px);
+        }
+      }
+
+      &--profile {
+        &::before {
+          content: url("../../images/icons/menu_black.svg");
+          @include mixin.sizes(44px, 44px);
+        }
+      }
+
+      &--step {
+        &::before {
+          content: url("../../images/icons/menu_black.svg");
+          @include mixin.sizes(44px, 44px);
+        }
       }
     }
 
     @include mixin.on-tablet-2 {
-      &--sign,
-      &--login,
-      &--homeAi,
-      &--home,
-      &--about,
-      &--contact,
-      &--faq,
-      &--explore,
-      &--volunt,
-      &--wishes,
-      &--donate,
-      &--stories,
-      &--event {
-        background-color: var.$white;
+      &--white-bg {
+        &::before {
+          content: url("../../images/icons/menu_white_bg.svg");
+          @include mixin.sizes(44px, 44px);
+        }
+      }
+
+      &--about {
+        &::before {
+          content: url("../../images/icons/menu_white_bg.svg");
+          @include mixin.sizes(44px, 44px);
+        }
+      }
+
+      &--homeAI {
+        &::before {
+          content: url("../../images/icons/menu_white_bg.svg");
+          @include mixin.sizes(44px, 44px);
+        }
+      }
+
+      &--contact {
+        &::before {
+          content: url("../../images/icons/menu_white_bg.svg");
+          @include mixin.sizes(44px, 44px);
+        }
+      }
+
+      &--login {
+        &::before {
+          content: url("../../images/icons/menu_white_bg.svg");
+          @include mixin.sizes(44px, 44px);
+        }
+      }
+
+      &--profile {
+        &::before {
+          content: url("../../images/icons/menu_black.svg");
+          @include mixin.sizes(44px, 44px);
+        }
+      }
+
+      &--step {
+        &::before {
+          content: url("../../images/icons/menu_white_bg.svg");
+          @include mixin.sizes(44px, 44px);
+        }
       }
     }
 
     @include mixin.on-desktop {
       display: none;
     }
-  }
-
-  &__img {
-    width: 44px;
-    height: 44px;
-    z-index: 5;
   }
 
   &__lang {
     position: relative;
     width: max-content;
     height: 44px;
-    border: solid 0.5px var.$white;
+    text-transform: uppercase;
     background-color: transparent;
+    border-radius: 60px;
+    padding: 8px;
     cursor: pointer;
-    overflow: hidden;
     transition: all 0.5s ease;
-
     @include mixin.flex(flex, center, center, false);
 
     @include mixin.on-mobile {
-      border-radius: 60px;
-      padding: 8px;
-      border: solid 0.5px var.$white;
-
-      &--sign,
-      &--login,
-      &--homeAi,
-      &--about,
-      &--home,
-      &--contact,
-      &--explore,
-      &--volunt,
-      &--wishes,
-      &--donate,
-      &--stories,
-      &--event {
-        background-color: transparent;
+      &--main {
         color: var.$white;
-        border: solid 0.5px var.$white;
+        border: 0.5px solid var.$white;
+      }
+
+      &--homeAI {
+        color: var.$black;
+        border: 0.5px solid var.$black;
+      }
+
+      &--about {
+        color: var.$white;
+        border: 0.5px solid var.$white;
+      }
+
+      &--contact {
+        color: var.$black;
+        border: 0.5px solid var.$black;
+      }
+
+      &--login {
+        color: var.$black;
+        border: 0.5px solid var.$black;
+      }
+
+      &--profile {
+        color: var.$black;
+        border: 0.5px solid var.$black;
+      }
+
+      &--step {
+        color: var.$black;
+        border: 0.5px solid var.$black;
       }
     }
 
     @include mixin.on-tablet {
-      border-radius: 60px;
-      padding: 8px;
-      border: solid 0.5px var.$white;
+      &--main {
+        color: var.$white;
+        border: 0.5px solid var.$white;
+      }
+
+      &--homeAI {
+        color: var.$black;
+        border: 0.5px solid var.$black;
+      }
 
       &--about {
-        background-color: transparent;
         color: var.$black;
-        border: solid 0.5px var.$black;
+        border: 0.5px solid var.$black;
+      }
+
+      &--contact {
+        color: var.$black;
+        border: 0.5px solid var.$black;
+      }
+
+      &--login {
+        color: var.$black;
+        border: 0.5px solid var.$black;
+      }
+
+      &--profile {
+        color: var.$black;
+        border: 0.5px solid var.$black;
+      }
+
+      &--step {
+        color: var.$black;
+        border: 0.5px solid var.$black;
       }
     }
 
     @include mixin.on-tablet-2 {
-      border-radius: 60px;
-      padding: 8px;
-      border: solid 0.5px var.$white;
+      &--main {
+        color: var.$white;
+        border: 0.5px solid var.$white;
+      }
+
+      &--homeAI {
+        color: var.$white;
+        border: 0.5px solid var.$white;
+      }
+
+      &--about {
+        color: var.$white;
+        border: 0.5px solid var.$white;
+      }
+
+      &--contact {
+        color: var.$white;
+        border: 0.5px solid var.$white;
+      }
+
+      &--login {
+        color: var.$white;
+        border: 0.5px solid var.$white;
+      }
+
+      &--profile {
+        color: var.$black;
+        border: 0.5px solid var.$black;
+      }
+
+      &--step {
+        color: var.$white;
+        border: 0.5px solid var.$white;
+      }
     }
 
     @include mixin.on-desktop {
       display: none;
-    }
-
-    &::before {
-      content: "";
-      position: absolute;
-      left: 0;
-      top: 50%;
-      width: 0;
-      height: 100%;
-      background: var.$orange-red;
-      transform: translateY(-50%);
-      z-index: 0;
-      transition: width 0.5s ease;
-    }
-
-    &:hover::before {
-      width: 100%;
-    }
-  }
-
-  &__lang-name {
-    text-transform: uppercase;
-    z-index: 5;
-    transition: all 0.5s ease;
-
-    @include mixin.on-mobile {
-      color: var.$white;
-    }
-
-    @include mixin.on-tablet {
-      color: var.$white;
-    }
-
-    &--about {
-      @include mixin.on-mobile {
-        color: var.$white;
-      }
-
-      @include mixin.on-tablet {
-        color: var.$black;
-      }
-
-      @include mixin.on-tablet-2 {
-        color: var.$white;
-      }
-
-      @include mixin.on-desktop {
-        color: var.$black;
-      }
     }
   }
 }

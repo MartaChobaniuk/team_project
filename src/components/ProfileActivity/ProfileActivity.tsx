@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
 import { useAuth } from 'react-oidc-context';
 import cn from 'classnames';
@@ -14,22 +14,21 @@ export const ProfileActivity = () => {
   const { profile } = auth.user || {};
   const [query, setQuery] = useState('');
   const [openDropdown, setOpenDropdown] = useState<number | null>(null);
-  const [isScrolled, setIsScrolled] = useState<boolean>(false);
-  const [isFixed, setIsFixed] = useState<boolean>(false);
+  const [isScrolled, setIsScrolled] = useState(false);
+  const bottomRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const handleScroll = () => {
-      const scrollY = window.scrollY;
-
-      setIsScrolled(scrollY > 50);
-      setIsFixed(scrollY > 100);
+      if (bottomRef.current) {
+        setIsScrolled(bottomRef.current.scrollTop > 50);
+      }
     };
 
-    window.addEventListener('scroll', handleScroll);
+    const bottomDiv = bottomRef.current;
 
-    return () => {
-      window.removeEventListener('scroll', handleScroll);
-    };
+    bottomDiv?.addEventListener('scroll', handleScroll);
+
+    return () => bottomDiv?.removeEventListener('scroll', handleScroll);
   }, []);
 
   const toggleOpen = (index: number) => {
@@ -46,11 +45,22 @@ export const ProfileActivity = () => {
         <div
           className={cn(styles.activity__top, {
             [styles['activity__top--scrolled']]: isScrolled,
-            [styles['activity__top--fixed']]: isFixed,
           })}
         >
-          <p className={styles.activity__greeting}>Hello, {profile?.name}</p>
-          <h1 className={styles.activity__title}>All You Need, In One Place</h1>
+          <p
+            className={cn(styles.activity__greeting, {
+              [styles['activity__greeting--scrolled']]: isScrolled,
+            })}
+          >
+            Hello, {profile?.name}
+          </p>
+          <h1
+            className={cn(styles.activity__title, {
+              [styles['activity__title--scrolled']]: isScrolled,
+            })}
+          >
+            All You Need, In One Place
+          </h1>
           <div className={styles.activity__buttons}>
             <NavLink
               to={Path.ProfileInfo}
@@ -88,7 +98,12 @@ export const ProfileActivity = () => {
           </div>
         </div>
 
-        <div className={styles.activity__bottom}>
+        <div
+          ref={bottomRef}
+          className={cn(styles.activity__bottom, {
+            [styles['activity__bottom--scrolled']]: isScrolled,
+          })}
+        >
           <div className={styles.activity__block}>
             <h2 className={styles.activity__subtitle}>Upcoming Events</h2>
             <div className={styles.activity__content}>

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useLocation, useNavigate, NavLink } from 'react-router-dom';
 import { useAuth } from 'react-oidc-context';
 import cn from 'classnames';
@@ -15,22 +15,21 @@ export const ProfileOpportunities = () => {
   const { profile } = auth.user || {};
   const [query, setQuery] = useState('');
   const [openDropdown, setOpenDropdown] = useState<number | null>(null);
-  const [isScrolled, setIsScrolled] = useState<boolean>(false);
-  const [isFixed, setIsFixed] = useState<boolean>(false);
+  const [isScrolled, setIsScrolled] = useState(false);
+  const bottomRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const handleScroll = () => {
-      const scrollY = window.scrollY;
-
-      setIsScrolled(scrollY > 50);
-      setIsFixed(scrollY > 150);
+      if (bottomRef.current) {
+        setIsScrolled(bottomRef.current.scrollTop > 50);
+      }
     };
 
-    window.addEventListener('scroll', handleScroll);
+    const bottomDiv = bottomRef.current;
 
-    return () => {
-      window.removeEventListener('scroll', handleScroll);
-    };
+    bottomDiv?.addEventListener('scroll', handleScroll);
+
+    return () => bottomDiv?.removeEventListener('scroll', handleScroll);
   }, []);
 
   const toggleOpen = (index: number) => {
@@ -47,7 +46,6 @@ export const ProfileOpportunities = () => {
         <div
           className={cn(styles.opport__top, {
             [styles['opport__top--scrolled']]: isScrolled,
-            [styles['opport__top--fixed']]: isFixed,
           })}
         >
           <p
@@ -60,17 +58,11 @@ export const ProfileOpportunities = () => {
           <h1
             className={cn(styles.opport__title, {
               [styles['opport__title--scrolled']]: isScrolled,
-              [styles['opport__title--fixed']]: isFixed,
             })}
           >
             All You Need, In One Place
           </h1>
-          <div
-            className={cn(styles.opport__buttons, {
-              [styles['opport__buttons--scrolled']]: isScrolled,
-              [styles['opport__buttons--fixed']]: isFixed,
-            })}
-          >
+          <div className={styles.opport__buttons}>
             <NavLink
               to={Path.ProfileInfo}
               className={({ isActive }: { isActive: boolean }) =>
@@ -107,7 +99,12 @@ export const ProfileOpportunities = () => {
           </div>
         </div>
 
-        <div className={styles.opport__bottom}>
+        <div
+          ref={bottomRef}
+          className={cn(styles.opport__bottom, {
+            [styles['opport__bottom--scrolled']]: isScrolled,
+          })}
+        >
           <div className={styles.opport__block}>
             <div className={styles.opport__shell}>
               <h2 className={styles.opport__subtitle}>

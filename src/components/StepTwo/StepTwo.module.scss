@@ -103,7 +103,7 @@
     }
 
     @include mixin.on-tablet-2 {
-      @include mixin.flex(flex, false, space-between, column);
+      @include mixin.flex(flex, false, flex-end, column);
       padding: 24px;
       border-radius: 20px 0 0 20px;
       height: 100vh;
@@ -111,7 +111,7 @@
     }
 
     @include mixin.on-desktop {
-      @include mixin.flex(flex, false, space-between, column);
+      @include mixin.flex(flex, false, flex-end, column);
       padding: 40px;
       border-radius: 20px 0 0 20px;
       height: 100vh;
@@ -125,28 +125,49 @@
     scrollbar-width: none;
 
     @include mixin.on-mobile {
-      height: 52vh;
+      margin-top: 0;
+      height: 725px;
     }
 
     @include mixin.on-tablet {
-      height: 52vh;
+      margin-top: 0;
+      height: 725px;
     }
 
     @include mixin.on-tablet-2 {
-      height: 70vh;
+      margin-top: 60px;
+      height: 725px;
     }
 
     @include mixin.on-desktop {
-      height: 73vh;
+      margin-top: 40px;
+      height: 650px;
     }
   }
 
   &__bllock-top {
-    display: flex;
-    flex-direction: row;
-    justify-content: start;
-    align-items: center;
+    @include mixin.flex(flex, center, start, row);
     cursor: pointer;
+  }
+
+  &__bllock-bottom {
+    @include mixin.flex(flex, start, start, column);
+
+    @include mixin.on-mobile {
+      margin-bottom: 0;
+    }
+
+    @include mixin.on-tablet {
+      margin-bottom: 0;
+    }
+
+    @include mixin.on-tablet-2 {
+      margin-bottom: 20px;
+    }
+
+    @include mixin.on-desktop {
+      margin-bottom: 20px;
+    }
   }
 
   &__img {
@@ -212,19 +233,19 @@
     text-align: justify;
 
     @include mixin.on-mobile {
-      margin-top: 0;
+      margin-bottom: 20px;
     }
 
     @include mixin.on-tablet {
-      margin-top: 0;
+      margin-bottom: 20px;
     }
 
     @include mixin.on-tablet-2 {
-      margin-top: 86px;
+      margin-bottom: 40px;
     }
 
     @include mixin.on-desktop {
-      margin-top: 100px;
+      margin-bottom: 40px;
     }
   }
 
@@ -241,13 +262,29 @@
   }
 
   &__input--target {
-    width: 50%;
     height: 44px;
     color: var.$white;
+    cursor: pointer;
 
     &:placeholder-shown {
       @include mixin.body-text-desktop-tablet;
       color: var.$light-gray;
+    }
+
+    @include mixin.on-mobile {
+      width: 100%;
+    }
+
+    @include mixin.on-tablet {
+      width: 100%;
+    }
+
+    @include mixin.on-tablet-2 {
+      width: 100%;
+    }
+
+    @include mixin.on-desktop {
+      width: 50%;
     }
   }
 
@@ -256,6 +293,7 @@
     display: flex;
     flex-direction: row;
     margin-top: 20px;
+    margin-bottom: 10px;
   }
 
   &__button-prev {
@@ -302,9 +340,9 @@
 
   &__button--calendar {
     width: max-content;
+    padding: 8px 16px;
     height: 44px;
     line-height: 44px;
-    padding: 8px 16px;
     background-color: transparent;
     border-radius: 80px;
     border: 0.5px solid var.$white;
@@ -393,10 +431,37 @@
   }
 
   &__dropdown-assist {
-    @include mixin.flex(flex, center, space-between, row);
-    width: 50%;
-    cursor: pointer;
-    margin-right: 20px;
+    @include mixin.on-mobile {
+      position: relative;
+      @include mixin.flex(flex, center, space-between, row);
+      width: 100%;
+      height: 44px;
+      cursor: pointer;
+    }
+
+    @include mixin.on-tablet {
+      position: relative;
+      @include mixin.flex(flex, center, space-between, row);
+      width: 100%;
+      height: 44px;
+      cursor: pointer;
+    }
+
+    @include mixin.on-tablet-2 {
+      position: relative;
+      @include mixin.flex(flex, center, space-between, row);
+      width: 100%;
+      height: 44px;
+      cursor: pointer;
+    }
+
+    @include mixin.on-desktop {
+      @include mixin.flex(flex, center, space-between, row);
+      width: 50%;
+      height: 44px;
+      cursor: pointer;
+      margin-right: 20px;
+    }
   }
 
   &__dropdown-region {
@@ -442,7 +507,7 @@
     top: 100%;
     left: 0;
     z-index: 15;
-    height: 36vh;
+    height: 40vh;
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
     scrollbar-width: none;
@@ -504,11 +569,6 @@
   }
 
   &__dropdown-list-region {
-    width: 600px;
-    height: 40vh;
-    position: absolute;
-    top: 100%;
-    left: 0;
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
     scrollbar-width: none;
@@ -520,6 +580,38 @@
     @include mixin.flex(flex, flex-start, flex-start, column);
     flex-wrap: wrap;
     cursor: pointer;
+
+    @include mixin.on-mobile {
+      width: 375px;
+      height: 620px;
+      position: absolute;
+      top: 100%;
+      left: 0;
+    }
+
+    @include mixin.on-tablet {
+      width: 580px;
+      height: 420px;
+      position: absolute;
+      top: 100%;
+      left: 0;
+    }
+
+    @include mixin.on-tablet-2 {
+      width: 480px;
+      height: 420px;
+      position: absolute;
+      top: 100%;
+      left: 0;
+    }
+
+    @include mixin.on-desktop {
+      width: 580px;
+      height: 420px;
+      position: absolute;
+      top: 100%;
+      left: 0;
+    }
   }
 
   &__dropdown-list-demands {
@@ -571,15 +663,21 @@
 
   &__dropdowns-block {
     @include mixin.on-mobile {
+      @include mixin.flex(flex, false, false, column);
+      width: 100%;
+      height: 95px;
     }
 
     @include mixin.on-tablet {
+      @include mixin.flex(flex, false, false, column);
+      width: 100%;
+      height: 95px;
     }
 
     @include mixin.on-tablet-2 {
       @include mixin.flex(flex, false, false, column);
       width: 100%;
-      height: 115px;
+      height: 95px;
     }
 
     @include mixin.on-desktop {
@@ -608,17 +706,14 @@
     position: relative;
     width: 100%;
     height: 44px;
-    @include mixin.flex(flex, false, false, row);
     gap: 2%;
+    @include mixin.flex(flex, false, space-between, row);
   }
 
   &__calendar {
     position: relative;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
-    width: 62%;
+    @include mixin.flex(flex, center, space-between, row);
+    width: 55%;
     height: 44px;
     cursor: pointer;
   }
@@ -632,17 +727,29 @@
 
   &__block-hour,
   &__block-min {
-    width: 10%;
+    @include mixin.flex(flex, center, center, row);
     height: 44px;
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
     cursor: pointer;
+
+    @include mixin.on-mobile {
+      width: 10%;
+    }
+
+    @include mixin.on-tablet {
+      width: 10%;
+    }
+
+    @include mixin.on-tablet-2 {
+      width: 10%;
+    }
+
+    @include mixin.on-desktop {
+      width: 10%;
+    }
   }
 
   &__input--calendar {
-    width: 50%;
+    width: 100%;
     height: 44px;
     display: flex;
     flex-direction: row;
@@ -753,20 +860,21 @@
 
   &__lines--calendar {
     width: 100%;
-    @include mixin.flex(flex, false, false, row);
-    gap: 2%;
+    @include mixin.flex(flex, center, space-between, row);
   }
 
   &__line--big {
-    width: 61%;
+    width: auto;
     height: 1px;
     background-color: var.$light-gray;
+    flex-grow: 6;
   }
 
   &__line--small {
-    width: 12%;
+    width: auto;
     height: 1px;
     background-color: var.$light-gray;
+    flex-grow: 1;
   }
 
   &__errors {
@@ -788,16 +896,30 @@
     }
   }
 
+  &__container-error-left {
+    @include mixin.on-desktop {
+      width: 50%;
+      margin-right: 20px;
+      @include mixin.flex(flex, false, flex-start, row);
+    }
+  }
+
   &__error-left {
-    width: 100%;
     color: var.$error;
+    text-align: left;
     @include mixin.small-text-desktop-tablet;
-    margin-right: 20px;
+  }
+
+  &__container-error-right {
+    @include mixin.on-desktop {
+      width: 50%;
+      @include mixin.flex(flex, false, flex-start, row);
+    }
   }
 
   &__error-right {
-    width: 100%;
     color: var.$error;
+    text-align: left;
     @include mixin.small-text-desktop-tablet;
   }
 
@@ -856,14 +978,43 @@
 
   &__remark--container {
     width: 100%;
-    display: flex;
-    justify-content: flex-end;
+
+    @include mixin.on-mobile {
+      @include mixin.flex(flex, false, flex-start, row);
+    }
+
+    @include mixin.on-tablet {
+      @include mixin.flex(flex, false, flex-start, row);
+    }
+
+    @include mixin.on-tablet-2 {
+      @include mixin.flex(flex, false, flex-start, row);
+    }
+
+    @include mixin.on-desktop {
+      @include mixin.flex(flex, false, flex-end, row);
+    }
   }
 
   &__remark--target {
-    width: 48.5%;
     text-align: left;
     @include mixin.small-text-desktop-tablet;
     color: var.$grey;
+
+    @include mixin.on-mobile {
+      width: 100%;
+    }
+
+    @include mixin.on-tablet {
+      width: 100%;
+    }
+
+    @include mixin.on-tablet-2 {
+      width: 100%;
+    }
+
+    @include mixin.on-desktop {
+      width: 48.5%;
+    }
   }
 }

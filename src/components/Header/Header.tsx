@@ -6,8 +6,6 @@ import { NavbarLeft } from '../NavbarLeft';
 import { Logo } from '../Logo';
 import { Path } from '../../utils/constants';
 import { NavbarRight } from '../NavbarRight';
-import menu_white from '../../images/icons/menu_white_bg.svg';
-import cross_white from '../../images/icons/cross_white_bg.svg';
 import { usePathChecker } from '../../helpers/usePathChecker';
 
 export const Header = () => {
@@ -20,7 +18,6 @@ export const Header = () => {
   const {
     isHome,
     isHomeAI,
-    isSignUp,
     isLogIn,
     isAbout,
     isContact,
@@ -30,7 +27,29 @@ export const Header = () => {
     isVolunteering,
     isWishes,
     isDonate,
+    isProfile,
+    isProfileInfo,
+    isOpportunities,
+    isActivity,
+    isStepOne,
+    isStepTwo,
+    isStepThree,
   } = usePathChecker();
+
+  const isProfileActive =
+    isProfile || isProfileInfo || isActivity || isOpportunities;
+
+  const isStepActive = isStepOne || isStepTwo || isStepThree;
+
+  const isMainActive =
+    isHome ||
+    isFaq ||
+    isExplore ||
+    isVolunteering ||
+    isWishes ||
+    isStories ||
+    isDonate ||
+    isEventPage;
 
   useEffect(() => {
     document.body.style.overflow = openMenu ? 'hidden' : '';
@@ -59,11 +78,7 @@ export const Header = () => {
   };
 
   return (
-    <div
-      className={cn(styles.header, {
-        [styles['header--about']]: isAbout,
-      })}
-    >
+    <div className={styles.header}>
       <div className={styles.header__left}>
         <Logo className={styles.header__logo} />
         <NavbarLeft className={styles['header__navbar-left']} />
@@ -72,52 +87,30 @@ export const Header = () => {
       <div className={styles['header__right-mobile']}>
         <button
           className={cn(styles.header__lang, {
-            [styles['header__lang--sign']]: isSignUp,
+            [styles['header__lang--main']]: isMainActive,
+            [styles['header__lang--profile']]: isProfileActive,
+            [styles['header__lang--step']]: isStepActive,
             [styles['header__lang--login']]: isLogIn,
-            [styles['header__lang--homeAi']]: isHomeAI,
-            [styles['header__lang--home']]: isHome,
+            [styles['header__lang--homeAI']]: isHomeAI,
             [styles['header__lang--about']]: isAbout,
             [styles['header__lang--contact']]: isContact,
-            [styles['header__lang--explore']]: isExplore,
-            [styles['header__lang--volunt']]: isVolunteering,
-            [styles['header__lang--wishes']]: isWishes,
-            [styles['header__lang--donate']]: isDonate,
-            [styles['header__lang--stories']]: isStories,
-            [styles['header__lang--event']]: isEventPage,
           })}
         >
-          <span
-            className={cn(styles['header__lang-name'], {
-              [styles['header__lang-name--about']]: isAbout,
-            })}
-          >
-            ENG
-          </span>
+          ENG
         </button>
         <button
           onClick={openMenu ? handleCloseMenu : handleOpenMenu}
           className={cn(styles.header__button, {
-            [styles['header__button--home']]: isHome,
-            [styles['header__button--sign']]: isSignUp,
+            [styles['header__button--open']]: openMenu,
+            [styles['header__button--white-bg']]: isMainActive,
+            [styles['header__button--profile']]: isProfileActive,
+            [styles['header__button--step']]: isStepActive,
             [styles['header__button--login']]: isLogIn,
-            [styles['header__button--homeAi']]: isHomeAI,
             [styles['header__button--about']]: isAbout,
-            [styles['header__button--faq']]: isFaq,
+            [styles['header__button--homeAI']]: isHomeAI,
             [styles['header__button--contact']]: isContact,
-            [styles['header__button--explore']]: isExplore,
-            [styles['header__button--volunt']]: isVolunteering,
-            [styles['header__button--wishes']]: isWishes,
-            [styles['header__button--donate']]: isDonate,
-            [styles['header__button--stories']]: isStories,
-            [styles['header__button--event']]: isEventPage,
           })}
-        >
-          <img
-            src={openMenu ? cross_white : menu_white}
-            alt={openMenu ? 'close' : 'menu'}
-            className={styles.header__img}
-          />
-        </button>
+        ></button>
       </div>
 
       <div className={styles.header__right}>

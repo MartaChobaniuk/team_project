@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/indent */
+/* eslint-disable prettier/prettier */
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable no-console */
 import { useEffect, useState } from 'react';
@@ -347,9 +349,25 @@ export const StepTwo = () => {
         'Please choose a starting date and time (hour and minute)';
     }
 
+    if (!stepTwoData.startHour) {
+      newErrors.startHour = 'Please choose a starting hour and minutes';
+    }
+
+    if (!stepTwoData.startMinute) {
+      newErrors.startMinute = 'Please choose a starting minutes';
+    }
+
     if (!stepTwoData.endingDate) {
       newErrors.endingDate =
         'Please choose an ending date and time (hour and minute)';
+    }
+
+    if (!stepTwoData.endHour) {
+      newErrors.endHour = 'Please choose a ending hour and minutes';
+    }
+
+    if (!stepTwoData.endMinute) {
+      newErrors.endMinute = 'Please choose a ending minutes';
     }
 
     setErrors(newErrors);
@@ -384,12 +402,12 @@ export const StepTwo = () => {
           </div>
         </div>
         <div className={styles['two__left-side']}>
-          <p className={styles.two__content}>
-            Provide key details about the opportunity. These details are all
-            required as they will make your opportunity easy to find through our
-            filters and search tools.
-          </p>
           <div className={styles.two__form}>
+            <p className={styles.two__content}>
+              Provide key details about the opportunity. These details are all
+              required as they will make your opportunity easy to find through
+              our filters and search tools.
+            </p>
             <form>
               <input
                 className={styles.two__input}
@@ -533,14 +551,18 @@ export const StepTwo = () => {
               </div>
               <div className={styles.two__errors}>
                 {errors.categoryId && !stepTwoData.categoryId && (
-                  <p className={styles['two__error-left']}>
-                    {errors.categoryId}
-                  </p>
+                  <div className={styles['two__container-error-left']}>
+                    <p className={styles['two__error-left']}>
+                      {errors.categoryId}
+                    </p>
+                  </div>
                 )}
                 {errors.opportunityType && !stepTwoData.opportunityType && (
-                  <p className={styles['two__error-right']}>
-                    {errors.opportunityType}
-                  </p>
+                  <div className={styles['two__container-error-right']}>
+                    <p className={styles['two__error-right']}>
+                      {errors.opportunityType}
+                    </p>
+                  </div>
                 )}
               </div>
 
@@ -571,32 +593,38 @@ export const StepTwo = () => {
                       alt="Arrow Down"
                     />
                   </div>
+                  {dropdownStates.assistanceType && (
+                    <ul className={styles['two__dropdown-list-assist']}>
+                      {assistanceType.map(type => (
+                        <li
+                          key={type}
+                          onClick={() => selectOption('assistanceType', type)}
+                          className={cn(styles['two__dropdown-item'], {
+                            [styles['two__dropdown-item--active']]:
+                              selectedOptions.assistanceType === type,
+                          })}
+                        >
+                          <label className={styles['two__dropdown-label']}>
+                            <input
+                              type="checkbox"
+                              checked={selectedOptions.assistanceType === type}
+                              onChange={() =>
+                                selectOption('assistanceType', type)
+                              }
+                              className={styles['two__dropdown-checkbox']}
+                            />
+                            {type}
+                          </label>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
                 </div>
-                {dropdownStates.assistanceType && (
-                  <ul className={styles['two__dropdown-list-assist']}>
-                    {assistanceType.map(type => (
-                      <li
-                        key={type}
-                        onClick={() => selectOption('assistanceType', type)}
-                        className={cn(styles['two__dropdown-item'], {
-                          [styles['two__dropdown-item--active']]:
-                            selectedOptions.assistanceType === type,
-                        })}
-                      >
-                        <label className={styles['two__dropdown-label']}>
-                          <input
-                            type="checkbox"
-                            checked={selectedOptions.assistanceType === type}
-                            onChange={() =>
-                              selectOption('assistanceType', type)
-                            }
-                            className={styles['two__dropdown-checkbox']}
-                          />
-                          {type}
-                        </label>
-                      </li>
-                    ))}
-                  </ul>
+                <div className={styles['two__line-categ-tablet']}></div>
+                {errors.assistanceType && !stepTwoData.assistanceType && (
+                  <p className={styles['two__error-left-tablet']}>
+                    {errors.assistanceType}
+                  </p>
                 )}
                 <input
                   type="text"
@@ -606,6 +634,12 @@ export const StepTwo = () => {
                   value={stepTwoData.target}
                   onChange={handleChange}
                 />
+                <div className={styles['two__line-categ-tablet']}></div>
+                {errors.target && !stepTwoData.target && (
+                  <p className={styles['two__error-right-tablet']}>
+                    {errors.target}
+                  </p>
+                )}
               </div>
               <div className={styles.two__lines}>
                 <div className={styles['two__line-left']}></div>
@@ -613,12 +647,18 @@ export const StepTwo = () => {
               </div>
               <div className={styles.two__errors}>
                 {errors.assistanceType && !stepTwoData.assistanceType && (
-                  <p className={styles['two__error-left']}>
-                    {errors.assistanceType}
-                  </p>
+                  <div className={styles['two__container-error-left']}>
+                    <p className={styles['two__error-left']}>
+                      {errors.assistanceType}
+                    </p>
+                  </div>
                 )}
                 {errors.target && !stepTwoData.target && (
-                  <p className={styles['two__error-right']}>{errors.target}</p>
+                  <div className={styles['two__container-error-right']}>
+                    <p className={styles['two__error-right']}>
+                      {errors.target}
+                    </p>
+                  </div>
                 )}
               </div>
               <div className={styles['two__remark--container']}>
@@ -770,6 +810,16 @@ export const StepTwo = () => {
               {errors.startingDate && !stepTwoData.startingDate && (
                 <p className={styles.two__error}>{errors.startingDate}</p>
               )}
+              {errors.startHour &&
+                stepTwoData.startingDate &&
+                !stepTwoData.startHour && (
+                  <p className={styles.two__error}>{errors.startHour}</p>
+                )}
+              {errors.startMinute &&
+                stepTwoData.startHour &&
+                !stepTwoData.startMinute && (
+                  <p className={styles.two__error}>{errors.startMinute}</p>
+                )}
               <div className={styles['two__block-calendar']}>
                 <div className={styles.two__calendar}>
                   <input
@@ -843,6 +893,16 @@ export const StepTwo = () => {
               {errors.endingDate && !stepTwoData.endingDate && (
                 <p className={styles.two__error}>{errors.endingDate}</p>
               )}
+              {errors.endHour &&
+                stepTwoData.endingDate &&
+                !stepTwoData.endHour && (
+                  <p className={styles.two__error}>{errors.endHour}</p>
+                )}
+              {errors.endMinute &&
+                stepTwoData.endHour &&
+                !stepTwoData.endMinute && (
+                  <p className={styles.two__error}>{errors.endMinute}</p>
+                )}
               <input
                 type="text"
                 className={styles.two__input}
