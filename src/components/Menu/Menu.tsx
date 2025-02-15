@@ -5,7 +5,6 @@ import styles from './Menu.module.scss';
 import { Path } from '../../utils/constants';
 import user from '../../images/icons/account_black.svg';
 import logout from '../../images/icons/logout.svg';
-import { deleteImgFromIndexedDB } from '../../helpers/deleteImageFromIndexedDB';
 
 export const Menu = () => {
   const auth = useAuth();
@@ -23,11 +22,10 @@ export const Menu = () => {
 
   const handleLogout = async () => {
     localStorage.removeItem('accessToken');
-    localStorage.removeItem('userName');
-    localStorage.removeItem('userPhone');
+    localStorage.removeItem('name');
+    localStorage.removeItem('phone');
     localStorage.removeItem('email');
-
-    await deleteImgFromIndexedDB('profileImage');
+    localStorage.removeItem('profileImage');
 
     await auth.removeUser();
 
