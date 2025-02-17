@@ -14,6 +14,21 @@ export const ProfileOpportunities = () => {
   const [openDropdown, setOpenDropdown] = useState<number | null>(null);
   const [isScrolled, setIsScrolled] = useState(false);
   const bottomRef = useRef<HTMLDivElement>(null);
+  const [userName, setUserName] = useState(
+    localStorage.getItem('name') || 'user',
+  );
+
+  useEffect(() => {
+    const handleStorageChange = () => {
+      setUserName(localStorage.getItem('name') || 'user');
+    };
+
+    window.addEventListener('storage', handleStorageChange);
+
+    return () => {
+      window.removeEventListener('storage', handleStorageChange);
+    };
+  }, []);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -37,8 +52,6 @@ export const ProfileOpportunities = () => {
     setQuery(e.target.value);
   };
 
-  const userName = localStorage.getItem('name');
-
   return (
     <div className={styles.opport}>
       <div className={styles.opport__nav}>
@@ -52,7 +65,7 @@ export const ProfileOpportunities = () => {
               [styles['opport__greeting--scrolled']]: isScrolled,
             })}
           >
-            Hello, {userName ? userName : 'user'}
+            Hello, {userName}
           </p>
           <h1
             className={cn(styles.opport__title, {

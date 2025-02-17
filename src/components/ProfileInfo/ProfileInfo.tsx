@@ -49,9 +49,7 @@ export const ProfileInfo = () => {
 
   useEffect(() => {
     const searchParams = new URLSearchParams(window.location.search);
-    const code =
-      searchParams.get('code') ||
-      new URLSearchParams(window.location.hash.split('?')[1]).get('code');
+    const code = searchParams.get('code');
 
     if (code) {
       window.history.replaceState({}, '', window.location.pathname);
@@ -110,6 +108,17 @@ export const ProfileInfo = () => {
     updateProfile();
   }, [auth.isAuthenticated, auth.user]);
 
+  useEffect(() => {
+    const storedImage = localStorage.getItem('profileImage');
+
+    if (storedImage) {
+      setProfileData(prev => ({
+        ...prev,
+        profileImage: storedImage,
+      }));
+    }
+  }, []);
+
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
 
@@ -152,14 +161,20 @@ export const ProfileInfo = () => {
       return;
     }
 
-    const imageUrl = URL.createObjectURL(file);
+    const reader = new FileReader();
 
-    localStorage.setItem('profileImage', imageUrl);
+    reader.onload = () => {
+      const imageUrl = reader.result as string;
 
-    setProfileData(prev => ({
-      ...prev,
-      profileImage: imageUrl,
-    }));
+      localStorage.setItem('profileImage', imageUrl);
+
+      setProfileData(prev => ({
+        ...prev,
+        profileImage: imageUrl,
+      }));
+    };
+
+    reader.readAsDataURL(file);
   };
 
   const handleEditClick = () => {
@@ -238,8 +253,6 @@ export const ProfileInfo = () => {
       setIsSaving(false);
     }
   };
-
-  const storedProfileImage = localStorage.getItem('profileImage');
 
   return (
     <div className={styles.info}>
@@ -349,9 +362,7 @@ export const ProfileInfo = () => {
                   >
                     {profileData.profileImage ? (
                       <img
-                        src={
-                          storedProfileImage ? storedProfileImage : default_user
-                        }
+                        src={profileData.profileImage}
                         alt="profile"
                         className={styles.info__photo}
                       />
@@ -362,7 +373,7 @@ export const ProfileInfo = () => {
                 </>
               ) : (
                 <img
-                  src={storedProfileImage ? storedProfileImage : default_user}
+                  src={profileData.profileImage || default_user}
                   alt="profile"
                   className={styles.info__photo}
                 />
