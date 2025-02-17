@@ -96,7 +96,7 @@ export const ProfileInfo = () => {
           name: data.name,
           email: data.email,
           phone: data.phone,
-          profileImage: default_user || data.profileImage,
+          profileImage: data.profileImage,
         }));
 
         localStorage.setItem('accessToken', accessToken);
@@ -349,7 +349,9 @@ export const ProfileInfo = () => {
                   >
                     {profileData.profileImage ? (
                       <img
-                        src={default_user || storedProfileImage}
+                        src={
+                          storedProfileImage ? storedProfileImage : default_user
+                        }
                         alt="profile"
                         className={styles.info__photo}
                       />
@@ -360,7 +362,7 @@ export const ProfileInfo = () => {
                 </>
               ) : (
                 <img
-                  src={default_user || storedProfileImage}
+                  src={storedProfileImage ? storedProfileImage : default_user}
                   alt="profile"
                   className={styles.info__photo}
                 />

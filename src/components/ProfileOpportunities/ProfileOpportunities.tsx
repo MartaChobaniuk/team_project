@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
 import { useLocation, useNavigate, NavLink } from 'react-router-dom';
-import { useAuth } from 'react-oidc-context';
 import cn from 'classnames';
 import styles from './ProfileOpportunities.module.scss';
 import { Path } from '../../utils/constants';
@@ -11,8 +10,6 @@ import arrow_down from '../../images/icons/arrow_down_white.svg';
 export const ProfileOpportunities = () => {
   const { pathname } = useLocation();
   const navigate = useNavigate();
-  const auth = useAuth();
-  const { profile } = auth.user || {};
   const [query, setQuery] = useState('');
   const [openDropdown, setOpenDropdown] = useState<number | null>(null);
   const [isScrolled, setIsScrolled] = useState(false);
@@ -40,6 +37,8 @@ export const ProfileOpportunities = () => {
     setQuery(e.target.value);
   };
 
+  const userName = localStorage.getItem('name');
+
   return (
     <div className={styles.opport}>
       <div className={styles.opport__nav}>
@@ -53,7 +52,7 @@ export const ProfileOpportunities = () => {
               [styles['opport__greeting--scrolled']]: isScrolled,
             })}
           >
-            Hello, {profile?.name}
+            Hello, {userName ? userName : 'user'}
           </p>
           <h1
             className={cn(styles.opport__title, {
