@@ -315,13 +315,11 @@
     }
 
     @include mixin.on-tablet-2 {
-      @include mixin.h3-desktop-tablet;
-      margin-bottom: 20px;
+      @include mixin.h2-desktop-tablet;
     }
 
     @include mixin.on-desktop {
       @include mixin.h2-desktop-tablet;
-      margin-bottom: 20px;
     }
   }
 
@@ -423,12 +421,12 @@
     }
 
     @include mixin.on-tablet-2 {
-      width: 100%;
-      @include mixin.flex(flex, center, center, row);
+      width: max-content;
+      @include mixin.flex(flex, center, flex-end, row);
     }
 
     @include mixin.on-desktop {
-      width: 70%;
+      width: max-content;
       @include mixin.flex(flex, center, flex-end, row);
     }
   }
@@ -452,11 +450,11 @@
     }
 
     @include mixin.on-tablet-2 {
-      width: 100%;
+      width: 250px;
     }
 
     @include mixin.on-desktop {
-      width: 227px;
+      width: 250px;
     }
 
     &:hover {
@@ -465,42 +463,6 @@
 
     &:active {
       background-color: var.$light-gray;
-    }
-  }
-
-  &__button-delete {
-    height: 44px;
-    line-height: 44px;
-    text-transform: uppercase;
-    border-radius: 12px;
-    cursor: pointer;
-    background-color: transparent;
-    color: var.$white;
-    border: 0.5px solid var.$white;
-    transition: background-color 0.3s ease;
-
-    @include mixin.on-mobile {
-      width: 100%;
-    }
-
-    @include mixin.on-tablet {
-      width: 100%;
-    }
-
-    @include mixin.on-tablet-2 {
-      width: 100%;
-    }
-
-    @include mixin.on-desktop {
-      width: 227px;
-    }
-
-    &:hover {
-      background-color: var.$dark-gray;
-    }
-
-    &:active {
-      background-color: var.$dark-gray;
     }
   }
 
@@ -517,7 +479,7 @@
 
     @include mixin.on-tablet-2 {
       width: 100%;
-      @include mixin.flex(flex, start, center, column);
+      @include mixin.flex(flex, center, space-between, row);
     }
 
     @include mixin.on-desktop {

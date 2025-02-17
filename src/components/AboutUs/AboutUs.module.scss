@@ -86,7 +86,7 @@
     }
 
     @include mixin.on-desktop {
-      margin-top: 86px;
+      margin-top: 50px;
       overflow-y: scroll;
       -webkit-overflow-scrolling: touch;
       scrollbar-width: none;
@@ -454,8 +454,8 @@
     }
 
     @include mixin.on-tablet-2 {
-      margin-top: 86px;
-      max-height: 75vh;
+      margin-top: 50px;
+      height: 80vh;
       overflow-y: auto;
       -webkit-overflow-scrolling: touch;
       scrollbar-width: none;

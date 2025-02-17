@@ -7,7 +7,11 @@ export const LogIn = () => {
   const auth = useAuth();
 
   if (auth.isLoading) {
-    return <Loader />;
+    return (
+      <div className={styles.loading}>
+        <Loader />
+      </div>
+    );
   }
 
   if (auth.error) {

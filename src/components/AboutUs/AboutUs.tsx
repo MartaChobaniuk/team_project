@@ -29,14 +29,11 @@ export const AboutUs = () => {
       }
     };
 
-    // Зберігаємо посилання на contentRef в змінній перед додаванням обробників подій
     const currentContentRef = contentRef.current;
 
-    // Додаємо обробники подій
     currentContentRef?.addEventListener('scroll', handleFixed);
     window.addEventListener('scroll', handleScroll);
 
-    // Очищення
     return () => {
       window.removeEventListener('scroll', handleScroll);
       currentContentRef?.removeEventListener('scroll', handleFixed);
@@ -63,11 +60,13 @@ export const AboutUs = () => {
               makes it easy to find and contribute to causes that resonate with
               you.
               <br />
+              <br />
               With a user-friendly catalog and advanced search tools - including
               filters and AI-driven recommendations - you can quickly discover
               the perfect way to support those in need. Our platform also offers
               online options for those unable to be on the ground in Ukraine,
               ensuring everyone, whether at home or abroad, can contribute.
+              <br />
               <br />
               The name The Change reflects both our mission and our mindset: we
               inspire proactive help rather than passive hope. By facilitating
@@ -231,11 +230,13 @@ export const AboutUs = () => {
               makes it easy to find and contribute to causes that resonate with
               you.
               <br />
+              <br />
               With a user-friendly catalog and advanced search tools - including
               filters and AI-driven recommendations - you can quickly discover
               the perfect way to support those in need. Our platform also offers
               online options for those unable to be on the ground in Ukraine,
               ensuring everyone, whether at home or abroad, can contribute.
+              <br />
               <br />
               The name The Change reflects both our mission and our mindset: we
               inspire proactive help rather than passive hope. By facilitating

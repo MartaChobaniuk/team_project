@@ -1,43 +1,25 @@
 /* eslint-disable no-console */
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useState } from 'react';
 import cn from 'classnames';
 import styles from './Home.module.scss';
 import arrow from '../../images/icons/arrow_r.svg';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { Path } from '../../utils/constants';
+import { useSwipeable } from 'react-swipeable';
 
 export const Home: React.FC = () => {
   const [isScrolled, setIsScrolled] = useState<boolean>(false);
   const navigate = useNavigate();
-  const contentRef = useRef<HTMLDivElement | null>(null);
 
-  useEffect(() => {
-    const handleScroll = () => {
-      const content = contentRef.current;
-
-      if (content) {
-        if (content.scrollTop + content.clientHeight >= content.scrollHeight) {
-          setTimeout(() => {
-            setIsScrolled(true);
-          }, 500);
-        } else {
-          setIsScrolled(false);
-        }
-      }
-    };
-
-    const content = contentRef.current;
-
-    if (content) {
-      content.addEventListener('scroll', handleScroll);
-    }
-
-    return () => {
-      if (content) {
-        content.removeEventListener('scroll', handleScroll);
-      }
-    };
-  }, []);
+  const handlers = useSwipeable({
+    onSwipedUp: () => {
+      setIsScrolled(true);
+    },
+    onSwipedDown: () => {
+      setIsScrolled(false);
+    },
+    trackTouch: true,
+  });
 
   const handleHomeAI = () => {
     navigate(Path.HomeAI);
@@ -97,12 +79,17 @@ export const Home: React.FC = () => {
         </div>
 
         <div
+          {...handlers}
           className={cn(styles['home__left-mobile'], {
             [styles['home__left-mobile--scrolled']]: isScrolled,
           })}
         >
           <div className={styles['home__collaps-line']}></div>
-          <div ref={contentRef} className={styles['home__mobile-content-left']}>
+          <div
+            className={cn(styles['home__mobile-content-left'], {
+              [styles['home__mobile-content-left--scrolled']]: isScrolled,
+            })}
+          >
             <h1
               className={cn(styles['home__mobile-title'], {
                 [styles['home__mobile-title--scrolled']]: isScrolled,

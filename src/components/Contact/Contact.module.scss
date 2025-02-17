@@ -5,6 +5,7 @@
   position: relative;
   height: 100vh;
   width: 100%;
+  overflow: hidden;
 
   &__error {
     color: var.$error;
@@ -53,7 +54,7 @@
 
     @include mixin.on-mobile {
       margin-top: 70px;
-      height: 25vh;
+      height: 24vh;
 
       &--scrolled {
         margin-top: 70px;
@@ -135,7 +136,7 @@
   &__footer-right {
     @include mixin.on-mobile {
       backdrop-filter: blur(34px);
-      padding: 16px;
+      padding: 20px;
       border-radius: 20px;
       @include mixin.flex(flex, flex-start, space-between, column);
 

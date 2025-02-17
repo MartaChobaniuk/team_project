@@ -159,7 +159,7 @@
 
   &__buttons {
     @include mixin.on-tablet {
-      @include mixin.flex(flex, center, center, column);
+      @include mixin.flex(flex, center, flex-start, row);
       width: 100%;
     }
 
@@ -343,14 +343,14 @@
       background-color: var.$black;
       position: relative;
       z-index: 8;
-      height: 80vh;
+      height: 95vh;
       border-radius: 0 0 20px 20px;
-      padding: 16px;
+      padding: 20px;
       @include mixin.flex(flex, false, false, column);
       transition: height 0.5s ease;
 
       &--scrolled {
-        height: 25vh;
+        height: 140px;
       }
     }
 
@@ -459,12 +459,12 @@
       background-color: transparent;
       backdrop-filter: blur(34px);
       color: var.$black;
-      padding: 16px;
-      height: 20vh;
-      @include mixin.flex(flex, false, flex-start, column);
+      padding: 20px;
+      height: 120px;
+      @include mixin.flex(flex, false, center, column);
 
       &--scrolled {
-        height: 23vh;
+        height: 210px;
         border-radius: 20px 20px 0 0;
       }
     }

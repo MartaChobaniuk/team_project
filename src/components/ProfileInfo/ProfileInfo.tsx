@@ -27,7 +27,6 @@ export const ProfileInfo = () => {
     useState<ProfileData | null>(null);
   const [isEditing, setIsEditing] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
-  const [isDeleting, setIsDeleting] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [isScrolled, setIsScrolled] = useState(false);
 
@@ -240,53 +239,6 @@ export const ProfileInfo = () => {
     }
   };
 
-  const handleDeleteClick = async () => {
-    setIsDeleting(true);
-
-    if (!auth.user?.access_token) {
-      setErrorMessage('User is not authenticated');
-
-      return;
-    }
-
-    const accessToken = auth.user.access_token;
-
-    try {
-      const response = await fetch(
-        'https://dewvdtfd5m.execute-api.eu-north-1.amazonaws.com/dev/account',
-        {
-          method: 'DELETE',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${accessToken}`,
-          },
-        },
-      );
-
-      if (!response.ok) {
-        throw new Error(`Error deleting account. Status: ${response.status}`);
-      }
-
-      const data = await response.json();
-
-      console.log('Account successfully deleted:', data);
-
-      localStorage.removeItem('accessToken');
-      localStorage.removeItem('userName');
-      localStorage.removeItem('userPhone');
-      localStorage.removeItem('email');
-
-      await auth.removeUser();
-
-      navigate(Path.Home);
-    } catch (error) {
-      console.error('Error deleting account:', error);
-      setErrorMessage('Failed to delete account. Please try again later.');
-    } finally {
-      setIsDeleting(false);
-    }
-  };
-
   const storedProfileImage = localStorage.getItem('profileImage');
 
   return (
@@ -374,14 +326,6 @@ export const ProfileInfo = () => {
                   {isSaving ? 'Saving...' : 'Save'}
                 </button>
               )}
-              <button
-                type="button"
-                className={styles['info__button-delete']}
-                onClick={handleDeleteClick}
-                disabled={isDeleting}
-              >
-                {isDeleting ? 'Deleting...' : 'Delete Account'}
-              </button>
             </div>
           </div>
           {errorMessage && <p className={styles.info__error}>{errorMessage}</p>}
@@ -405,11 +349,7 @@ export const ProfileInfo = () => {
                   >
                     {profileData.profileImage ? (
                       <img
-                        src={
-                          profileData.profileImage ||
-                          storedProfileImage ||
-                          default_user
-                        }
+                        src={default_user || storedProfileImage}
                         alt="profile"
                         className={styles.info__photo}
                       />
@@ -420,11 +360,7 @@ export const ProfileInfo = () => {
                 </>
               ) : (
                 <img
-                  src={
-                    profileData.profileImage ||
-                    storedProfileImage ||
-                    default_user
-                  }
+                  src={default_user || storedProfileImage}
                   alt="profile"
                   className={styles.info__photo}
                 />
