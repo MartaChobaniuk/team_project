@@ -34,12 +34,13 @@ export const Header = () => {
     isStepOne,
     isStepTwo,
     isStepThree,
+    isSubmit,
   } = usePathChecker();
 
   const isProfileActive =
     isProfile || isProfileInfo || isActivity || isOpportunities;
 
-  const isStepActive = isStepOne || isStepTwo || isStepThree;
+  const isStepActive = isStepOne || isStepTwo || isStepThree || isSubmit;
 
   const isMainActive =
     isHome ||

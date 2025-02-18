@@ -33,6 +33,7 @@ export const Logo: React.FC<Props> = ({ className }) => {
     isVolunteering,
     isWishes,
     isDonate,
+    isSubmit,
   } = usePathChecker();
 
   return (
@@ -51,9 +52,8 @@ export const Logo: React.FC<Props> = ({ className }) => {
           [styles['logo__text--donate']]: isDonate,
           [styles['logo__text--stories']]: isStories,
           [styles['logo__text--event']]: isEventPage,
-          [styles['logo__text--step-one']]: isStepOne,
-          [styles['logo__text--step-two']]: isStepTwo,
-          [styles['logo__text--step-three']]: isStepThree,
+          [styles['logo__text--steps']]:
+            isStepOne || isStepTwo || isStepThree || isSubmit,
           [styles['logo__text--profile']]:
             isProfile || isProfileInfo || isActivity || isOpportunities,
         })}

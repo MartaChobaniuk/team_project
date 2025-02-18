@@ -34,6 +34,7 @@ export const NavbarLeft: React.FC<Props> = ({ className }) => {
     isStepOne,
     isStepTwo,
     isStepThree,
+    isSubmit,
   } = usePathChecker();
 
   const navLinks = [
@@ -73,7 +74,8 @@ export const NavbarLeft: React.FC<Props> = ({ className }) => {
           isOpportunities ||
           isStepOne ||
           isStepTwo ||
-          isStepThree,
+          isStepThree ||
+          isSubmit,
       },
       className,
     );

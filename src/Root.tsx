@@ -23,6 +23,7 @@ import { StepThreePage } from './pages/StepThreePage';
 import { VolunteeringPage } from './pages/VolunteeringPage';
 import { WishesPage } from './pages/WishesPage';
 import { DonatePage } from './pages/DonatePage';
+import { SuccessSubmitPage } from './pages/SuccessSubmit';
 
 export const Root = () => (
   <Router basename="/team_project">
@@ -75,6 +76,8 @@ export const Root = () => (
             <Route path={Path.StepThree} element={<StepThreePage />} />
           </Route>
         </Route>
+
+        <Route path={Path.SuccessSubmit} element={<SuccessSubmitPage />} />
 
         <Route path={Path.Menu} element={<MenuPage />} />
 

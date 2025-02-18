@@ -96,9 +96,7 @@
     &--login,
     &--contact,
     &--profile,
-    &--step-one,
-    &--step-two,
-    &--step-three {
+    &--steps {
       @include mixin.on-mobile {
         color: var.$black;
 

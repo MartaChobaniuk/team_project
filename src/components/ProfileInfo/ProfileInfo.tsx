@@ -89,12 +89,15 @@ export const ProfileInfo = () => {
 
         const data = await response.json();
 
+        const storedProfileImage =
+          localStorage.getItem('profileImage') || data.profileImage;
+
         setProfileData(prev => ({
           ...prev,
           name: data.name,
           email: data.email,
           phone: data.phone,
-          profileImage: data.profileImage,
+          profileImage: storedProfileImage,
         }));
 
         localStorage.setItem('accessToken', accessToken);
@@ -108,17 +111,6 @@ export const ProfileInfo = () => {
     updateProfile();
   }, [auth.isAuthenticated, auth.user]);
 
-  useEffect(() => {
-    const storedImage = localStorage.getItem('profileImage');
-
-    if (storedImage) {
-      setProfileData(prev => ({
-        ...prev,
-        profileImage: storedImage,
-      }));
-    }
-  }, []);
-
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
 
@@ -126,6 +118,11 @@ export const ProfileInfo = () => {
       ...prevData,
       [name]: value,
     }));
+  };
+
+  const handleProfileImageChange = (newImageUrl: string) => {
+    setProfileData(prev => ({ ...prev, profileImage: newImageUrl }));
+    localStorage.setItem('profileImage', newImageUrl);
   };
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -163,15 +160,15 @@ export const ProfileInfo = () => {
 
     const reader = new FileReader();
 
-    reader.onload = () => {
-      const imageUrl = reader.result as string;
+    reader.onloadend = () => {
+      const newImageUrl = reader.result;
 
-      localStorage.setItem('profileImage', imageUrl);
-
-      setProfileData(prev => ({
-        ...prev,
-        profileImage: imageUrl,
-      }));
+      if (typeof newImageUrl === 'string') {
+        handleProfileImageChange(newImageUrl);
+      } else {
+        console.error('FileReader result is not a string:', newImageUrl);
+        setErrorMessage('Error loading image. Please try again.');
+      }
     };
 
     reader.readAsDataURL(file);

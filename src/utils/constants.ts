@@ -19,5 +19,6 @@ export enum Path {
   StepOne = '/profile/opportunities/step-one',
   StepTwo = '/profile/opportunities/step-two',
   StepThree = '/profile/opportunities/step-three',
+  SuccessSubmit = '/profile/success-submit',
   Menu = '/menu',
 }

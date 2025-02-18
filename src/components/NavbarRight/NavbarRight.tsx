@@ -40,12 +40,13 @@ export const NavbarRight: React.FC<Props> = ({ className }) => {
     isStepOne,
     isStepTwo,
     isStepThree,
+    isSubmit,
   } = usePathChecker();
 
   const isProfileActive =
     isProfile || isProfileInfo || isActivity || isOpportunities;
 
-  const isStepActive = isStepOne || isStepTwo || isStepThree;
+  const isStepActive = isStepOne || isStepTwo || isStepThree || isSubmit;
 
   const isOtherPathActive = isHome ||
     isHomeAI ||
@@ -126,7 +127,8 @@ export const NavbarRight: React.FC<Props> = ({ className }) => {
               isEventPage ||
               isStepOne ||
               isStepTwo ||
-              isStepThree,
+              isStepThree ||
+              isSubmit,
             [styles['navbar__lang--dark-bg']]:
               isHome ||
               isAbout ||

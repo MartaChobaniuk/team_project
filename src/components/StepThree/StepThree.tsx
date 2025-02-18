@@ -344,8 +344,8 @@ export const StepThree = () => {
         await clearFilesFromIndexedDB();
 
         setTimeout(() => {
-          navigate(Path.ProfileInfo);
-        }, 2000);
+          navigate(Path.SuccessSubmit);
+        }, 1000);
       } else {
         const errorJson = await response.json();
 

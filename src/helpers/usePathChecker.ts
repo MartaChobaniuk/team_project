@@ -25,5 +25,6 @@ export const usePathChecker = () => {
     isVolunteering: pathname === Path.Volunteering,
     isWishes: pathname === Path.Wishes,
     isDonate: pathname === Path.Donate,
+    isSubmit: pathname === Path.SuccessSubmit,
   };
 };
