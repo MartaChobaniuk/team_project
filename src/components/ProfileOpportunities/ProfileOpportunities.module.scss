@@ -5,6 +5,11 @@
   width: 100%;
   height: 100vh;
 
+  &__error {
+    color: var.$error;
+    @include mixin.body-text-desktop-tablet;
+  }
+
   &__nav {
     height: 100vh;
     width: 100%;

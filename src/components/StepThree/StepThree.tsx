@@ -324,11 +324,17 @@ export const StepThree = () => {
         formData.append('documentFile', docFile);
       }
 
+      const accessToken = localStorage.getItem('accessToken');
+
       const response = await fetch(
-        'https://dewvdtfd5m.execute-api.eu-north-1.amazonaws.com/dev/events',
+        // eslint-disable-next-line max-len
+        'https://dewvdtfd5m.execute-api.eu-north-1.amazonaws.com/dev/createEvent',
         {
           method: 'POST',
           body: formData,
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
         },
       );
 

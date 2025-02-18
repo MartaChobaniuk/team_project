@@ -3,7 +3,6 @@ export type OpportunityType = {
   name: string;
   type: string;
   mainAssistance: string | number;
-  alternativeAssistance: string | number;
   status: string;
   feedback: string;
 };

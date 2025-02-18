@@ -6,6 +6,8 @@ import { Path } from '../../utils/constants';
 import search from '../../images/icons/search.svg';
 import arrow_up from '../../images/icons/arrow_up_white (2).svg';
 import arrow_down from '../../images/icons/arrow_down_white.svg';
+import { Loader } from '../Loader';
+import { OpportunityType } from '../../types/OpportunityType';
 
 export const ProfileOpportunities = () => {
   const { pathname } = useLocation();
@@ -17,6 +19,10 @@ export const ProfileOpportunities = () => {
   const [userName, setUserName] = useState(
     localStorage.getItem('name') || 'user',
   );
+  // eslint-disable-next-line max-len, prettier/prettier
+  const [postedOpportunities, setPostedOpportunities] = useState<OpportunityType[]>([]);
+  const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState<boolean>(false);
 
   useEffect(() => {
     const handleStorageChange = () => {
@@ -42,6 +48,64 @@ export const ProfileOpportunities = () => {
     bottomDiv?.addEventListener('scroll', handleScroll);
 
     return () => bottomDiv?.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  useEffect(() => {
+    const getUserAccountDetails = async () => {
+      const accessToken = localStorage.getItem('accessToken');
+
+      if (!accessToken) {
+        setError('You need to be logged in to view your account details.');
+
+        return;
+      }
+
+      setLoading(true);
+      setError(null);
+
+      try {
+        const response = await fetch(
+          'https://dewvdtfd5m.execute-api.eu-north-1.amazonaws.com/dev/account',
+          {
+            method: 'GET',
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${accessToken}`,
+            },
+          },
+        );
+
+        if (!response.ok) {
+          if (response.status === 401) {
+            setError('Unauthorized: Please login again.');
+          } else if (response.status === 404) {
+            setError('Account not found.');
+          } else if (response.status === 500) {
+            setError('Server error. Please try again later.');
+          } else {
+            setError(`Unexpected error: ${response.statusText}`);
+          }
+
+          return;
+        }
+
+        const data = await response.json();
+
+        if (!data || !Array.isArray(data.postedOpportunities)) {
+          setError('Error: Invalid data structure received.');
+
+          return;
+        }
+
+        setPostedOpportunities(data.postedOpportunities);
+      } catch (errorMes) {
+        setError('Network error. Please check your connection.');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    getUserAccountDetails();
   }, []);
 
   const toggleOpen = (index: number) => {
@@ -270,6 +334,8 @@ export const ProfileOpportunities = () => {
             </div>
           </div>
           <div className={styles.opport__block}>
+            {error && <p className={styles.opport__error}>{error}</p>}
+            {loading && <Loader />}
             <h2 className={styles.opport__subtitle}>Posted Opportunities</h2>
             <div className={styles['opport__search-block']}>
               <div className={styles['opport__block-input']}>
@@ -306,68 +372,89 @@ export const ProfileOpportunities = () => {
                   <span>Leave Feedback</span>
                 </div>
                 <div className={styles['opport__line-grid']}></div>
-                <div className={styles.opport__row}>
-                  <span>Wish</span>
-                  <span>Donation</span>
-                  <span>14/25 participants</span>
-                  <span>Report Needed</span>
-                  <button className={styles['opport__button-detail']}>
-                    Submit a report
-                  </button>
-                </div>
+                {postedOpportunities.length > 0 ? (
+                  postedOpportunities.map(
+                    (event: OpportunityType, index: number) => (
+                      <div key={index} className={styles.opport__row}>
+                        <span>{event.name}</span>
+                        <span>{event.type}</span>
+                        <span>{event.mainAssistance}</span>
+                        <span>{event.status}</span>
+                        <button className={styles['opport__button-detail']}>
+                          Submit a report
+                        </button>
+                      </div>
+                    ),
+                  )
+                ) : (
+                  <div>No opportunities available.</div>
+                )}
               </div>
               <div className={styles.opport__dropdown}>
-                <button
-                  className={styles['opport__dropdown-button']}
-                  onClick={e => {
-                    e.preventDefault();
-                    toggleOpen(3);
-                  }}
-                >
-                  <span className={styles.opport__select}>Wish</span>
-                </button>
-                <div className={styles['opport__dropdown-img-container']}>
-                  <img
-                    className={styles['opport__dropdown-img']}
-                    src={openDropdown === 3 ? arrow_up : arrow_down}
-                    alt="Arrow Down"
-                  />
-                </div>
+                {postedOpportunities.length > 0 ? (
+                  postedOpportunities.map(
+                    (event: OpportunityType, index: number) => (
+                      <div key={event.id} className={styles.opport__dropdown}>
+                        <button
+                          className={styles['opport__dropdown-button']}
+                          onClick={e => {
+                            e.preventDefault();
+                            toggleOpen(index);
+                          }}
+                        >
+                          <span className={styles.opport__select}>
+                            {event.name}
+                          </span>
+                        </button>
+                        <div
+                          className={styles['opport__dropdown-img-container']}
+                        >
+                          <img
+                            className={styles['opport__dropdown-img']}
+                            src={openDropdown === index ? arrow_up : arrow_down}
+                            alt="Arrow Down"
+                          />
+                        </div>
+                        <div className={styles.opport__line}></div>
+
+                        {openDropdown === index && (
+                          <div className={styles.opport__info}>
+                            <div>
+                              <span className={styles['opport__detail-name']}>
+                                Type:
+                              </span>
+                              <span className={styles['opport__detail-value']}>
+                                {event.type}
+                              </span>
+                            </div>
+                            <div>
+                              <span className={styles['opport__detail-name']}>
+                                Main Assistance Progress:
+                              </span>
+                              <span className={styles['opport__detail-value']}>
+                                {event.mainAssistance}
+                              </span>
+                            </div>
+                            <div>
+                              <span className={styles['opport__detail-name']}>
+                                Status:
+                              </span>
+                              <span className={styles['opport__detail-value']}>
+                                {event.status}
+                              </span>
+                            </div>
+                            <button className={styles['opport__button-detail']}>
+                              Submit a report
+                            </button>
+                          </div>
+                        )}
+                      </div>
+                    ),
+                  )
+                ) : (
+                  <p>No opportunities available</p>
+                )}
               </div>
-              <div className={styles.opport__line}></div>
-              {openDropdown === 3 && (
-                <>
-                  <div className={styles.opport__info}>
-                    <div>
-                      <span className={styles['opport__detail-name']}>
-                        Type:
-                      </span>
-                      <span className={styles['opport__detail-value']}>
-                        Donation
-                      </span>
-                    </div>
-                    <div>
-                      <span className={styles['opport__detail-name']}>
-                        Main Assistance Progress:
-                      </span>
-                      <span className={styles['opport__detail-value']}>
-                        14/25 participants
-                      </span>
-                    </div>
-                    <div>
-                      <span className={styles['opport__detail-name']}>
-                        Status:
-                      </span>
-                      <span className={styles['opport__detail-value']}>
-                        Report Needed
-                      </span>
-                    </div>
-                    <button className={styles['opport__button-detail']}>
-                      Submit a report
-                    </button>
-                  </div>
-                </>
-              )}
             </div>
           </div>
         </div>
