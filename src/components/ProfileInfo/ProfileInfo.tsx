@@ -1,30 +1,18 @@
 /* eslint-disable no-console */
 import { useEffect, useRef, useState } from 'react';
-import { useAuth } from 'react-oidc-context';
 import { NavLink, useLocation, useNavigate } from 'react-router-dom';
+import { useUser } from '../../store/UserContex';
 import styles from './ProfileInfo.module.scss';
 import { Path } from '../../utils/constants';
 import cn from 'classnames';
 import default_user from '../../images/icons/profile-default.svg';
-interface ProfileData {
-  name: string;
-  email: string;
-  phone: string;
-  profileImage: string | null;
-}
+import { Loader } from '../Loader';
 
 export const ProfileInfo = () => {
+  const { user, setUser, error, loading } = useUser();
   const { pathname } = useLocation();
-  const auth = useAuth();
   const navigate = useNavigate();
-  const [profileData, setProfileData] = useState<ProfileData>({
-    name: '',
-    email: '',
-    phone: '',
-    profileImage: default_user,
-  });
-  const [originalProfileData, setOriginalProfileData] =
-    useState<ProfileData | null>(null);
+
   const [isEditing, setIsEditing] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
@@ -58,70 +46,33 @@ export const ProfileInfo = () => {
   }, [navigate]);
 
   useEffect(() => {
-    if (!auth.isAuthenticated || !auth.user) {
+    if (!user) {
       return;
     }
 
-    const updateProfile = async () => {
-      try {
-        const accessToken = auth.user?.access_token;
-
-        if (!accessToken) {
-          setErrorMessage('Authorization token is missing');
-
-          throw new Error('Authorization token is missing');
-        }
-
-        const response = await fetch(
-          'https://dewvdtfd5m.execute-api.eu-north-1.amazonaws.com/dev/account',
-          {
-            method: 'GET',
-            headers: {
-              'Content-Type': 'application/json',
-              Authorization: `Bearer ${accessToken}`,
-            },
-          },
-        );
-
-        if (!response.ok) {
-          throw new Error(`HTTP error! Status: ${response.status}`);
-        }
-
-        const data = await response.json();
-
-        const storedProfileImage =
-          localStorage.getItem('profileImage') || data.profileImage;
-
-        setProfileData(prev => ({
-          ...prev,
-          name: data.name,
-          email: data.email,
-          phone: data.phone,
-          profileImage: storedProfileImage,
-        }));
-
-        localStorage.setItem('accessToken', accessToken);
-        localStorage.setItem('email', data.email);
-      } catch (error) {
-        console.error('Error loading profile:', error);
-        setErrorMessage('Failed to load profile. Please try again later.');
-      }
-    };
-
-    updateProfile();
-  }, [auth.isAuthenticated, auth.user]);
+    localStorage.setItem(
+      'accessToken',
+      localStorage.getItem('accessToken') || '',
+    );
+    localStorage.setItem('email', user.email);
+  }, [user]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (!user) {
+      return;
+    }
+
     const { name, value } = e.target;
 
-    setProfileData(prevData => ({
-      ...prevData,
-      [name]: value,
-    }));
+    setUser({ ...user, [name]: value });
   };
 
   const handleProfileImageChange = (newImageUrl: string) => {
-    setProfileData(prev => ({ ...prev, profileImage: newImageUrl }));
+    if (!user) {
+      return;
+    }
+
+    setUser({ ...user, profileImage: newImageUrl });
     localStorage.setItem('profileImage', newImageUrl);
   };
 
@@ -161,12 +112,9 @@ export const ProfileInfo = () => {
     const reader = new FileReader();
 
     reader.onloadend = () => {
-      const newImageUrl = reader.result;
-
-      if (typeof newImageUrl === 'string') {
-        handleProfileImageChange(newImageUrl);
+      if (typeof reader.result === 'string') {
+        handleProfileImageChange(reader.result);
       } else {
-        console.error('FileReader result is not a string:', newImageUrl);
         setErrorMessage('Error loading image. Please try again.');
       }
     };
@@ -174,22 +122,10 @@ export const ProfileInfo = () => {
     reader.readAsDataURL(file);
   };
 
-  const handleEditClick = () => {
-    if (isEditing) {
-      if (originalProfileData) {
-        setProfileData(originalProfileData);
-      }
-
-      setErrorMessage(null);
-    } else {
-      setOriginalProfileData(profileData);
-    }
-
-    setIsEditing(prev => !prev);
-  };
+  const handleEditClick = () => setIsEditing(prev => !prev);
 
   const handleSaveClick = async () => {
-    if (!profileData.name || !profileData.phone) {
+    if (!user || !user.name || !user.phone) {
       setErrorMessage('Name and phone are required!');
 
       return;
@@ -208,11 +144,6 @@ export const ProfileInfo = () => {
         return;
       }
 
-      const userInfo = {
-        name: profileData.name,
-        phone: profileData.phone,
-      };
-
       const response = await fetch(
         'https://dewvdtfd5m.execute-api.eu-north-1.amazonaws.com/dev/account',
         {
@@ -221,7 +152,7 @@ export const ProfileInfo = () => {
             'Content-Type': 'application/json',
             Authorization: `Bearer ${accessToken}`,
           },
-          body: JSON.stringify(userInfo),
+          body: JSON.stringify({ name: user.name, phone: user.phone }),
         },
       );
 
@@ -229,22 +160,11 @@ export const ProfileInfo = () => {
         throw new Error(`HTTP error! Status: ${response.status}`);
       }
 
-      const data = await response.json();
-
-      console.log('Profile updated:', data);
-
-      localStorage.setItem('name', profileData.name);
-      localStorage.setItem('phone', profileData.phone);
-
-      const storedProfileImage = localStorage.getItem('profileImage');
-
-      setProfileData(prev => ({
-        ...prev,
-        profileImage: storedProfileImage,
-      }));
+      localStorage.setItem('name', user.name);
+      localStorage.setItem('phone', user.phone);
 
       setIsEditing(false);
-    } catch (error) {
+    } catch (errorMes) {
       setErrorMessage('Failed to save profile. Please try again.');
     } finally {
       setIsSaving(false);
@@ -264,7 +184,7 @@ export const ProfileInfo = () => {
               [styles['info__greeting--scrolled']]: isScrolled,
             })}
           >
-            Hello, {profileData.name}
+            Hello, {user?.name || 'User'}!
           </p>
           <h1
             className={cn(styles.info__title, {
@@ -339,6 +259,8 @@ export const ProfileInfo = () => {
             </div>
           </div>
           {errorMessage && <p className={styles.info__error}>{errorMessage}</p>}
+          {error && <p className={styles.info__error}>{error}</p>}
+          {loading && <Loader />}
           <div className={styles.info__details}>
             <div className={styles['info__photo-container']}>
               {isEditing ? (
@@ -355,11 +277,11 @@ export const ProfileInfo = () => {
                   />
                   <label
                     htmlFor="profileImage"
-                    className={`${styles['custom-file-label']} ${!profileData.profileImage ? styles['no-file-selected'] : ''}`}
+                    className={`${styles['custom-file-label']} ${!user?.profileImage ? styles['no-file-selected'] : ''}`}
                   >
-                    {profileData.profileImage ? (
+                    {user?.profileImage ? (
                       <img
-                        src={profileData.profileImage}
+                        src={user.profileImage}
                         alt="profile"
                         className={styles.info__photo}
                       />
@@ -370,7 +292,7 @@ export const ProfileInfo = () => {
                 </>
               ) : (
                 <img
-                  src={profileData.profileImage || default_user}
+                  src={user?.profileImage || default_user}
                   alt="profile"
                   className={styles.info__photo}
                 />
@@ -382,14 +304,12 @@ export const ProfileInfo = () => {
                   type="text"
                   name="name"
                   placeholder="Name"
-                  value={profileData.name}
+                  value={user?.name}
                   onChange={handleInputChange}
                   className={styles.info__input}
                 />
               ) : (
-                <p className={styles.info__input}>
-                  {profileData.name || 'Name'}
-                </p>
+                <p className={styles.info__input}>{user?.name || 'Name'}</p>
               )}
               <div className={styles.info__line}></div>
               {isEditing ? (
@@ -397,14 +317,12 @@ export const ProfileInfo = () => {
                   type="email"
                   name="email"
                   placeholder="Email"
-                  value={profileData.email}
+                  value={user?.email}
                   onChange={handleInputChange}
                   className={styles.info__input}
                 />
               ) : (
-                <p className={styles.info__input}>
-                  {profileData.email || 'Email'}
-                </p>
+                <p className={styles.info__input}>{user?.email || 'Email'}</p>
               )}
               <div className={styles.info__line}></div>
               {isEditing ? (
@@ -412,13 +330,13 @@ export const ProfileInfo = () => {
                   type="tel"
                   name="phone"
                   placeholder="Phone"
-                  value={profileData.phone}
+                  value={user?.phone}
                   onChange={handleInputChange}
                   className={styles.info__input}
                 />
               ) : (
                 <p className={styles.info__input}>
-                  {profileData.phone || 'Phone Number'}
+                  {user?.phone || 'Phone Number'}
                 </p>
               )}
               <div className={styles.info__line}></div>

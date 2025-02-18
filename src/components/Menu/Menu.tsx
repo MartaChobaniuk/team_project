@@ -26,6 +26,7 @@ export const Menu = () => {
     localStorage.removeItem('phone');
     localStorage.removeItem('email');
     localStorage.removeItem('profileImage');
+    localStorage.clear();
 
     await auth.removeUser();
 

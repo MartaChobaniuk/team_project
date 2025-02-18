@@ -336,11 +336,12 @@ export const StepThree = () => {
         setSubmitSuccess(true);
         setSuccessMessage('Your event has been successfully created');
 
+        resetOpportunityData();
+
         localStorage.removeItem('stepOneData');
         localStorage.removeItem('stepTwoData');
         localStorage.removeItem('stepThreeData');
-        localStorage.clear();
-        resetOpportunityData();
+
         await clearFilesFromIndexedDB();
 
         setTimeout(() => {
