@@ -1,4 +1,5 @@
 export type NewOpportunityType = {
+  id: string;
   organizerType: string;
   organizerName: string;
   phone: string;

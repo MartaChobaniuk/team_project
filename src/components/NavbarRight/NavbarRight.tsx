@@ -96,9 +96,11 @@ export const NavbarRight: React.FC<Props> = ({ className }) => {
 
   const handleLogout = async () => {
     localStorage.removeItem('accessToken');
-    localStorage.removeItem('userName');
-    localStorage.removeItem('userPhone');
+    localStorage.removeItem('name');
+    localStorage.removeItem('phone');
     localStorage.removeItem('email');
+    localStorage.removeItem('profileImage');
+    localStorage.clear();
 
     await deleteImgFromIndexedDB('profileImage');
 
@@ -142,7 +144,7 @@ export const NavbarRight: React.FC<Props> = ({ className }) => {
         </button>
 
         {auth.isAuthenticated && isOtherPathActive && (
-          <NavLink to={Path.Profile} className={getClassName}>
+          <NavLink to={Path.ProfileInfo} className={getClassName}>
             <img src={iconSrc} alt="user" className={iconClass} />
             <span className={styles.navbar__name}>Profile</span>
           </NavLink>

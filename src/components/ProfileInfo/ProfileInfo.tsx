@@ -262,7 +262,7 @@ export const ProfileInfo = () => {
               [styles['info__greeting--scrolled']]: isScrolled,
             })}
           >
-            Hello, {profileData.name}
+            Hello, {profileData.name}!
           </p>
           <h1
             className={cn(styles.info__title, {

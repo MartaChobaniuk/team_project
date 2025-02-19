@@ -8,19 +8,20 @@ import search from '../../images/icons/search.svg';
 import arrow_up from '../../images/icons/arrow_up_white (2).svg';
 import arrow_down from '../../images/icons/arrow_down_white.svg';
 import { Loader } from '../Loader';
+import { NewOpportunityType } from '../../types/NewOpportunityType';
 
 export const ProfileOpportunities = () => {
   const { pathname } = useLocation();
   const navigate = useNavigate();
   const [query, setQuery] = useState('');
-  const [openDropdown, setOpenDropdown] = useState<number | null>(null);
+  const [openDropdown, setOpenDropdown] = useState<string | null>(null);
   const [isScrolled, setIsScrolled] = useState(false);
   const bottomRef = useRef<HTMLDivElement>(null);
   const [userName, setUserName] = useState(
     localStorage.getItem('name') || 'user',
   );
   // eslint-disable-next-line max-len, prettier/prettier
-  const [postedOpportunities, setPostedOpportunities] = useState<string[]>([]);
+  const [postedOpportunities, setPostedOpportunities] = useState<NewOpportunityType[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
 
@@ -108,8 +109,8 @@ export const ProfileOpportunities = () => {
     getUserAccountDetails();
   }, []);
 
-  const toggleOpen = (index: number) => {
-    setOpenDropdown(prev => (prev === index ? null : index));
+  const toggleOpen = (id: string) => {
+    setOpenDropdown(prev => (prev === id ? null : id));
   };
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -231,7 +232,6 @@ export const ProfileOpportunities = () => {
                   className={styles['opport__dropdown-button']}
                   onClick={e => {
                     e.preventDefault();
-                    toggleOpen(1);
                   }}
                 >
                   <span className={styles.opport__select}>Wish</span>
@@ -239,13 +239,13 @@ export const ProfileOpportunities = () => {
                 <div className={styles['opport__dropdown-img-container']}>
                   <img
                     className={styles['opport__dropdown-img']}
-                    src={openDropdown === 1 ? arrow_up : arrow_down}
+                    src={openDropdown ? arrow_up : arrow_down}
                     alt="Arrow Down"
                   />
                 </div>
               </div>
               <div className={styles.opport__line}></div>
-              {openDropdown === 1 && (
+              {false && (
                 <>
                   <div className={styles.opport__info}>
                     <div>
@@ -284,7 +284,6 @@ export const ProfileOpportunities = () => {
                   className={styles['opport__dropdown-button']}
                   onClick={e => {
                     e.preventDefault();
-                    toggleOpen(2);
                   }}
                 >
                   <span className={styles.opport__select}>Help Sasha</span>
@@ -292,13 +291,13 @@ export const ProfileOpportunities = () => {
                 <div className={styles['opport__dropdown-img-container']}>
                   <img
                     className={styles['opport__dropdown-img']}
-                    src={openDropdown === 2 ? arrow_up : arrow_down}
+                    src={openDropdown ? arrow_up : arrow_down}
                     alt="Arrow Down"
                   />
                 </div>
               </div>
               <div className={styles.opport__line}></div>
-              {openDropdown === 2 && (
+              {false && (
                 <>
                   <div className={styles.opport__info}>
                     <div>
@@ -373,12 +372,12 @@ export const ProfileOpportunities = () => {
                 </div>
                 <div className={styles['opport__line-grid']}></div>
                 {postedOpportunities.length > 0 ? (
-                  postedOpportunities.map((event: any, index: number) => (
-                    <div key={index} className={styles.opport__row}>
-                      <span>{event.name}</span>
-                      <span>{event.type}</span>
-                      <span>{event.mainAssistance}</span>
-                      <span>{event.status}</span>
+                  postedOpportunities.map(event => (
+                    <div key={event.id} className={styles.opport__row}>
+                      <span>{event.title}</span>
+                      <span>{event.opportunityType}</span>
+                      <span>{event.assistanceType}</span>
+                      <span>{event.currentProgress}</span>
                       <button className={styles['opport__button-detail']}>
                         Submit a report
                       </button>
@@ -390,35 +389,37 @@ export const ProfileOpportunities = () => {
               </div>
               <div className={styles.opport__dropdown}>
                 {postedOpportunities.length > 0 ? (
-                  postedOpportunities.map((event: any, index: number) => (
+                  postedOpportunities.map((event: NewOpportunityType) => (
                     <div key={event.id}>
                       <button
                         className={styles['opport__dropdown-button']}
                         onClick={e => {
                           e.preventDefault();
-                          toggleOpen(index);
+                          toggleOpen(event.id);
                         }}
                       >
                         <span className={styles.opport__select}>
-                          {event.name}
+                          {event.title}
                         </span>
                       </button>
                       <div className={styles['opport__dropdown-img-container']}>
                         <img
                           className={styles['opport__dropdown-img']}
-                          src={openDropdown === index ? arrow_up : arrow_down}
+                          src={
+                            openDropdown === event.id ? arrow_up : arrow_down
+                          }
                           alt="Arrow Down"
                         />
                       </div>
 
-                      {openDropdown === index && (
+                      {openDropdown === event.id && (
                         <div className={styles.opport__info}>
                           <div>
                             <span className={styles['opport__detail-name']}>
                               Type:
                             </span>
                             <span className={styles['opport__detail-value']}>
-                              {event.type}
+                              {event.opportunityType}
                             </span>
                           </div>
                           <div>
@@ -426,7 +427,7 @@ export const ProfileOpportunities = () => {
                               Main Assistance Progress:
                             </span>
                             <span className={styles['opport__detail-value']}>
-                              {event.mainAssistance}
+                              {event.assistanceType}
                             </span>
                           </div>
                           <div>
@@ -434,7 +435,7 @@ export const ProfileOpportunities = () => {
                               Status:
                             </span>
                             <span className={styles['opport__detail-value']}>
-                              {event.status}
+                              {event.currentProgress}
                             </span>
                           </div>
                           <button className={styles['opport__button-detail']}>
