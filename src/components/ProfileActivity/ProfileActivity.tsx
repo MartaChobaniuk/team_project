@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
-import { useAuth } from 'react-oidc-context';
 import cn from 'classnames';
 import styles from './ProfileActivity.module.scss';
 import { Path } from '../../utils/constants';
@@ -10,12 +9,25 @@ import arrow_down from '../../images/icons/arrow_down_white.svg';
 
 export const ProfileActivity = () => {
   const { pathname } = useLocation();
-  const auth = useAuth();
-  const { profile } = auth.user || {};
   const [query, setQuery] = useState('');
   const [openDropdown, setOpenDropdown] = useState<number | null>(null);
   const [isScrolled, setIsScrolled] = useState(false);
   const bottomRef = useRef<HTMLDivElement>(null);
+  const [userName, setUserName] = useState(
+    localStorage.getItem('name') || 'user',
+  );
+
+  useEffect(() => {
+    const handleStorageChange = () => {
+      setUserName(localStorage.getItem('name') || 'user');
+    };
+
+    window.addEventListener('storage', handleStorageChange);
+
+    return () => {
+      window.removeEventListener('storage', handleStorageChange);
+    };
+  }, []);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -52,7 +64,7 @@ export const ProfileActivity = () => {
               [styles['activity__greeting--scrolled']]: isScrolled,
             })}
           >
-            Hello, {profile?.name}
+            Hello, {userName}!
           </p>
           <h1
             className={cn(styles.activity__title, {

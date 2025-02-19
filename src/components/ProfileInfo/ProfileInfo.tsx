@@ -102,6 +102,7 @@ export const ProfileInfo = () => {
 
         localStorage.setItem('accessToken', accessToken);
         localStorage.setItem('email', data.email);
+        localStorage.setItem('name', data.name);
       } catch (error) {
         console.error('Error loading profile:', error);
         setErrorMessage('Failed to load profile. Please try again later.');
@@ -232,9 +233,6 @@ export const ProfileInfo = () => {
       const data = await response.json();
 
       console.log('Profile updated:', data);
-
-      localStorage.setItem('name', profileData.name);
-      localStorage.setItem('phone', profileData.phone);
 
       const storedProfileImage = localStorage.getItem('profileImage');
 

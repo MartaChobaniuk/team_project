@@ -7,7 +7,6 @@ import search from '../../images/icons/search.svg';
 import arrow_up from '../../images/icons/arrow_up_white (2).svg';
 import arrow_down from '../../images/icons/arrow_down_white.svg';
 import { Loader } from '../Loader';
-import { OpportunityType } from '../../types/OpportunityType';
 
 export const ProfileOpportunities = () => {
   const { pathname } = useLocation();
@@ -20,7 +19,7 @@ export const ProfileOpportunities = () => {
     localStorage.getItem('name') || 'user',
   );
   // eslint-disable-next-line max-len, prettier/prettier
-  const [postedOpportunities, setPostedOpportunities] = useState<OpportunityType[]>([]);
+  const [postedOpportunities, setPostedOpportunities] = useState<string[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
 
@@ -129,7 +128,7 @@ export const ProfileOpportunities = () => {
               [styles['opport__greeting--scrolled']]: isScrolled,
             })}
           >
-            Hello, {userName}
+            Hello, {userName}!
           </p>
           <h1
             className={cn(styles.opport__title, {
@@ -334,9 +333,9 @@ export const ProfileOpportunities = () => {
             </div>
           </div>
           <div className={styles.opport__block}>
+            <h2 className={styles.opport__subtitle}>Posted Opportunities</h2>
             {error && <p className={styles.opport__error}>{error}</p>}
             {loading && <Loader />}
-            <h2 className={styles.opport__subtitle}>Posted Opportunities</h2>
             <div className={styles['opport__search-block']}>
               <div className={styles['opport__block-input']}>
                 <img
@@ -373,88 +372,82 @@ export const ProfileOpportunities = () => {
                 </div>
                 <div className={styles['opport__line-grid']}></div>
                 {postedOpportunities.length > 0 ? (
-                  postedOpportunities.map(
-                    (event: OpportunityType, index: number) => (
-                      <div key={index} className={styles.opport__row}>
-                        <span>{event.name}</span>
-                        <span>{event.type}</span>
-                        <span>{event.mainAssistance}</span>
-                        <span>{event.status}</span>
-                        <button className={styles['opport__button-detail']}>
-                          Submit a report
-                        </button>
-                      </div>
-                    ),
-                  )
+                  postedOpportunities.map((event: any, index: number) => (
+                    <div key={index} className={styles.opport__row}>
+                      <span>{event.name}</span>
+                      <span>{event.type}</span>
+                      <span>{event.mainAssistance}</span>
+                      <span>{event.status}</span>
+                      <button className={styles['opport__button-detail']}>
+                        Submit a report
+                      </button>
+                    </div>
+                  ))
                 ) : (
                   <div>No opportunities available.</div>
                 )}
               </div>
               <div className={styles.opport__dropdown}>
                 {postedOpportunities.length > 0 ? (
-                  postedOpportunities.map(
-                    (event: OpportunityType, index: number) => (
-                      <div key={event.id} className={styles.opport__dropdown}>
-                        <button
-                          className={styles['opport__dropdown-button']}
-                          onClick={e => {
-                            e.preventDefault();
-                            toggleOpen(index);
-                          }}
-                        >
-                          <span className={styles.opport__select}>
-                            {event.name}
-                          </span>
-                        </button>
-                        <div
-                          className={styles['opport__dropdown-img-container']}
-                        >
-                          <img
-                            className={styles['opport__dropdown-img']}
-                            src={openDropdown === index ? arrow_up : arrow_down}
-                            alt="Arrow Down"
-                          />
-                        </div>
-                        <div className={styles.opport__line}></div>
-
-                        {openDropdown === index && (
-                          <div className={styles.opport__info}>
-                            <div>
-                              <span className={styles['opport__detail-name']}>
-                                Type:
-                              </span>
-                              <span className={styles['opport__detail-value']}>
-                                {event.type}
-                              </span>
-                            </div>
-                            <div>
-                              <span className={styles['opport__detail-name']}>
-                                Main Assistance Progress:
-                              </span>
-                              <span className={styles['opport__detail-value']}>
-                                {event.mainAssistance}
-                              </span>
-                            </div>
-                            <div>
-                              <span className={styles['opport__detail-name']}>
-                                Status:
-                              </span>
-                              <span className={styles['opport__detail-value']}>
-                                {event.status}
-                              </span>
-                            </div>
-                            <button className={styles['opport__button-detail']}>
-                              Submit a report
-                            </button>
-                          </div>
-                        )}
+                  postedOpportunities.map((event: any, index: number) => (
+                    <div key={event.id}>
+                      <button
+                        className={styles['opport__dropdown-button']}
+                        onClick={e => {
+                          e.preventDefault();
+                          toggleOpen(index);
+                        }}
+                      >
+                        <span className={styles.opport__select}>
+                          {event.name}
+                        </span>
+                      </button>
+                      <div className={styles['opport__dropdown-img-container']}>
+                        <img
+                          className={styles['opport__dropdown-img']}
+                          src={openDropdown === index ? arrow_up : arrow_down}
+                          alt="Arrow Down"
+                        />
                       </div>
-                    ),
-                  )
+
+                      {openDropdown === index && (
+                        <div className={styles.opport__info}>
+                          <div>
+                            <span className={styles['opport__detail-name']}>
+                              Type:
+                            </span>
+                            <span className={styles['opport__detail-value']}>
+                              {event.type}
+                            </span>
+                          </div>
+                          <div>
+                            <span className={styles['opport__detail-name']}>
+                              Main Assistance Progress:
+                            </span>
+                            <span className={styles['opport__detail-value']}>
+                              {event.mainAssistance}
+                            </span>
+                          </div>
+                          <div>
+                            <span className={styles['opport__detail-name']}>
+                              Status:
+                            </span>
+                            <span className={styles['opport__detail-value']}>
+                              {event.status}
+                            </span>
+                          </div>
+                          <button className={styles['opport__button-detail']}>
+                            Submit a report
+                          </button>
+                        </div>
+                      )}
+                    </div>
+                  ))
                 ) : (
                   <p>No opportunities available</p>
                 )}
               </div>
+              <div className={styles.opport__line}></div>
             </div>
           </div>
         </div>

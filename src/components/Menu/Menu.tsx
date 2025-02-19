@@ -46,7 +46,7 @@ export const Menu = () => {
         {auth.isAuthenticated ? (
           <div className={styles.menu__buttons}>
             <NavLink
-              to={Path.Profile}
+              to={Path.ProfileInfo}
               className={({ isActive }: { isActive: boolean }) =>
                 cn(styles.menu__sign, {
                   [styles['menu__sign--active']]: isActive,

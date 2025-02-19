@@ -135,8 +135,6 @@ export const StepOne = () => {
       fileInputRef.current.value = '';
     }
 
-    localStorage.clear();
-
     removeImageFromIndexedDB('organizerPhotoFile');
     navigate(Path.Opportunities);
   };

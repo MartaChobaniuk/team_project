@@ -4,7 +4,6 @@ import { HomePage } from './pages/HomePage';
 import { StoriesPage } from './pages/StoriesPage';
 import { AboutUsPage } from './pages/AboutUsPage';
 import { ContactPage } from './pages/ContactPage';
-import { SignUpPage } from './pages/SignUpPage';
 import { Path } from './utils/constants';
 import { NotFoundPage } from './pages/NotFoundPage';
 import { HomeAIPage } from './pages/HomeAIPage';
@@ -60,8 +59,6 @@ export const Root = () => (
         </Route>
 
         <Route path={Path.Contact} element={<ContactPage />} />
-
-        <Route path={Path.SignUp} element={<SignUpPage />} />
         <Route path={Path.LogIn} element={<LogInPage />} />
 
         <Route path={Path.Profile}>
