@@ -3,19 +3,19 @@ import styles from './ProgressBar.module.scss';
 import cn from 'classnames';
 
 type Props = {
-  goal: number | string;
+  target: number | string;
   currentProgress: number | string;
   opportunityType: string;
   assistanceType: string;
 };
 
 export const ProgressBar: React.FC<Props> = ({
-  goal,
+  target,
   currentProgress,
   opportunityType,
   assistanceType,
 }) => {
-  const percentage = (Number(currentProgress) / Number(goal)) * 100;
+  const percentage = (Number(currentProgress) / Number(target)) * 100;
 
   return (
     <div>

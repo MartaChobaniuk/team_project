@@ -708,6 +708,30 @@
     }
   }
 
+  &__list {
+    @include mixin.on-mobile {
+      @include mixin.flex(flex, center, false, column);
+      width: 100%;
+      cursor: pointer;
+    }
+
+    @include mixin.on-tablet {
+      @include mixin.flex(flex, center, false, column);
+      width: 100%;
+      cursor: pointer;
+    }
+
+    @include mixin.on-tablet-2 {
+      @include mixin.flex(flex, center, false, column);
+      width: 100%;
+      cursor: pointer;
+    }
+
+    @include mixin.on-desktop {
+      display: none;
+    }
+  }
+
   &__dropdown {
     @include mixin.on-mobile {
       @include mixin.flex(flex, center, space-between, row);
@@ -786,5 +810,23 @@
     background-color: var.$dark-gray;
     padding: 8px;
     border-radius: 0 0 20px 20px;
+  }
+
+  &__status {
+    @include mixin.body-text-desktop-tablet;
+    color: var.$grey;
+
+    &--progress {
+      color: var.$success;
+    }
+  }
+
+  &__main-assist {
+    @include mixin.body-text-desktop-tablet;
+    color: var.$warning;
+
+    &--progress {
+      color: var.$success;
+    }
   }
 }

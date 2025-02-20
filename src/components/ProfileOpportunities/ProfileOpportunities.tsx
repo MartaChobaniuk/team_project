@@ -9,6 +9,8 @@ import arrow_up from '../../images/icons/arrow_up_white (2).svg';
 import arrow_down from '../../images/icons/arrow_down_white.svg';
 import { Loader } from '../Loader';
 import { NewOpportunityType } from '../../types/NewOpportunityType';
+import { Link } from 'react-router-dom';
+import { usePathChecker } from '../../helpers/usePathChecker';
 
 export const ProfileOpportunities = () => {
   const { pathname } = useLocation();
@@ -24,6 +26,7 @@ export const ProfileOpportunities = () => {
   const [postedOpportunities, setPostedOpportunities] = useState<NewOpportunityType[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
+  const { isExplore, isVolunteering, isWishes, isDonate } = usePathChecker();
 
   useEffect(() => {
     const handleStorageChange = () => {
@@ -112,6 +115,16 @@ export const ProfileOpportunities = () => {
 
     getUserAccountDetails();
   }, []);
+
+  const basePath = isExplore
+    ? Path.Explore
+    : isVolunteering
+      ? Path.Volunteering
+      : isWishes
+        ? Path.Wishes
+        : isDonate
+          ? Path.Donate
+          : '';
 
   const toggleOpen = (id: string) => {
     setOpenDropdown(prev => (prev === id ? null : id));
@@ -382,24 +395,46 @@ export const ProfileOpportunities = () => {
                     <div key={event.id ?? index} className={styles.opport__row}>
                       <span>{event.title}</span>
                       <span>{event.opportunityType}</span>
-                      <span>{event.assistanceType}</span>
-                      <span>{event.currentProgress}</span>
-                      <button
+                      <span
+                        className={cn(styles['opport__main-assist'], {
+                          [styles['opport__main-assist--progress']]:
+                            event.status === 'IN_PROGRESS',
+                        })}
+                      >
+                        {event.opportunityType === 'WISHES'
+                          ? `${event.target} / ${event.currentProgress} ₴ collected`
+                          : `${event.target} / ${event.currentProgress} participants`}
+                      </span>
+                      <span
+                        className={cn(styles.opport__status, {
+                          [styles['opport__status--progress']]:
+                            event.status === 'IN_PROGRESS',
+                        })}
+                      >
+                        {event.status === 'Unknown'
+                          ? 'IN_PROGRESS'
+                          : event.status}
+                      </span>
+                      <Link
+                        to={`${basePath}/${event.id}`}
                         className={styles['opport__button-detail']}
                         aria-label={`View details for ${event.title}`}
                       >
                         View details
-                      </button>
+                      </Link>
                     </div>
                   ))
                 ) : (
                   <div>No opportunities available.</div>
                 )}
               </div>
-              <div className={styles.opport__dropdown}>
+              <div className={styles.opport__list}>
                 {postedOpportunities.length > 0 ? (
                   postedOpportunities.map((event, index: number) => (
-                    <div key={event.id ?? `fallback-${index}-${Math.random()}`}>
+                    <div
+                      key={event.id ?? `fallback-${index}-${Math.random()}`}
+                      className={styles.opport__dropdown}
+                    >
                       <button
                         className={styles['opport__dropdown-button']}
                         onClick={e => {

@@ -34,9 +34,6 @@ export const EventsProvider: React.FC<Props> = ({ children }) => {
     try {
       const data = await getEvents();
 
-      // eslint-disable-next-line no-console
-      console.log('Events:', data);
-
       setEvents(data);
     } catch {
       setEvents([]);

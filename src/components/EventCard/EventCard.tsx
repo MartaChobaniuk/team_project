@@ -53,7 +53,7 @@ export const EventCard: React.FC<Props> = ({ event }) => {
       </div>
       <h4 className={styles.event__title}>{event.title}</h4>
       <ProgressBar
-        goal={event.target}
+        target={event.target}
         currentProgress={event.currentProgress}
         opportunityType={event.opportunityType}
         assistanceType={event.assistanceType}

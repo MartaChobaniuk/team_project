@@ -28,4 +28,5 @@ export type NewOpportunityType = {
   descriptionLink: string;
   document: string;
   currentProgress: string | number;
+  status: string;
 };
