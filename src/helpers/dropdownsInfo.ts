@@ -10,9 +10,9 @@ export const categoryId: Record<string, string> = {
   '7636e8b3-06ea-4d58-8b73-f35d90d0a6b9': 'Animal Rescue',
 };
 
-export const opportunityType = ['Voluntary', 'Wishes'];
+export const opportunityType = ['VOLUNTARY', 'WISHES'];
 
-export const assistanceType = ['Volunteering', 'Donation'];
+export const assistanceType = ['VOLUNTEERING', 'DONATION'];
 
 export const region = [
   'Kyiv',

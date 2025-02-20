@@ -398,7 +398,7 @@ export const ProfileOpportunities = () => {
                             event.status === 'Completed',
                         })}
                       >
-                        {event.opportunityType === 'Wishes'
+                        {event.opportunityType === 'WISHES'
                           ? `${event.target} / ${event.currentProgress ?? 0} ₴ collected`
                           : `${event.target} / ${event.currentProgress ?? 0} participants`}
                       </span>
@@ -413,7 +413,7 @@ export const ProfileOpportunities = () => {
                         {event.status}
                       </span>
                       <Link
-                        to={`/${event.opportunityType === 'Wishes' ? isWishes : isVolunteering}/${event.id}`}
+                        to={`/${event.opportunityType === 'WISHES' ? isWishes : isVolunteering}/${event.id}`}
                         className={styles['opport__button-detail']}
                         aria-label={`View details for ${event.title}`}
                       >
