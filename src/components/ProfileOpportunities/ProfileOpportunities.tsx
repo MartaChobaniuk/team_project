@@ -452,64 +452,67 @@ export const ProfileOpportunities = () => {
                             alt="Arrow Down"
                           />
                         </div>
-
-                        {openDropdown === event.id && (
-                          <div className={styles.opport__info}>
-                            <div>
-                              <span className={styles['opport__detail-name']}>
-                                Type:
-                              </span>
-                              <span className={styles['opport__detail-value']}>
-                                {event.opportunityType}
-                              </span>
-                            </div>
-                            <div>
-                              <span className={styles['opport__detail-name']}>
-                                Main Assistance Progress:
-                              </span>
-                              <span
-                                className={cn(
-                                  styles['opport__detail-value'],
-                                  styles['opport__main-assist'],
-                                  {
-                                    [styles['opport__main-assist--progress']]:
-                                      event.status === 'In progress',
-                                    [styles['opport__main-assist--completed']]:
-                                      event.status === 'Completed',
-                                  },
-                                )}
-                              >
-                                {event.opportunityType === 'WISHES'
-                                  ? `${event.target} / ${event.currentProgress ?? 0} ₴ collected`
-                                  : `${event.target} / ${event.currentProgress ?? 0} participants`}
-                              </span>
-                            </div>
-                            <div>
-                              <span className={styles['opport__detail-name']}>
-                                Status:
-                              </span>
-                              <span
-                                className={cn(
-                                  styles['opport__detail-value'],
-                                  styles.opport__status,
-                                  {
-                                    [styles['opport__status--progress']]:
-                                      event.status === 'In progress',
-                                    [styles['opport__status--completed']]:
-                                      event.status === 'Completed',
-                                  },
-                                )}
-                              >
-                                {event.status}
-                              </span>
-                            </div>
-                            <button className={styles['opport__button-detail']}>
-                              Submit a report
-                            </button>
-                          </div>
-                        )}
                       </div>
                       <div className={styles.opport__line}></div>
+                      {openDropdown === event.id && (
+                        <div className={styles.opport__info}>
+                          <div>
+                            <span className={styles['opport__detail-name']}>
+                              Type:
+                            </span>
+                            <span className={styles['opport__detail-value']}>
+                              {event.opportunityType}
+                            </span>
+                          </div>
+                          <div>
+                            <span className={styles['opport__detail-name']}>
+                              Main Assistance Progress:
+                            </span>
+                            <span
+                              className={cn(
+                                styles['opport__detail-value'],
+                                styles['opport__main-assist'],
+                                {
+                                  [styles['opport__main-assist--progress']]:
+                                    event.status === 'In progress',
+                                  [styles['opport__main-assist--completed']]:
+                                    event.status === 'Completed',
+                                },
+                              )}
+                            >
+                              {event.opportunityType === 'WISHES'
+                                ? `${event.target} / ${event.currentProgress ?? 0} ₴ collected`
+                                : `${event.target} / ${event.currentProgress ?? 0} participants`}
+                            </span>
+                          </div>
+                          <div>
+                            <span className={styles['opport__detail-name']}>
+                              Status:
+                            </span>
+                            <span
+                              className={cn(
+                                styles['opport__detail-value'],
+                                styles.opport__status,
+                                {
+                                  [styles['opport__status--progress']]:
+                                    event.status === 'In progress',
+                                  [styles['opport__status--completed']]:
+                                    event.status === 'Completed',
+                                },
+                              )}
+                            >
+                              {event.status}
+                            </span>
+                          </div>
+                          <Link
+                            to={`${event.opportunityType === 'WISHES' ? '/wishes' : '/volunteering'}/${event.id}`}
+                            className={styles['opport__button-detail']}
+                            aria-label={`View details for ${event.title}`}
+                          >
+                            View details
+                          </Link>
+                        </div>
+                      )}
                     </React.Fragment>
                   ))
                 ) : (
