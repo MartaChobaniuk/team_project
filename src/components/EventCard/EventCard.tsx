@@ -6,6 +6,7 @@ import { EventType } from '../../types/EventType';
 import { ProgressBar } from '../ProgressBar';
 import { usePathChecker } from '../../helpers/usePathChecker';
 import { Path } from '../../utils/constants';
+import { categoryId } from '../../helpers/dropdownsInfo';
 
 type Props = {
   event: EventType;
@@ -13,6 +14,17 @@ type Props = {
 
 export const EventCard: React.FC<Props> = ({ event }) => {
   const { isExplore, isVolunteering, isWishes, isDonate } = usePathChecker();
+
+  const formatDate = (dateString: string) => {
+    const date = new Date(dateString);
+    const options: Intl.DateTimeFormatOptions = {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+    };
+
+    return date.toLocaleDateString('en-US', options);
+  };
 
   const basePath = isExplore
     ? Path.Explore
@@ -47,12 +59,12 @@ export const EventCard: React.FC<Props> = ({ event }) => {
         assistanceType={event.assistanceType}
       />
       <div className={styles.event__types}>
-        <p>{event.categoryId}</p>
+        <p>{categoryId[event.categoryId] || 'Category'}</p>
       </div>
       <div className={styles.event__details}>
-        <p>{event.region}</p> /
         <p>
-          {event.startingDate},{event.startHour} {event.startMinute}
+          {event.region} / {formatDate(event.startingDate)} / {event.startHour}.
+          {event.startMinute}
         </p>
       </div>
     </Link>

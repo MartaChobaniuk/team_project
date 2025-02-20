@@ -6,7 +6,8 @@ export const categoryId: Record<string, string> = {
   '807af9ec-424f-4f9a-a756-e17d4b60f3a4': 'Mental Health',
   '906431b6-07de-441a-91fb-38fa069356d9': 'Education & Mentorship',
   '8fde5b19-bbc1-4188-b3e0-eb540a9bb644': 'Community & Local Initiatives',
-  '123': 'Cultural & Historical Preservation',
+  '26b9055c-e94a-4869-a89c-35efc5951492': 'Cultural & Historical Preservation',
+  '7636e8b3-06ea-4d58-8b73-f35d90d0a6b9': 'Animal Rescue',
 };
 
 export const opportunityType = ['Voluntary', 'Wishes'];

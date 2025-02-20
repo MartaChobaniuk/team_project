@@ -66,7 +66,8 @@ export const ProfileOpportunities = () => {
 
       try {
         const response = await fetch(
-          'https://dewvdtfd5m.execute-api.eu-north-1.amazonaws.com/dev/account',
+          // eslint-disable-next-line max-len
+          'https://dewvdtfd5m.execute-api.eu-north-1.amazonaws.com/dev/account/with-events',
           {
             method: 'GET',
             headers: {
@@ -92,13 +93,16 @@ export const ProfileOpportunities = () => {
 
         const data = await response.json();
 
-        if (!data || !Array.isArray(data.postedOpportunities)) {
+        if (!data || !Array.isArray(data.events)) {
           setError('Error: Invalid data structure received.');
 
           return;
         }
 
-        setPostedOpportunities(data.postedOpportunities);
+        // eslint-disable-next-line no-console
+        console.log('data:', data);
+
+        setPostedOpportunities(data.events);
       } catch (errorMes) {
         setError('Network error. Please check your connection.');
       } finally {
@@ -368,18 +372,23 @@ export const ProfileOpportunities = () => {
                   <span>Type</span>
                   <span>Main Assistance Progress</span>
                   <span>Status</span>
-                  <span>Leave Feedback</span>
+                  <span>Details</span>
                 </div>
                 <div className={styles['opport__line-grid']}></div>
-                {postedOpportunities.length > 0 ? (
-                  postedOpportunities.map(event => (
-                    <div key={event.id} className={styles.opport__row}>
+                {loading ? (
+                  <div>Loading opportunities...</div>
+                ) : postedOpportunities.length > 0 ? (
+                  postedOpportunities.map((event, index) => (
+                    <div key={event.id ?? index} className={styles.opport__row}>
                       <span>{event.title}</span>
                       <span>{event.opportunityType}</span>
                       <span>{event.assistanceType}</span>
                       <span>{event.currentProgress}</span>
-                      <button className={styles['opport__button-detail']}>
-                        Submit a report
+                      <button
+                        className={styles['opport__button-detail']}
+                        aria-label={`View details for ${event.title}`}
+                      >
+                        View details
                       </button>
                     </div>
                   ))
@@ -389,8 +398,8 @@ export const ProfileOpportunities = () => {
               </div>
               <div className={styles.opport__dropdown}>
                 {postedOpportunities.length > 0 ? (
-                  postedOpportunities.map((event: NewOpportunityType) => (
-                    <div key={event.id}>
+                  postedOpportunities.map((event, index: number) => (
+                    <div key={event.id ?? `fallback-${index}-${Math.random()}`}>
                       <button
                         className={styles['opport__dropdown-button']}
                         onClick={e => {

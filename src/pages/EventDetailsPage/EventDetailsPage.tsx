@@ -14,6 +14,10 @@ import PhoneInput from 'react-phone-input-2';
 
 export const EventDetailsPage = () => {
   const { eventId } = useParams<{ eventId: string }>();
+  // eslint-disable-next-line prettier/prettier
+
+  console.log('Event ID from useParams:', eventId);
+
   const navigate = useNavigate();
   const auth = useAuth();
   const isAuthenticated = auth?.user;
@@ -21,19 +25,24 @@ export const EventDetailsPage = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [isVisible, setIsVisible] = useState(false);
-  const [isDarkBackground, setIsDarkBackground] = useState(false);
   const [formParticipate, setFormParticipate] = useState(false);
   const [formDonation, setFormDonation] = useState(false);
 
   useEffect(() => {
     const fetchEventDetails = async () => {
       try {
-        setIsLoading(true);
-        if (eventId) {
-          const data = await getEventById(eventId);
+        if (!eventId) {
+          setError('Event ID is missing');
 
-          setEvent(data);
+          return;
         }
+
+        setIsLoading(true);
+
+        const data = await getEventById(eventId);
+
+        console.log('Fetched event data:', data);
+        setEvent(data);
       } catch (err) {
         setError('No details');
       } finally {
@@ -41,9 +50,7 @@ export const EventDetailsPage = () => {
       }
     };
 
-    if (eventId) {
-      fetchEventDetails();
-    }
+    fetchEventDetails();
   }, [eventId]);
 
   useEffect(() => {
@@ -53,55 +60,6 @@ export const EventDetailsPage = () => {
 
     return () => clearTimeout(timer);
   }, []);
-
-  useEffect(() => {
-    const analyzeImageBrightness = () => {
-      if (!event?.coverImage) {
-        return;
-      }
-
-      const img = new Image();
-
-      img.crossOrigin = 'anonymous';
-      img.src = event.coverImage;
-
-      img.onload = () => {
-        const canvas = document.createElement('canvas');
-        const ctx = canvas.getContext('2d');
-
-        if (!ctx) {
-          return;
-        }
-
-        const width = 10;
-        const height = 10;
-
-        canvas.width = width;
-        canvas.height = height;
-
-        ctx.drawImage(img, 0, 0, width, height);
-        const imageData = ctx.getImageData(0, 0, width, height);
-        const { data } = imageData;
-
-        let totalBrightness = 0;
-
-        for (let i = 0; i < data.length; i += 4) {
-          const r = data[i];
-          const g = data[i + 1];
-          const b = data[i + 2];
-          const brightness = 0.299 * r + 0.587 * g + 0.114 * b;
-
-          totalBrightness += brightness;
-        }
-
-        const avgBrightness = totalBrightness / (width * height);
-
-        setIsDarkBackground(avgBrightness < 128);
-      };
-    };
-
-    analyzeImageBrightness();
-  }, [event?.coverImage]);
 
   const handleClick = () => {
     if (!event) {
@@ -146,7 +104,6 @@ export const EventDetailsPage = () => {
       <div
         className={cn(styles['event-details__content-top'], {
           [styles['event-details__content-top--visible']]: isVisible,
-          [styles['event-details__content-top--is-dark']]: isDarkBackground,
         })}
         style={{
           backgroundImage: event.coverImage
@@ -170,7 +127,8 @@ export const EventDetailsPage = () => {
         <div className={styles['event-details__block-names']}>
           <h2 className={styles['event-details__main-title']}>{event.title}</h2>
           <p className={styles['event-details__subtitle']}>
-            {`${event.categoryId} / ${event.address} / ${new Date(event.startingDate).toLocaleString('uk-UA')}`}
+            {`${event.categoryId || 'Unknown'} / ${event.address || 'No address provided'} 
+            / ${new Date(event.startingDate).toLocaleString('uk-UA')}`}
           </p>
           <div className={styles['event-details__shell']}>
             <div className={styles['event-details__buttons']}>

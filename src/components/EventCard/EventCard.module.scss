@@ -2,8 +2,9 @@
 @use "../../utils/variables" as var;
 
 .event {
-  width: 350px;
-  height: max-content;
+  box-sizing: border-box;
+  width: 360px;
+  height: 350px;
   display: flex;
   flex-direction: column;
   gap: 5px;
@@ -14,6 +15,8 @@
 
   &__container-img {
     position: relative;
+    width: 350px;
+    height: 250px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -40,8 +43,9 @@
 
   &__img {
     width: 100%;
+    height: 100%;
     border-radius: 15px 15px 0 0;
-    object-fit: contain;
+    object-fit: cover;
     object-position: center;
   }
 
@@ -49,6 +53,7 @@
     @include mixin.h4-desktop-tablet;
     color: var.$black;
     text-transform: uppercase;
+    height: 35px;
   }
 
   &__types,

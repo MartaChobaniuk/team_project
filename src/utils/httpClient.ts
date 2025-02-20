@@ -1,7 +1,12 @@
 export const BASE_URL = `https://dewvdtfd5m.execute-api.eu-north-1.amazonaws.com/dev`;
 
-const handleResponse = (response: Response) => {
+const handleResponse = async (response: Response) => {
   if (!response.ok) {
+    const error = await response.text();
+
+    throw new Error(
+      `API error: ${response.status} ${response.statusText} - ${error}`,
+    );
   }
 
   return response.json();

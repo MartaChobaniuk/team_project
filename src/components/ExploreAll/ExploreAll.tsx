@@ -238,9 +238,10 @@ export const ExploreAll = () => {
               <p className={styles['explore__error-text']}>{errorMessage}</p>
             </div>
           )}
+
           {filteredEvent.length > 0 &&
-            filteredEvent.map(event => (
-              <EventCard key={event.id} event={event} />
+            filteredEvent.map((event, index) => (
+              <EventCard key={event.id ?? `fallback-${index}`} event={event} />
             ))}
 
           {!errorMessage && filteredEvent.length === 0 && (
