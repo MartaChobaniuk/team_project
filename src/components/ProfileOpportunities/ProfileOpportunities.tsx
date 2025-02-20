@@ -96,6 +96,14 @@ export const ProfileOpportunities = () => {
         }
 
         const data = await response.json();
+        const eventId = data.id;
+
+        if (!eventId) {
+          setError('Error: Event ID not found.');
+
+          return;
+        }
+
         const events = Array.isArray(data?.events) ? data.events : [];
 
         if (!events.length) {
@@ -392,10 +400,10 @@ export const ProfileOpportunities = () => {
                       <span
                         className={cn(styles['opport__main-assist'], {
                           [styles['opport__main-assist--progress']]:
-                            event.status === 'IN_PROGRESS' ||
+                            event.status === 'In progress' ||
                             event.status === 'Unknown',
                           [styles['opport__main-assist--completed']]:
-                            event.status === 'COMPLETED',
+                            event.status === 'Completed',
                         })}
                       >
                         {event.opportunityType === 'Wishes'
@@ -405,15 +413,12 @@ export const ProfileOpportunities = () => {
                       <span
                         className={cn(styles.opport__status, {
                           [styles['opport__status--progress']]:
-                            event.status === 'IN_PROGRESS' ||
-                            event.status === 'Unknown',
+                            event.status === 'In progress',
                           [styles['opport__status--completed']]:
-                            event.status === 'COMPLETED',
+                            event.status === 'Completed',
                         })}
                       >
-                        {event.status === 'Unknown'
-                          ? 'IN_PROGRESS'
-                          : event.status}
+                        {event.status}
                       </span>
                       <Link
                         to={`${event.opportunityType === 'Wishes' ? isWishes : isVolunteering}/${event.id}`}
