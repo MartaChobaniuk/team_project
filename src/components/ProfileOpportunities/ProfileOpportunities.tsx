@@ -1,6 +1,6 @@
 /* eslint-disable no-console */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useLocation, useNavigate, NavLink } from 'react-router-dom';
 import cn from 'classnames';
 import styles from './ProfileOpportunities.module.scss';
@@ -11,7 +11,6 @@ import arrow_down from '../../images/icons/arrow_down_white.svg';
 import { Loader } from '../Loader';
 import { NewOpportunityType } from '../../types/NewOpportunityType';
 import { Link } from 'react-router-dom';
-import { usePathChecker } from '../../helpers/usePathChecker';
 
 export const ProfileOpportunities = () => {
   const { pathname } = useLocation();
@@ -27,7 +26,6 @@ export const ProfileOpportunities = () => {
   const [postedOpportunities, setPostedOpportunities] = useState<NewOpportunityType[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
-  const { isVolunteering, isWishes } = usePathChecker();
 
   useEffect(() => {
     const handleStorageChange = () => {
@@ -413,7 +411,7 @@ export const ProfileOpportunities = () => {
                         {event.status}
                       </span>
                       <Link
-                        to={`/${event.opportunityType === 'WISHES' ? isWishes : isVolunteering}/${event.id}`}
+                        to={`${event.opportunityType === 'WISHES' ? '/wishes' : '/volunteering'}/${event.id}`}
                         className={styles['opport__button-detail']}
                         aria-label={`View details for ${event.title}`}
                       >
@@ -428,68 +426,95 @@ export const ProfileOpportunities = () => {
               <div className={styles.opport__list}>
                 {postedOpportunities.length > 0 ? (
                   postedOpportunities.map((event, index: number) => (
-                    <div
+                    <React.Fragment
                       key={event.id ?? `fallback-${index}-${Math.random()}`}
-                      className={styles.opport__dropdown}
                     >
-                      <button
-                        className={styles['opport__dropdown-button']}
-                        onClick={e => {
-                          e.preventDefault();
-                          toggleOpen(event.id);
-                        }}
-                      >
-                        <span className={styles.opport__select}>
-                          {event.title}
-                        </span>
-                      </button>
-                      <div className={styles['opport__dropdown-img-container']}>
-                        <img
-                          className={styles['opport__dropdown-img']}
-                          src={
-                            openDropdown === event.id ? arrow_up : arrow_down
-                          }
-                          alt="Arrow Down"
-                        />
-                      </div>
-
-                      {openDropdown === event.id && (
-                        <div className={styles.opport__info}>
-                          <div>
-                            <span className={styles['opport__detail-name']}>
-                              Type:
-                            </span>
-                            <span className={styles['opport__detail-value']}>
-                              {event.opportunityType}
-                            </span>
-                          </div>
-                          <div>
-                            <span className={styles['opport__detail-name']}>
-                              Main Assistance Progress:
-                            </span>
-                            <span className={styles['opport__detail-value']}>
-                              {event.assistanceType}
-                            </span>
-                          </div>
-                          <div>
-                            <span className={styles['opport__detail-name']}>
-                              Status:
-                            </span>
-                            <span className={styles['opport__detail-value']}>
-                              {event.currentProgress}
-                            </span>
-                          </div>
-                          <button className={styles['opport__button-detail']}>
-                            Submit a report
-                          </button>
+                      <div className={styles.opport__dropdown}>
+                        <button
+                          className={styles['opport__dropdown-button']}
+                          onClick={e => {
+                            e.preventDefault();
+                            toggleOpen(event.id);
+                          }}
+                        >
+                          <span className={styles.opport__select}>
+                            {event.title}
+                          </span>
+                        </button>
+                        <div
+                          className={styles['opport__dropdown-img-container']}
+                        >
+                          <img
+                            className={styles['opport__dropdown-img']}
+                            src={
+                              openDropdown === event.id ? arrow_up : arrow_down
+                            }
+                            alt="Arrow Down"
+                          />
                         </div>
-                      )}
-                    </div>
+
+                        {openDropdown === event.id && (
+                          <div className={styles.opport__info}>
+                            <div>
+                              <span className={styles['opport__detail-name']}>
+                                Type:
+                              </span>
+                              <span className={styles['opport__detail-value']}>
+                                {event.opportunityType}
+                              </span>
+                            </div>
+                            <div>
+                              <span className={styles['opport__detail-name']}>
+                                Main Assistance Progress:
+                              </span>
+                              <span
+                                className={cn(
+                                  styles['opport__detail-value'],
+                                  styles['opport__main-assist'],
+                                  {
+                                    [styles['opport__main-assist--progress']]:
+                                      event.status === 'In progress',
+                                    [styles['opport__main-assist--completed']]:
+                                      event.status === 'Completed',
+                                  },
+                                )}
+                              >
+                                {event.opportunityType === 'WISHES'
+                                  ? `${event.target} / ${event.currentProgress ?? 0} ₴ collected`
+                                  : `${event.target} / ${event.currentProgress ?? 0} participants`}
+                              </span>
+                            </div>
+                            <div>
+                              <span className={styles['opport__detail-name']}>
+                                Status:
+                              </span>
+                              <span
+                                className={cn(
+                                  styles['opport__detail-value'],
+                                  styles.opport__status,
+                                  {
+                                    [styles['opport__status--progress']]:
+                                      event.status === 'In progress',
+                                    [styles['opport__status--completed']]:
+                                      event.status === 'Completed',
+                                  },
+                                )}
+                              >
+                                {event.status}
+                              </span>
+                            </div>
+                            <button className={styles['opport__button-detail']}>
+                              Submit a report
+                            </button>
+                          </div>
+                        )}
+                      </div>
+                      <div className={styles.opport__line}></div>
+                    </React.Fragment>
                   ))
                 ) : (
                   <p>No opportunities available</p>
                 )}
-                <div className={styles.opport__line}></div>
               </div>
             </div>
           </div>
