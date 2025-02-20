@@ -817,15 +817,23 @@
     color: var.$grey;
 
     &--progress {
+      color: var.$warning;
+    }
+
+    &--completed {
       color: var.$success;
     }
   }
 
   &__main-assist {
     @include mixin.body-text-desktop-tablet;
-    color: var.$warning;
+    color: var.$grey;
 
     &--progress {
+      color: var.$warning;
+    }
+
+    &--completed {
       color: var.$success;
     }
   }

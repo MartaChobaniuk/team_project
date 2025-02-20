@@ -27,7 +27,7 @@ export const ProfileOpportunities = () => {
   const [postedOpportunities, setPostedOpportunities] = useState<NewOpportunityType[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
-  const { isExplore, isVolunteering, isWishes, isDonate } = usePathChecker();
+  const { isVolunteering, isWishes } = usePathChecker();
 
   useEffect(() => {
     const handleStorageChange = () => {
@@ -96,17 +96,17 @@ export const ProfileOpportunities = () => {
         }
 
         const data = await response.json();
+        const events = Array.isArray(data?.events) ? data.events : [];
 
-        if (!data || !Array.isArray(data.events)) {
-          setError('Error: Invalid data structure received.');
+        if (!events.length) {
+          setError(
+            'Error: Invalid data structure received or empty events array.',
+          );
 
           return;
         }
 
-        // eslint-disable-next-line no-console
-        console.log('data:', data);
-
-        setPostedOpportunities(data.events);
+        setPostedOpportunities(events);
       } catch (errorMes) {
         setError('Network error. Please check your connection.');
       } finally {
@@ -116,16 +116,6 @@ export const ProfileOpportunities = () => {
 
     getUserAccountDetails();
   }, []);
-
-  const basePath = isExplore
-    ? Path.Explore
-    : isVolunteering
-      ? Path.Volunteering
-      : isWishes
-        ? Path.Wishes
-        : isDonate
-          ? Path.Donate
-          : '';
 
   const toggleOpen = (id: string) => {
     setOpenDropdown(prev => (prev === id ? null : id));
@@ -137,7 +127,6 @@ export const ProfileOpportunities = () => {
 
   console.log('ProfileOpportunities rendered');
   console.log('Event data:', postedOpportunities);
-  console.log('Base path', basePath);
 
   return (
     <div className={styles.opport}>
@@ -405,6 +394,8 @@ export const ProfileOpportunities = () => {
                           [styles['opport__main-assist--progress']]:
                             event.status === 'IN_PROGRESS' ||
                             event.status === 'Unknown',
+                          [styles['opport__main-assist--completed']]:
+                            event.status === 'COMPLETED',
                         })}
                       >
                         {event.opportunityType === 'Wishes'
@@ -416,6 +407,8 @@ export const ProfileOpportunities = () => {
                           [styles['opport__status--progress']]:
                             event.status === 'IN_PROGRESS' ||
                             event.status === 'Unknown',
+                          [styles['opport__status--completed']]:
+                            event.status === 'COMPLETED',
                         })}
                       >
                         {event.status === 'Unknown'
@@ -423,7 +416,7 @@ export const ProfileOpportunities = () => {
                           : event.status}
                       </span>
                       <Link
-                        to={`${basePath}/${event.id}`}
+                        to={`${event.opportunityType === 'Wishes' ? isWishes : isVolunteering}/${event.id}`}
                         className={styles['opport__button-detail']}
                         aria-label={`View details for ${event.title}`}
                       >
