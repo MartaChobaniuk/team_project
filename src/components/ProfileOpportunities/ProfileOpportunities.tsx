@@ -393,8 +393,7 @@ export const ProfileOpportunities = () => {
                       <span
                         className={cn(styles['opport__main-assist'], {
                           [styles['opport__main-assist--progress']]:
-                            event.status === 'In progress' ||
-                            event.status === 'Unknown',
+                            event.status === 'In progress',
                           [styles['opport__main-assist--completed']]:
                             event.status === 'Completed',
                         })}
@@ -414,7 +413,7 @@ export const ProfileOpportunities = () => {
                         {event.status}
                       </span>
                       <Link
-                        to={`${event.opportunityType === 'Wishes' ? isWishes : isVolunteering}/${event.id}`}
+                        to={`/${event.opportunityType === 'Wishes' ? isWishes : isVolunteering}/${event.id}`}
                         className={styles['opport__button-detail']}
                         aria-label={`View details for ${event.title}`}
                       >
