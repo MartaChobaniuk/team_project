@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect, useRef, useState } from 'react';
 import { useLocation, useNavigate, NavLink } from 'react-router-dom';
@@ -133,6 +134,10 @@ export const ProfileOpportunities = () => {
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setQuery(e.target.value);
   };
+
+  console.log('ProfileOpportunities rendered');
+  console.log('Event data:', postedOpportunities);
+  console.log('Base path', basePath);
 
   return (
     <div className={styles.opport}>
@@ -398,17 +403,19 @@ export const ProfileOpportunities = () => {
                       <span
                         className={cn(styles['opport__main-assist'], {
                           [styles['opport__main-assist--progress']]:
-                            event.status === 'IN_PROGRESS',
+                            event.status === 'IN_PROGRESS' ||
+                            event.status === 'Unknown',
                         })}
                       >
-                        {event.opportunityType === 'WISHES'
-                          ? `${event.target} / ${event.currentProgress} ₴ collected`
-                          : `${event.target} / ${event.currentProgress} participants`}
+                        {event.opportunityType === 'Wishes'
+                          ? `${event.target} / ${event.currentProgress ?? 0} ₴ collected`
+                          : `${event.target} / ${event.currentProgress ?? 0} participants`}
                       </span>
                       <span
                         className={cn(styles.opport__status, {
                           [styles['opport__status--progress']]:
-                            event.status === 'IN_PROGRESS',
+                            event.status === 'IN_PROGRESS' ||
+                            event.status === 'Unknown',
                         })}
                       >
                         {event.status === 'Unknown'
@@ -492,8 +499,8 @@ export const ProfileOpportunities = () => {
                 ) : (
                   <p>No opportunities available</p>
                 )}
+                <div className={styles.opport__line}></div>
               </div>
-              <div className={styles.opport__line}></div>
             </div>
           </div>
         </div>
