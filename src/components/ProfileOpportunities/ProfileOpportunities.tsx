@@ -96,13 +96,6 @@ export const ProfileOpportunities = () => {
         }
 
         const data = await response.json();
-        const eventId = data.id;
-
-        if (!eventId) {
-          setError('Error: Event ID not found.');
-
-          return;
-        }
 
         const events = Array.isArray(data?.events) ? data.events : [];
 
