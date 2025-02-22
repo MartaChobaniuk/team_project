@@ -1,4 +1,5 @@
-import { useCallback, useContext, useEffect, useState } from 'react';
+/* eslint-disable no-console */
+import { useCallback, useContext, useEffect, useRef, useState } from 'react';
 import cn from 'classnames';
 import styles from './ExploreAll.module.scss';
 import { Link, useLocation } from 'react-router-dom';
@@ -12,6 +13,7 @@ import { EventType } from '../../types/EventType';
 import { filteredEv } from '../../helpers/getSortedEvents';
 import { EventCard } from '../EventCard';
 import { Loader } from '../Loader';
+import { getFiltersFromURL } from '../../helpers/getFiltersFromURL';
 
 export const ExploreAll = () => {
   const { pathname } = useLocation();
@@ -20,23 +22,70 @@ export const ExploreAll = () => {
   const [query, setQuery] = useState('');
   const [isFiltersOpen, setIsFiltersOpen] = useState<boolean>(false);
   const [isScrolled, setIsScrolled] = useState<boolean>(false);
-  const [isFixed, setIsFixed] = useState<boolean>(false);
   const [filters, setFilters] = useState<FilterSelection>({});
   const [filteredEvent, setFilteredEvent] = useState<EventType[]>([]);
+  const bottomRef = useRef<HTMLDivElement>(null);
+
+  const updateFiltersInURL = useCallback((filterSearch: FilterSelection) => {
+    const urlParams = new URLSearchParams();
+
+    if (filterSearch.startDate) {
+      urlParams.set('startDate', filterSearch.startDate.toISOString());
+    }
+
+    if (filterSearch.endDate) {
+      urlParams.set('endDate', filterSearch.endDate.toISOString());
+    }
+
+    if (filterSearch.categoryId) {
+      urlParams.set('categoryId', filterSearch.categoryId);
+    }
+
+    if (filterSearch.opportunityType) {
+      urlParams.set('opportunityType', filterSearch.opportunityType);
+    }
+
+    if (filterSearch.assistanceType) {
+      urlParams.set('assistanceType', filterSearch.assistanceType);
+    }
+
+    if (filterSearch.region) {
+      urlParams.set('region', filterSearch.region);
+    }
+
+    if (filterSearch.timeDemands) {
+      urlParams.set('timeDemands', filterSearch.timeDemands);
+    }
+
+    if (filterSearch.query) {
+      urlParams.set('query', filterSearch.query);
+    }
+
+    window.history.replaceState(
+      null,
+      '',
+      `${window.location.pathname}?${urlParams.toString()}`,
+    );
+  }, []);
+
+  useEffect(() => {
+    const filtersFromURL = getFiltersFromURL();
+
+    setFilters(filtersFromURL);
+  }, []);
 
   useEffect(() => {
     const handleScroll = () => {
-      const scrollY = window.scrollY;
-
-      setIsScrolled(scrollY > 50);
-      setIsFixed(scrollY > 100);
+      if (bottomRef.current) {
+        setIsScrolled(bottomRef.current.scrollTop > 50);
+      }
     };
 
-    window.addEventListener('scroll', handleScroll);
+    const bottomDiv = bottomRef.current;
 
-    return () => {
-      window.removeEventListener('scroll', handleScroll);
-    };
+    bottomDiv?.addEventListener('scroll', handleScroll);
+
+    return () => bottomDiv?.removeEventListener('scroll', handleScroll);
   }, []);
 
   useEffect(() => {
@@ -48,6 +97,8 @@ export const ExploreAll = () => {
   }, []);
 
   const filteredEvents = useCallback(() => {
+    updateFiltersInURL({ ...filters, query });
+
     if (filters || query) {
       const filtered = filteredEv(events, filters, query);
 
@@ -161,6 +212,7 @@ export const ExploreAll = () => {
         </div>
       </div>
       <div
+        ref={bottomRef}
         className={cn(styles['explore__content-bottom'], {
           [styles['explore__content-bottom--visible']]: isVisible,
           [styles['explore__content-bottom--is-filters']]: isFiltersOpen,
@@ -169,7 +221,6 @@ export const ExploreAll = () => {
         <div
           className={cn(styles['explore__search-block'], {
             [styles['explore__search-block--scrolled']]: isScrolled,
-            [styles['explore__search-block--fixed']]: isFixed,
             [styles['explore__search-block--is-filters']]: isFiltersOpen,
           })}
         >

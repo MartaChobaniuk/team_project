@@ -68,7 +68,7 @@ export const Filters: React.FC<FiltersProps> = ({
 
   useEffect(() => {
     if (isVolunteering && !selectedOptions.assistanceType) {
-      const volunteeringFilter = { assistanceType: 'Volunteering' };
+      const volunteeringFilter = { assistanceType: 'VOLUNTEERING' };
 
       setSelectedOptions(prev => ({
         ...prev,
@@ -89,7 +89,7 @@ export const Filters: React.FC<FiltersProps> = ({
 
   useEffect(() => {
     if (isWishes && !selectedOptions.assistanceType) {
-      const wishesFilter = { assistanceType: 'Donation' };
+      const wishesFilter = { assistanceType: 'DONATION' };
 
       setSelectedOptions(prev => ({
         ...prev,
@@ -110,7 +110,7 @@ export const Filters: React.FC<FiltersProps> = ({
 
   useEffect(() => {
     if (isDonate && !selectedOptions.assistanceType) {
-      const donateFilter = { assistanceType: 'Donation' };
+      const donateFilter = { assistanceType: 'DONATION' };
 
       setSelectedOptions(prev => ({
         ...prev,

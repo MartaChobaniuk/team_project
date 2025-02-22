@@ -11,6 +11,7 @@ import arrow_down from '../../images/icons/arrow_down_white.svg';
 import { Loader } from '../Loader';
 import { NewOpportunityType } from '../../types/NewOpportunityType';
 import { Link } from 'react-router-dom';
+import { useAutoAnimate } from '@formkit/auto-animate/react';
 
 export const ProfileOpportunities = () => {
   const { pathname } = useLocation();
@@ -26,6 +27,7 @@ export const ProfileOpportunities = () => {
   const [postedOpportunities, setPostedOpportunities] = useState<NewOpportunityType[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
+  const [parent] = useAutoAnimate();
 
   useEffect(() => {
     const handleStorageChange = () => {
@@ -123,9 +125,6 @@ export const ProfileOpportunities = () => {
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setQuery(e.target.value);
   };
-
-  console.log('ProfileOpportunities rendered');
-  console.log('Event data:', postedOpportunities);
 
   return (
     <div className={styles.opport}>
@@ -423,7 +422,7 @@ export const ProfileOpportunities = () => {
                   <div>No opportunities available.</div>
                 )}
               </div>
-              <div className={styles.opport__list}>
+              <div className={styles.opport__list} ref={parent}>
                 {postedOpportunities.length > 0 ? (
                   postedOpportunities.map((event, index: number) => (
                     <React.Fragment

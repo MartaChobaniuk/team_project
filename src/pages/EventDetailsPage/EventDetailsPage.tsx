@@ -14,10 +14,6 @@ import PhoneInput from 'react-phone-input-2';
 
 export const EventDetailsPage = () => {
   const { eventId } = useParams<{ eventId: string }>();
-  // eslint-disable-next-line prettier/prettier
-
-  console.log('Event ID from useParams:', eventId);
-
   const navigate = useNavigate();
   const auth = useAuth();
   const isAuthenticated = auth?.user;
@@ -41,7 +37,6 @@ export const EventDetailsPage = () => {
 
         const data = await getEventById(eventId);
 
-        console.log('Fetched event data:', data);
         setEvent(data);
       } catch (err) {
         setError('No details');

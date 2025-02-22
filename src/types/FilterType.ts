@@ -1,11 +1,10 @@
 export interface FilterSelection {
   query?: string;
-  categoryName?: string;
   categoryId?: string;
   opportunityType?: string;
   assistanceType?: string;
-  location?: string;
-  duration?: string;
+  region?: string;
+  timeDemands?: string;
   startDate?: Date | null;
   endDate?: Date | null;
 }
