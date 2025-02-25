@@ -136,26 +136,25 @@ export const EventDetailsPage = () => {
     }
   };
 
-  const handleClick = async () => {
+  const handleClick = () => {
     if (!event) {
       return;
     }
-
-    if (event.assistanceType === 'VOLUNTEERING') {
-      if (!isAuthenticated) {
-        setActiveForm('volunteering');
-      } else {
-        console.log(`Додаємо івент до профілю: ${event.id}`);
-
-        await handleSubmitAuth();
+  
+    const { assistanceType, id } = event;
+  
+    if (assistanceType === 'VOLUNTEERING') {
+      setActiveForm('volunteering');
+  
+      if (isAuthenticated) {
+        console.log(`Додаємо івент до профілю: ${id}`);
+        handleSubmitAuth();
       }
-    }
-
-    if (event.assistanceType === 'DONATION') {
+    } else if (assistanceType === 'DONATION') {
       setActiveForm('donation');
       setStepDonation(1);
     }
-  };
+  };  
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
