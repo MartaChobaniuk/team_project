@@ -77,7 +77,66 @@ export const EventDetailsPage = () => {
     return () => clearTimeout(timer);
   }, []);
 
-  const handleClick = () => {
+  const validateFields = () => {
+    const newErrors: Record<string, string> = {};
+
+    if (!formData.name.trim()) {
+      newErrors.name = 'Full name is required';
+    }
+
+    if (!formData.email.trim()) {
+      newErrors.email = 'Email is required';
+    }
+
+    if (!formData.phone.trim()) {
+      newErrors.phone = 'Phone number is required';
+    }
+
+    setErrors(newErrors);
+
+    return Object.keys(newErrors).length === 0;
+  };
+
+  const handleSubmitAuth = async () => {
+    setIsSubmitting(true);
+
+    if (!validateFields()) {
+      setIsSubmitting(false);
+
+      return;
+    }
+
+    try {
+      const token = localStorage.getItem('accessToken');
+
+      const response = await fetch(
+        `https://dewvdtfd5m.execute-api.eu-north-1.amazonaws.com/dev/events/${eventId}/authJoin`,
+        {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify(formData),
+        }
+      );
+
+      if (response.ok) {
+        alert('Дані успішно відправлено!');
+        localStorage.removeItem('eventForm');
+        setFormData({ name: '', phone: '', email: '' });
+      } else {
+        alert('Помилка відправки даних.');
+      }
+    } catch (errorMes) {
+      console.error('Error:', errorMes);
+      alert('Сталася помилка при відправці.');
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const handleClick = async () => {
     if (!event) {
       return;
     }
@@ -87,7 +146,8 @@ export const EventDetailsPage = () => {
         setActiveForm('volunteering');
       } else {
         console.log(`Додаємо івент до профілю: ${event.id}`);
-        //addToProfile(event);
+
+        await handleSubmitAuth();
       }
     }
 
@@ -130,26 +190,6 @@ export const EventDetailsPage = () => {
     });
   };
 
-  const validateFields = () => {
-    const newErrors: Record<string, string> = {};
-
-    if (!formData.name.trim()) {
-      newErrors.name = 'Full name is required';
-    }
-
-    if (!formData.email.trim()) {
-      newErrors.email = 'Email is required';
-    }
-
-    if (!formData.phone.trim()) {
-      newErrors.phone = 'Phone number is required';
-    }
-
-    setErrors(newErrors);
-
-    return Object.keys(newErrors).length === 0;
-  };
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -186,6 +226,7 @@ export const EventDetailsPage = () => {
       setIsSubmitting(false);
     }
   };
+
 
   const handleCancel = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
