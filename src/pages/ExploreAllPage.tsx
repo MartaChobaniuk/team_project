@@ -1,3 +1,3 @@
-import { ExploreAll } from '../components/ExploreAll';
+import { Explore } from '../components/Explore';
 
-export const ExploreAllPage = () => <ExploreAll />;
+export const ExploreAllPage = () => <Explore />;

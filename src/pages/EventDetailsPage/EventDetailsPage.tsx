@@ -1,3 +1,5 @@
+/* eslint-disable prettier/prettier */
+/* eslint-disable max-len */
 /* eslint-disable no-console */
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -11,6 +13,10 @@ import report from '../../images/icons/report.svg';
 import avatar from '../../images/icons/account_white.svg';
 import { useAuth } from 'react-oidc-context';
 import PhoneInput from 'react-phone-input-2';
+import { categoryId } from '../../helpers/dropdownsInfo';
+import { DonationStepOne } from '../../components/DonationStepOne';
+import { DonationStepTwo } from '../../components/DonationStepTwo';
+import { DonationStepThree } from '../../components/DonationStepThree';
 
 export const EventDetailsPage = () => {
   const { eventId } = useParams<{ eventId: string }>();
@@ -21,8 +27,23 @@ export const EventDetailsPage = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [isVisible, setIsVisible] = useState(false);
-  const [formParticipate, setFormParticipate] = useState(false);
-  const [formDonation, setFormDonation] = useState(false);
+  const [activeForm, setActiveForm] = useState<'volunteering' | 'donation' | null>(null);
+  const [stepDonation, setStepDonation] = useState(1);
+  const [formData, setFormData] = useState({
+    name: '',
+    phone: '',
+    email: '',
+  });
+  const [errors, setErrors] = useState<Record<string, string>>({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  useEffect(() => {
+    const storedData = localStorage.getItem('eventForm');
+
+    if (storedData) {
+      setFormData(JSON.parse(storedData));
+    }
+  }, []);
 
   useEffect(() => {
     const fetchEventDetails = async () => {
@@ -39,7 +60,7 @@ export const EventDetailsPage = () => {
 
         setEvent(data);
       } catch (err) {
-        setError('No details');
+        setError('No event details');
       } finally {
         setIsLoading(false);
       }
@@ -63,14 +84,130 @@ export const EventDetailsPage = () => {
 
     if (event.assistanceType === 'VOLUNTEERING') {
       if (!isAuthenticated) {
-        setFormParticipate(true);
+        setActiveForm('volunteering');
       } else {
         console.log(`Додаємо івент до профілю: ${event.id}`);
         //addToProfile(event);
       }
-    } else if (event.assistanceType === 'DONATION') {
-      setFormDonation(true);
     }
+
+    if (event.assistanceType === 'DONATION') {
+      setActiveForm('donation');
+      setStepDonation(1);
+    }
+  };
+
+  const formatDate = (dateString: string) => {
+    const date = new Date(dateString);
+    const options: Intl.DateTimeFormatOptions = {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+    };
+
+    return date.toLocaleDateString('en-US', options);
+  };
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+
+    setFormData((prev) => {
+      const updatedForm = { ...prev, [name]: value };
+
+      localStorage.setItem('eventForm', JSON.stringify(updatedForm));
+
+      return updatedForm;
+    });
+  };
+
+  const handlePhoneChange = (value: string) => {
+    setFormData((prev) => {
+      const updatedForm = { ...prev, phone: value };
+
+      localStorage.setItem('eventForm', JSON.stringify(updatedForm));
+
+      return updatedForm;
+    });
+  };
+
+  const validateFields = () => {
+    const newErrors: Record<string, string> = {};
+
+    if (!formData.name.trim()) {
+      newErrors.name = 'Full name is required';
+    }
+
+    if (!formData.email.trim()) {
+      newErrors.email = 'Email is required';
+    }
+
+    if (!formData.phone.trim()) {
+      newErrors.phone = 'Phone number is required';
+    }
+
+    setErrors(newErrors);
+
+    return Object.keys(newErrors).length === 0;
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    setIsSubmitting(true);
+
+    if (!validateFields()) {
+      setIsSubmitting(false);
+
+      return;
+    }
+
+    try {
+      const dataToSend = { ...formData, eventId };
+
+      const response = await fetch(
+        `https://dewvdtfd5m.execute-api.eu-north-1.amazonaws.com/dev/events/${eventId}/join`,
+        {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(dataToSend),
+        });
+
+      if (response.ok) {
+        alert('Дані успішно відправлено!');
+        localStorage.removeItem('eventForm');
+        setFormData({ name: '', phone: '', email: '' });
+      } else {
+        alert('Помилка відправки даних.');
+      }
+    } catch (errorMes) {
+      console.error('Error:', errorMes);
+      alert('Сталася помилка при відправці.');
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const handleCancel = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    localStorage.removeItem('eventForm');
+    setFormData({ name: '', phone: '', email: '' });
+  };
+
+  const handleCancelDonation = () => {
+    localStorage.removeItem('amount');
+    setActiveForm(null);
+  };
+
+  const handleGoBack = () => {
+    setStepDonation(1);
+  };
+
+  const handleNextStepOne = () => {
+    setStepDonation(2);
+  };
+
+  const handleNextStepTwo = () => {
+    setStepDonation(3);
   };
 
   const remaining =
@@ -79,15 +216,30 @@ export const EventDetailsPage = () => {
       : 0;
 
   if (isLoading) {
-    return <Loader />;
+    return (
+      <div className={styles.loading}>
+        <Loader />
+      </div>
+    );
   }
 
   if (error) {
-    return <p>{error}</p>;
+    return (
+      <div className={styles['error-block']}>
+        <p className={styles.error}>{error}</p>
+        <button
+          type="button"
+          className={styles['error-button']}
+          onClick={() => navigate(-1)}
+        >
+          Back
+        </button>
+      </div>
+    );
   }
 
   if (!event) {
-    return <p>Event not found</p>;
+    return <p className={styles.error}>Event not found</p>;
   }
 
   return (
@@ -122,8 +274,7 @@ export const EventDetailsPage = () => {
         <div className={styles['event-details__block-names']}>
           <h2 className={styles['event-details__main-title']}>{event.title}</h2>
           <p className={styles['event-details__subtitle']}>
-            {`${event.categoryId || 'Unknown'} / ${event.address || 'No address provided'} 
-            / ${new Date(event.startingDate).toLocaleString('uk-UA')}`}
+            {`${categoryId[event.categoryId] || 'Category'} / ${event.region} / ${formatDate(event.startingDate)} / ${event.startHour}.${event.startMinute} ${event.startPeriod}`}
           </p>
           <div className={styles['event-details__shell']}>
             <div className={styles['event-details__buttons']}>
@@ -226,89 +377,40 @@ export const EventDetailsPage = () => {
               Event Details
             </h3>
             <div className={styles['event-details__detail']}>
-              <span className={styles['event-details__name']}>
-                Required Materials & Skills:
-              </span>
+              <span className={styles['event-details__name']}>Required Materials & Skills: </span>
               <span className={styles['event-details__value']}>
                 {event.description}
               </span>
             </div>
             <div className={styles['event-details__detail']}>
-              <span className={styles['event-details__name']}>Location:</span>
+              <span className={styles['event-details__name']}>Location: </span>
               <span className={styles['event-details__value']}>
                 {event.address}
               </span>
             </div>
             <div className={styles['event-details__detail']}>
-              <span className={styles['event-details__name']}>
-                Date & time:
-              </span>
+              <span className={styles['event-details__name']}>Date & time: </span>
               <span className={styles['event-details__value']}>
-                {event.startingDate}
+                {formatDate(event.startingDate)} / {event.startHour}.
+                {event.startMinute} {event.startPeriod}
               </span>
             </div>
           </div>
         </div>
         <div className={styles['event-details__block-right']}>
-          {formParticipate ? (
-            <>
-              <p className={styles['event-details__part-title']}>
-                Leave us your contact information and we’ll get in touch.
-              </p>
-              <form className={styles['event-details__part-form']}>
-                <input
-                  className={styles['event-details__part-input']}
-                  type="text"
-                  name="fullName"
-                  placeholder="Your full name"
-                  required
-                />
-                <PhoneInput
-                  country={'ua'}
-                  inputProps={{
-                    required: true,
-                    className: styles['transparent-input'],
-                  }}
-                  buttonStyle={{
-                    background: 'transparent',
-                    border: 'none',
-                  }}
-                  containerStyle={{ background: 'transparent' }}
-                  dropdownStyle={{
-                    background: 'black',
-                    color: 'white',
-                    zIndex: '15',
-                  }}
-                />
-                <input
-                  className={styles['event-details__part-input']}
-                  type="email"
-                  name="email"
-                  placeholder="Email address"
-                  required
-                />
-              </form>
-              <div className={styles['event-details__part-buttons']}>
-                <button className={styles['event-details__part-send']}>
-                  Send
-                </button>
-                <button className={styles['event-details__part-cancel']}>
-                  Cancel
-                </button>
-              </div>
-            </>
-          ) : (
+          {!activeForm && (
             <>
               <div className={styles['event-details__organizer-block']}>
                 <div className={styles['event-details__img-container']}>
                   <img
                     src={event.organizerPhoto}
+                    alt="logo"
                     className={styles['event-details__organizer-logo']}
                   />
                 </div>
                 <div className={styles['event-details__organizer-details']}>
                   <p className={styles['event-details__organizer-title']}>
-                    Organization
+                    {event.organizerType === 'Individual' ? 'Organizer person' : 'Organization'}
                   </p>
                   <p className={styles['event-details__organizer-name']}>
                     {event.organizerName}
@@ -334,8 +436,103 @@ export const EventDetailsPage = () => {
               </div>
             </>
           )}
+          {activeForm === 'volunteering' && (
+            <>
+              <p className={styles['event-details__part-title']}>
+                Leave us your contact information and we’ll get in touch.
+              </p>
+              <form onSubmit={handleSubmit} className={styles['event-details__part-form']}>
+                <input
+                  value={formData.name}
+                  onChange={handleChange}
+                  className={styles['event-details__part-input']}
+                  type="text"
+                  name="name"
+                  placeholder="Your full name"
+                  required
+                />
+                <div className={styles['event-details__part-line']}></div>
+                {errors.name && !formData.name && (
+                  <p className={styles['event-details__part-error']}>
+                    {errors.name}
+                  </p>
+                )}
+                <PhoneInput
+                  country={'ua'}
+                  value={formData.phone}
+                  onChange={handlePhoneChange}
+                  inputProps={{
+                    required: true,
+                    className: styles['transparent-input'],
+                  }}
+                  buttonStyle={{
+                    background: 'transparent',
+                    border: 'none',
+                  }}
+                  containerStyle={{ background: 'transparent' }}
+                  dropdownStyle={{
+                    background: 'black',
+                    color: 'white',
+                    zIndex: '15',
+                  }}
+                />
+                <div className={styles['event-details__part-line']}></div>
+                {errors.phone && !formData.phone && (
+                  <p className={styles['event-details__part-error']}>
+                    {errors.phone}
+                  </p>
+                )}
+                <input
+                  value={formData.email}
+                  onChange={handleChange}
+                  className={styles['event-details__part-input']}
+                  type="email"
+                  name="email"
+                  placeholder="Email address"
+                />
+                <div className={styles['event-details__part-line']}></div>
+                {errors.email && !formData.email && (
+                  <p className={styles['event-details__part-error']}>
+                    {errors.email}
+                  </p>
+                )}
+              </form>
+              <div className={styles['event-details__part-buttons']}>
+                <button
+                  type="submit"
+                  className={styles['event-details__part-send']}
+                  onClick={handleSubmit}
+                >
+                  {isSubmitting ? 'Sending' : 'Send'}
+                </button>
+                <button
+                  type="button"
+                  onClick={handleCancel}
+                  className={styles['event-details__part-cancel']}
+                >
+                  Cancel
+                </button>
+              </div>
+            </>
+          )}
 
-          {formDonation && <form></form>}
+          {activeForm === 'donation' && stepDonation === 1 && (
+            <DonationStepOne
+              onCancel={handleCancelDonation}
+              onNext={handleNextStepOne}
+            />
+          )}
+
+          {activeForm === 'donation' && stepDonation === 2 && (
+            <DonationStepTwo
+              onBack={handleGoBack}
+              onNext={handleNextStepTwo}
+            />
+          )}
+
+          {activeForm === 'donation' && stepDonation === 3 && (
+            <DonationStepThree />
+          )}
         </div>
       </div>
     </div>

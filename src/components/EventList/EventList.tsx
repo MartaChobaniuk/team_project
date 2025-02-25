@@ -1,8 +1,14 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable no-console */
-import { useCallback, useContext, useEffect, useRef, useState } from 'react';
+import React, {
+  useCallback,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
 import cn from 'classnames';
-import styles from './ExploreAll.module.scss';
+import styles from './EventList.module.scss';
 import { Link, useLocation } from 'react-router-dom';
 import { Path } from '../../utils/constants';
 import { EventsContext } from '../../store/EventsContex';
@@ -16,7 +22,12 @@ import { EventCard } from '../EventCard';
 import { Loader } from '../Loader';
 import { getFiltersFromURL } from '../../helpers/getFiltersFromURL';
 
-export const ExploreAll = () => {
+type Props = {
+  title: string;
+  subtitle: string;
+};
+
+export const EventList: React.FC<Props> = ({ title, subtitle }) => {
   const { pathname } = useLocation();
   const { events, loading, errorMessage } = useContext(EventsContext);
   const [isVisible, setIsVisible] = useState(false);
@@ -152,7 +163,7 @@ export const ExploreAll = () => {
             [styles['explore__title--visible']]: isVisible,
           })}
         >
-          Explore Your Opportunities To Make A Positive Impact On The World
+          {title}
         </h2>
         <p
           className={cn(styles.explore__subtitle, {
@@ -160,12 +171,7 @@ export const ExploreAll = () => {
             [styles['explore__subtitle--is-filters']]: isFiltersOpen,
           })}
         >
-          Discover a world of opportunities to make a difference. Explore our
-          catalog of open wishes, fundraisers, and volunteering events. Use the
-          search bar and filters to find the perfect match for your skills,
-          passions, or resources. Whether you want to donate, fulfill a wish, or
-          volunteer your time, there’s something here for everyone ready to take
-          action.
+          {subtitle}
         </p>
         <div
           className={cn(styles.explore__footer, {
