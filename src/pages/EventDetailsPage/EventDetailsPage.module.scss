@@ -492,4 +492,16 @@
       color: var.$white;
     }
   }
+
+  &__success {
+    width: 100%;
+    color: var.$success;
+    @include mixin.button-text-desktop-tablet;
+  }
+  
+  &__error {
+    width: 100%;
+    color: var.$error;
+    @include mixin.button-text-desktop-tablet;
+  }
 }

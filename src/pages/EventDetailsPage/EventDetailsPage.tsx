@@ -36,14 +36,23 @@ export const EventDetailsPage = () => {
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [successSubmit, setSuccessSubmit] = useState(false);
+  const [successMessage, setSuccessMessage] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
 
   useEffect(() => {
-    const storedData = localStorage.getItem('eventForm');
+    try {
+      const storedData = localStorage.getItem('eventForm');
 
-    if (storedData) {
-      setFormData(JSON.parse(storedData));
+      if (storedData) {
+        setFormData(JSON.parse(storedData));
+      }
+    } catch (errorMes) {
+      console.error('Failed to load form data:', errorMes);
+      localStorage.removeItem('eventForm');
     }
   }, []);
+
 
   useEffect(() => {
     const fetchEventDetails = async () => {
@@ -86,10 +95,14 @@ export const EventDetailsPage = () => {
 
     if (!formData.email.trim()) {
       newErrors.email = 'Email is required';
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+      newErrors.email = 'Invalid email format';
     }
 
     if (!formData.phone.trim()) {
       newErrors.phone = 'Phone number is required';
+    } else if (!/^\d{10,15}$/.test(formData.phone)) {
+      newErrors.phone = 'Invalid phone number format';
     }
 
     setErrors(newErrors);
@@ -122,15 +135,16 @@ export const EventDetailsPage = () => {
       );
 
       if (response.ok) {
-        alert('Дані успішно відправлено!');
+        setSuccessSubmit(true);
+        setSuccessMessage('Data is send');
         localStorage.removeItem('eventForm');
         setFormData({ name: '', phone: '', email: '' });
       } else {
-        alert('Помилка відправки даних.');
+        setErrorMessage('Data sent failed');
       }
-    } catch (errorMes) {
-      console.error('Error:', errorMes);
-      alert('Сталася помилка при відправці.');
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (errorMes: any) {
+      setErrorMessage(errorMes);
     } finally {
       setIsSubmitting(false);
     }
@@ -140,21 +154,20 @@ export const EventDetailsPage = () => {
     if (!event) {
       return;
     }
-  
-    const { assistanceType, id } = event;
-  
+
+    const { assistanceType } = event;
+
     if (assistanceType === 'VOLUNTEERING') {
       setActiveForm('volunteering');
-  
+
       if (isAuthenticated) {
-        console.log(`Додаємо івент до профілю: ${id}`);
         handleSubmitAuth();
       }
     } else if (assistanceType === 'DONATION') {
       setActiveForm('donation');
       setStepDonation(1);
     }
-  };  
+  };
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
@@ -212,20 +225,20 @@ export const EventDetailsPage = () => {
         });
 
       if (response.ok) {
-        alert('Дані успішно відправлено!');
+        setSuccessSubmit(true);
+        setSuccessMessage('Data is send');
         localStorage.removeItem('eventForm');
         setFormData({ name: '', phone: '', email: '' });
       } else {
-        alert('Помилка відправки даних.');
+        setErrorMessage('Data sent failed');
       }
-    } catch (errorMes) {
-      console.error('Error:', errorMes);
-      alert('Сталася помилка при відправці.');
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (errorMes: any) {
+      setErrorMessage(errorMes);
     } finally {
       setIsSubmitting(false);
     }
   };
-
 
   const handleCancel = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
@@ -240,6 +253,14 @@ export const EventDetailsPage = () => {
 
   const handleGoBack = () => {
     setStepDonation(1);
+  };
+
+  const handleGoBackStepTwo = () => {
+    setStepDonation(2);
+  };
+
+  const handleClose = () => {
+    setActiveForm(null);
   };
 
   const handleNextStepOne = () => {
@@ -537,6 +558,12 @@ export const EventDetailsPage = () => {
                   </p>
                 )}
               </form>
+              {successMessage && (
+                <p className={styles['event-details__success']}>Data sent successfully!</p>
+              )}
+              {errorMessage && (
+                <p className={styles['event-details__error']}>Data sent failed. Please try again.</p>
+              )}
               <div className={styles['event-details__part-buttons']}>
                 <button
                   type="submit"
@@ -545,13 +572,23 @@ export const EventDetailsPage = () => {
                 >
                   {isSubmitting ? 'Sending' : 'Send'}
                 </button>
-                <button
-                  type="button"
-                  onClick={handleCancel}
-                  className={styles['event-details__part-cancel']}
-                >
-                  Cancel
-                </button>
+                {successSubmit ? (
+                  <button
+                    type="button"
+                    onClick={() => setActiveForm(null)}
+                    className={styles['event-details__part-cancel']}
+                  >
+                    Close
+                  </button>
+                ) : (
+                  <button
+                    type="button"
+                    onClick={handleCancel}
+                    className={styles['event-details__part-cancel']}
+                  >
+                    Cancel
+                  </button>
+                )}
               </div>
             </>
           )}
@@ -571,7 +608,10 @@ export const EventDetailsPage = () => {
           )}
 
           {activeForm === 'donation' && stepDonation === 3 && (
-            <DonationStepThree />
+            <DonationStepThree
+              onBack={handleGoBackStepTwo}
+              onClose={handleClose}
+            />
           )}
         </div>
       </div>

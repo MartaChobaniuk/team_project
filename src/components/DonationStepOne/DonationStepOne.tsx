@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import cn from 'classnames';
 import styles from './DonationStepOne.module.scss';
 
@@ -13,6 +13,18 @@ export const DonationStepOne: React.FC<Props> = ({ onNext, onCancel }) => {
   );
   const [customAmount, setCustomAmount] = useState('');
   const [error, setError] = useState('');
+
+  useEffect(() => {
+    const storedAmount = localStorage.getItem('amount');
+
+    if (storedAmount) {
+      if (['10', '50', '100'].includes(storedAmount)) {
+        setSelectedAmount(storedAmount);
+      } else {
+        setCustomAmount(storedAmount);
+      }
+    }
+  }, []);
 
   const handleAmountClick = (amount: string) => {
     setSelectedAmount(amount);

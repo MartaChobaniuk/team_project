@@ -62,16 +62,17 @@ export const ProfileInfo = () => {
       return;
     }
 
+    const accessToken =
+      localStorage.getItem('accessToken') || auth.user?.access_token;
+
+    if (!accessToken) {
+      setErrorMessage('Authorization token is missing');
+
+      throw new Error('Authorization token is missing');
+    }
+
     const updateProfile = async () => {
       try {
-        const accessToken = auth.user?.access_token;
-
-        if (!accessToken) {
-          setErrorMessage('Authorization token is missing');
-
-          throw new Error('Authorization token is missing');
-        }
-
         const response = await fetch(
           'https://dewvdtfd5m.execute-api.eu-north-1.amazonaws.com/dev/account',
           {
@@ -100,7 +101,6 @@ export const ProfileInfo = () => {
           profileImage: storedProfileImage,
         }));
 
-        localStorage.setItem('accessToken', accessToken);
         localStorage.setItem('email', data.email);
         localStorage.setItem('name', data.name);
       } catch (error) {

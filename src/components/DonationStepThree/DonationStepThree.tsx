@@ -1,10 +1,15 @@
 /* eslint-disable no-console */
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import cn from 'classnames';
 import styles from './DonationStepThree.module.scss';
 
-export const DonationStepThree = () => {
+type Props = {
+  onBack: () => void;
+  onClose: () => void;
+};
+
+export const DonationStepThree: React.FC<Props> = ({ onBack, onClose }) => {
   const { eventId } = useParams<{ eventId: string }>();
   const [cardNumber, setCardNumber] = useState('');
   const [cardType, setCardType] = useState(
@@ -100,6 +105,15 @@ export const DonationStepThree = () => {
     } finally {
       setIsSubmitting(false);
     }
+  };
+
+  const handleClose = () => {
+    localStorage.removeItem('name');
+    localStorage.removeItem('email');
+    localStorage.removeItem('amount');
+    localStorage.removeItem('paymentMethodId');
+
+    onClose();
   };
 
   return (
@@ -207,12 +221,23 @@ export const DonationStepThree = () => {
           >
             {isSubmitting ? 'Donation' : 'Donate'}
           </button>
-          <button
-            type="button"
-            className={styles['donation-three__button-back']}
-          >
-            Go Back
-          </button>
+          {submitSuccess ? (
+            <button
+              type="button"
+              onClick={handleClose}
+              className={styles['donation-three__button-back']}
+            >
+              Close
+            </button>
+          ) : (
+            <button
+              type="button"
+              onClick={onBack}
+              className={styles['donation-three__button-back']}
+            >
+              Go Back
+            </button>
+          )}
         </div>
       </div>
     </div>
