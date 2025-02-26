@@ -97,6 +97,10 @@ export const DonationStepThree: React.FC<Props> = ({ onBack, onClose }) => {
 
       if (response.ok) {
         setSubmitSuccess(true);
+        localStorage.removeItem('name');
+        localStorage.removeItem('email');
+        localStorage.removeItem('amount');
+        localStorage.removeItem('paymentMethodId');
       } else {
         setSubmitError('Donation failed. Please try again.');
       }

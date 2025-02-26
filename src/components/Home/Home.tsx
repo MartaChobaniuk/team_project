@@ -1,15 +1,27 @@
 /* eslint-disable no-console */
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import cn from 'classnames';
 import styles from './Home.module.scss';
 import arrow from '../../images/icons/arrow_r.svg';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { Path } from '../../utils/constants';
 import { useSwipeable } from 'react-swipeable';
+import { useAuth } from 'react-oidc-context';
 
 export const Home: React.FC = () => {
   const [isScrolled, setIsScrolled] = useState<boolean>(false);
+  const auth = useAuth();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (auth.isAuthenticated && auth.user) {
+      const accessToken = auth.user.access_token;
+
+      if (accessToken) {
+        localStorage.setItem('accessToken', accessToken);
+      }
+    }
+  }, [auth.isAuthenticated, auth.user]);
 
   const handlers = useSwipeable({
     onSwipedUp: () => {

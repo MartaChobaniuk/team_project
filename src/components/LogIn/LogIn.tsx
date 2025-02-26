@@ -1,20 +1,9 @@
-import { useEffect } from 'react';
 import { useAuth } from 'react-oidc-context';
 import styles from './LogIn.module.scss';
 import { Loader } from '../Loader';
 
 export const LogIn = () => {
   const auth = useAuth();
-
-  useEffect(() => {
-    if (auth.isAuthenticated && auth.user) {
-      const accessToken = auth.user.access_token;
-
-      if (accessToken) {
-        localStorage.setItem('accessToken', accessToken);
-      }
-    }
-  }, [auth.isAuthenticated, auth.user]);
 
   if (auth.isLoading) {
     return (
