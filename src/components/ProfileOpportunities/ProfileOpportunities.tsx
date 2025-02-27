@@ -28,6 +28,8 @@ export const ProfileOpportunities = () => {
   // eslint-disable-next-line max-len, prettier/prettier
   const [submittedOpportunities, setSubmittedOpportunities] = useState<NewOpportunityType[]>([]);
   const [error, setError] = useState<string | null>(null);
+  // eslint-disable-next-line max-len, prettier/prettier
+  const [errorSubmittedOpport, setErrorSubmittedOpport] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const [parent] = useAutoAnimate();
 
@@ -131,7 +133,7 @@ export const ProfileOpportunities = () => {
       }
 
       setLoading(true);
-      setError(null);
+      setErrorSubmittedOpport(null);
 
       try {
         const response = await fetch(
@@ -148,13 +150,13 @@ export const ProfileOpportunities = () => {
 
         if (!response.ok) {
           if (response.status === 401) {
-            setError('Unauthorized: Please login again.');
+            setErrorSubmittedOpport('Unauthorized: Please login again.');
           } else if (response.status === 404) {
-            setError('Account not found.');
+            setErrorSubmittedOpport('Account not found.');
           } else if (response.status === 500) {
-            setError('Server error. Please try again later.');
+            setErrorSubmittedOpport('Server error. Please try again later.');
           } else {
-            setError(`Unexpected error: ${response.statusText}`);
+            setErrorSubmittedOpport(`Unexpected error: ${response.statusText}`);
           }
 
           return;
@@ -163,18 +165,21 @@ export const ProfileOpportunities = () => {
         const data = await response.json();
 
         const events = Array.isArray(data?.events) ? data.events : [];
+        const completedEvents = events.filter(
+          (event: NewOpportunityType) => event.status === 'Completed',
+        );
 
         if (!events.length) {
-          setError(
+          setErrorSubmittedOpport(
             'Error: Invalid data structure received or empty events array.',
           );
 
           return;
         }
 
-        setSubmittedOpportunities(events);
+        setSubmittedOpportunities(completedEvents);
       } catch (errorMes) {
-        setError('Network error. Please check your connection.');
+        setErrorSubmittedOpport('Network error. Please check your connection.');
       } finally {
         setLoading(false);
       }
@@ -282,6 +287,9 @@ export const ProfileOpportunities = () => {
                   <span>Details</span>
                 </div>
                 <div className={styles['opport__line-grid']}></div>
+                {errorSubmittedOpport && (
+                  <p className={styles.opport__error}>{errorSubmittedOpport}</p>
+                )}
                 {loading ? (
                   <div>Loading opportunities...</div>
                 ) : submittedOpportunities.length > 0 ? (
