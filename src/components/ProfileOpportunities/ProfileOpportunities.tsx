@@ -101,10 +101,6 @@ export const ProfileOpportunities = () => {
 
         const events = Array.isArray(data?.events) ? data.events : [];
 
-        const completedEvents = events.filter(
-          (event: NewOpportunityType) => event.status === 'Completed',
-        );
-
         if (!events.length) {
           setError(
             'Error: Invalid data structure received or empty events array.',
@@ -114,7 +110,6 @@ export const ProfileOpportunities = () => {
         }
 
         setPostedOpportunities(events);
-        setSubmittedOpportunities(completedEvents);
       } catch (errorMes) {
         setError('Network error. Please check your connection.');
       } finally {
@@ -125,16 +120,68 @@ export const ProfileOpportunities = () => {
     getUserAccountDetails();
   }, []);
 
-  const formatDate = (dateString: string) => {
-    const date = new Date(dateString);
-    const options: Intl.DateTimeFormatOptions = {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric',
+  useEffect(() => {
+    const getUserAccountDetails = async () => {
+      const accessToken = localStorage.getItem('accessToken');
+
+      if (!accessToken) {
+        setError('You need to be logged in to view your account details.');
+
+        return;
+      }
+
+      setLoading(true);
+      setError(null);
+
+      try {
+        const response = await fetch(
+          // eslint-disable-next-line max-len
+          'https://dewvdtfd5m.execute-api.eu-north-1.amazonaws.com/dev/account/with-sub-events',
+          {
+            method: 'GET',
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${accessToken}`,
+            },
+          },
+        );
+
+        if (!response.ok) {
+          if (response.status === 401) {
+            setError('Unauthorized: Please login again.');
+          } else if (response.status === 404) {
+            setError('Account not found.');
+          } else if (response.status === 500) {
+            setError('Server error. Please try again later.');
+          } else {
+            setError(`Unexpected error: ${response.statusText}`);
+          }
+
+          return;
+        }
+
+        const data = await response.json();
+
+        const events = Array.isArray(data?.events) ? data.events : [];
+
+        if (!events.length) {
+          setError(
+            'Error: Invalid data structure received or empty events array.',
+          );
+
+          return;
+        }
+
+        setSubmittedOpportunities(events);
+      } catch (errorMes) {
+        setError('Network error. Please check your connection.');
+      } finally {
+        setLoading(false);
+      }
     };
 
-    return date.toLocaleDateString('en-US', options);
-  };
+    getUserAccountDetails();
+  }, []);
 
   const toggleOpen = (id: string) => {
     setOpenDropdown(prev => (prev === id ? null : id));
@@ -241,23 +288,8 @@ export const ProfileOpportunities = () => {
                   submittedOpportunities.map((event, index) => (
                     <div key={event.id ?? index} className={styles.opport__row}>
                       <span>{event.title}</span>
-                      <span>
-                        {formatDate(event.startDate)}, {event.startHour}
-                        {event.startPeriod}
-                      </span>
+                      <span>{event.startDate}</span>
                       <span>{event.opportunityType}</span>
-                      <span
-                        className={cn(styles['opport__main-assist'], {
-                          [styles['opport__main-assist--progress']]:
-                            event.status === 'In progress',
-                          [styles['opport__main-assist--completed']]:
-                            event.status === 'Completed',
-                        })}
-                      >
-                        {event.opportunityType === 'WISHES'
-                          ? `${event.target} / ${event.currentProgress ?? 0} ₴ collected`
-                          : `${event.target} / ${event.currentProgress ?? 0} participants`}
-                      </span>
                       <span className={styles.opport__status}>
                         {event.status}
                       </span>
@@ -312,8 +344,7 @@ export const ProfileOpportunities = () => {
                               Submission Date:
                             </span>
                             <span className={styles['opport__detail-value']}>
-                              {formatDate(event.startDate)}, {event.startHour}
-                              {event.startPeriod}
+                              {event.startDate}
                             </span>
                           </div>
                           <div>

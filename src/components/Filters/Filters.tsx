@@ -16,6 +16,7 @@ import {
   region,
   timeDemands,
 } from '../../helpers/dropdownsInfo';
+import { useSearchParams } from 'react-router-dom';
 
 interface FiltersProps {
   onFilterChange: (newFilters: FilterSelection) => void;
@@ -65,6 +66,7 @@ export const Filters: React.FC<FiltersProps> = ({
   const [showDatePickerEnd, setShowDatePickerEnd] = useState(false);
   const [isApplyActive, setApplyActive] = useState(false);
   const [isCancelActive, setCancelActive] = useState(false);
+  const [searchParams, setSearchParams] = useSearchParams();
 
   useEffect(() => {
     if (isVolunteering && !selectedOptions.assistanceType) {
@@ -84,8 +86,27 @@ export const Filters: React.FC<FiltersProps> = ({
 
       onFilterChange(filtersToApply);
       setApplyActive(true);
+
+      if (!searchParams.get('assistanceType')) {
+        setSearchParams(prev => {
+          const newParams = new URLSearchParams(prev);
+
+          newParams.set('assistanceType', 'VOLUNTEERING');
+
+          return newParams;
+        });
+      }
     }
-  }, [isVolunteering, selectedOptions, startDate, endDate, onFilterChange]);
+  }, [
+    isVolunteering,
+    selectedOptions,
+    startDate,
+    endDate,
+    onFilterChange,
+    searchParams,
+    setSearchParams,
+  ]
+  );
 
   useEffect(() => {
     if (isWishes && !selectedOptions.assistanceType) {
@@ -105,8 +126,26 @@ export const Filters: React.FC<FiltersProps> = ({
 
       onFilterChange(filtersToApply);
       setApplyActive(true);
+
+      if (!searchParams.get('assistanceType')) {
+        setSearchParams(prev => {
+          const newParams = new URLSearchParams(prev);
+
+          newParams.set('assistanceType', 'DONATION');
+
+          return newParams;
+        });
+      }
     }
-  }, [isWishes, selectedOptions, startDate, endDate, onFilterChange]);
+  }, [
+    isWishes,
+    selectedOptions,
+    startDate,
+    endDate,
+    onFilterChange,
+    searchParams,
+    setSearchParams,
+  ]);
 
   useEffect(() => {
     if (isDonate && !selectedOptions.assistanceType) {
@@ -126,8 +165,26 @@ export const Filters: React.FC<FiltersProps> = ({
 
       onFilterChange(filtersToApply);
       setApplyActive(true);
+
+      if (!searchParams.get('assistanceType')) {
+        setSearchParams(prev => {
+          const newParams = new URLSearchParams(prev);
+
+          newParams.set('assistanceType', 'DONATION');
+
+          return newParams;
+        });
+      }
     }
-  }, [isDonate, selectedOptions, startDate, endDate, onFilterChange]);
+  }, [
+    isDonate,
+    selectedOptions,
+    startDate,
+    endDate,
+    onFilterChange,
+    searchParams,
+    setSearchParams,
+  ]);
 
   const toggleDropdown = (dropdownId: DropdownId) => {
     setDropdownStates(prevState => ({
