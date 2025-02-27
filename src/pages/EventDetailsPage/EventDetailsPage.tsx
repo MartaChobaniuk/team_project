@@ -17,6 +17,7 @@ import { categoryId } from '../../helpers/dropdownsInfo';
 import { DonationStepOne } from '../../components/DonationStepOne';
 import { DonationStepTwo } from '../../components/DonationStepTwo';
 import { DonationStepThree } from '../../components/DonationStepThree';
+import default_img from '../../images/wallpaper/bg_for_event.jpg';
 
 export const EventDetailsPage = () => {
   const { eventId } = useParams<{ eventId: string }>();
@@ -39,6 +40,55 @@ export const EventDetailsPage = () => {
   const [successSubmit, setSuccessSubmit] = useState(false);
   const [successMessage, setSuccessMessage] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
+  const [isLightText, setIsLightText] = useState(true);
+
+  useEffect(() => {
+    if (event && event.coverImage) {
+      const img = new Image();
+
+      img.crossOrigin = 'Anonymous';
+      img.src = event.coverImage || default_img;
+      img.onload = () => {
+        const canvas = document.createElement('canvas');
+        const ctx = canvas.getContext('2d');
+
+        if (!ctx) {
+          return;
+        }
+
+        canvas.width = img.width;
+        canvas.height = img.height;
+        ctx.drawImage(img, 0, 0);
+        try {
+          const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+          const pixels = imageData.data;
+          let r = 0, g = 0, b = 0, count = 0;
+
+          for (let i = 0; i < pixels.length; i += 4 * 10) {
+            r += pixels[i];
+            g += pixels[i + 1];
+            b += pixels[i + 2];
+            count++;
+          }
+
+          r = Math.floor(r / count);
+          g = Math.floor(g / count);
+          b = Math.floor(b / count);
+          const brightness = 0.2126 * r + 0.7152 * g + 0.0722 * b;
+          // eslint-disable-next-line padding-line-between-statements
+          console.log('RGB:', r, g, b, 'Brightness:', brightness);
+          // Якщо яскравість більше 128 (тобто фон світлий), то текст має бути темним
+          setIsLightText(brightness < 128);
+        } catch (errorMes) {
+          console.error('Помилка читання даних з canvas (можливо, CORS):', errorMes);
+        }
+      };
+
+      img.onerror = (e) => {
+        console.error('Помилка завантаження зображення:', e);
+      };
+    }
+  }, [event]);
 
   useEffect(() => {
     try {
@@ -142,7 +192,7 @@ export const EventDetailsPage = () => {
       } else {
         setErrorMessage('Data sent failed');
       }
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (errorMes: any) {
       setErrorMessage(errorMes);
     } finally {
@@ -312,6 +362,8 @@ export const EventDetailsPage = () => {
       <div
         className={cn(styles['event-details__content-top'], {
           [styles['event-details__content-top--visible']]: isVisible,
+          [styles['event-details__content-top--light-text']]: isLightText,
+          [styles['event-details__content-top--dark-text']]: !isLightText,
         })}
         style={{
           backgroundImage: event.coverImage

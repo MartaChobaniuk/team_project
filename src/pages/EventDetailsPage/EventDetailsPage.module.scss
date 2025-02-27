@@ -69,10 +69,17 @@
   &__content-top {
     position: relative;
     z-index: 12;
-    color: var.$black;
     border-radius: 0 0 20px 20px;
     @include mixin.sizes(100%, 100vh);
     @include mixin.flex(flex, false, space-between, column);
+
+    &--dark-text {
+      color: var.$black;
+    }
+
+    &--light-text {
+      color: var.$light-gray;
+    }
 
     @include mixin.on-desktop {
       padding: 86px 24px 20px;
