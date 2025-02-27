@@ -1,11 +1,12 @@
 {
   "files": {
-    "main.css": "/team_project/static/css/main.685216ee.css",
-    "main.js": "/team_project/static/js/main.5f598275.js",
+    "main.css": "/team_project/static/css/main.33e01d27.css",
+    "main.js": "/team_project/static/js/main.aea5dd58.js",
     "static/media/sign_up_bg.jpg": "/team_project/static/media/sign_up_bg.74bc4f2635a0c1531067.jpg",
     "static/media/profile_opport_bg.jpg": "/team_project/static/media/profile_opport_bg.1b18c97268221426cd1c.jpg",
     "static/media/profile_bg.jpg": "/team_project/static/media/profile_bg.a65fb7c91dd0c3c19e00.jpg",
     "static/media/contact_bg.jpg": "/team_project/static/media/contact_bg.94db65f51614f0ecb5b6.jpg",
+    "static/media/bg_for_event.jpg": "/team_project/static/media/bg_for_event.3a339145cfadf68a2ddc.jpg",
     "static/media/fa-solid-900.ttf": "/team_project/static/media/fa-solid-900.ad1782c70927ebc5bc87.ttf",
     "static/media/about_us_bg.jpg": "/team_project/static/media/about_us_bg.a2840d6127680be844b6.jpg",
     "static/media/fa-brands-400.ttf": "/team_project/static/media/fa-brands-400.26b80c8830bebf340211.ttf",
@@ -36,11 +37,11 @@
     "static/media/up.svg": "/team_project/static/media/up.08a513a5e48d451fe0fa0b7e81515353.svg",
     "static/media/arrow_down_white.svg": "/team_project/static/media/arrow_down_white.ed56529ee92fbee9980eabf1248beb09.svg",
     "static/media/down.svg": "/team_project/static/media/down.6fba0153068f6693b0e28fb18a079d8e.svg",
-    "main.685216ee.css.map": "/team_project/static/css/main.685216ee.css.map",
-    "main.5f598275.js.map": "/team_project/static/js/main.5f598275.js.map"
+    "main.33e01d27.css.map": "/team_project/static/css/main.33e01d27.css.map",
+    "main.aea5dd58.js.map": "/team_project/static/js/main.aea5dd58.js.map"
   },
   "entrypoints": [
-    "static/css/main.685216ee.css",
-    "static/js/main.5f598275.js"
+    "static/css/main.33e01d27.css",
+    "static/js/main.aea5dd58.js"
   ]
 }
