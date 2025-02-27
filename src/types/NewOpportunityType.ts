@@ -13,8 +13,8 @@ export type NewOpportunityType = {
   target: string | number;
   region: string;
   address: string;
-  startDate: Date | null;
-  endDate: Date | null;
+  startDate: string;
+  endDate: string;
   startHour: string;
   startMinute: string;
   endHour: string;

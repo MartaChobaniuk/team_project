@@ -25,6 +25,8 @@ export const ProfileOpportunities = () => {
   );
   // eslint-disable-next-line max-len, prettier/prettier
   const [postedOpportunities, setPostedOpportunities] = useState<NewOpportunityType[]>([]);
+  // eslint-disable-next-line max-len, prettier/prettier
+  const [submittedOpportunities, setSubmittedOpportunities] = useState<NewOpportunityType[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const [parent] = useAutoAnimate();
@@ -99,6 +101,10 @@ export const ProfileOpportunities = () => {
 
         const events = Array.isArray(data?.events) ? data.events : [];
 
+        const completedEvents = events.filter(
+          (event: NewOpportunityType) => event.status === 'Completed',
+        );
+
         if (!events.length) {
           setError(
             'Error: Invalid data structure received or empty events array.',
@@ -108,6 +114,7 @@ export const ProfileOpportunities = () => {
         }
 
         setPostedOpportunities(events);
+        setSubmittedOpportunities(completedEvents);
       } catch (errorMes) {
         setError('Network error. Please check your connection.');
       } finally {
@@ -117,6 +124,17 @@ export const ProfileOpportunities = () => {
 
     getUserAccountDetails();
   }, []);
+
+  const formatDate = (dateString: string) => {
+    const date = new Date(dateString);
+    const options: Intl.DateTimeFormatOptions = {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+    };
+
+    return date.toLocaleDateString('en-US', options);
+  };
 
   const toggleOpen = (id: string) => {
     setOpenDropdown(prev => (prev === id ? null : id));
@@ -206,139 +224,140 @@ export const ProfileOpportunities = () => {
                 Create an opportunity
               </button>
             </div>
+
             <div className={styles.opport__content}>
               <div className={styles.opport__grid}>
                 <div className={styles.opport__header}>
-                  <span className={styles['opport__detail-name']}>Name</span>
-                  <span className={styles['opport__detail-name']}>
-                    Submission Date
-                  </span>
-                  <span className={styles['opport__detail-name']}>
-                    Opportunity Type
-                  </span>
-                  <span className={styles['opport__detail-name']}>Status</span>
-                  <span className={styles['opport__detail-name']}>Details</span>
+                  <span>Name</span>
+                  <span>Submission Date</span>
+                  <span>Opportunity Type</span>
+                  <span>Status</span>
+                  <span>Details</span>
                 </div>
                 <div className={styles['opport__line-grid']}></div>
-                <div className={styles.opport__row}>
-                  <span className={styles['opport__detail-value']}>Wish</span>
-                  <span className={styles['opport__detail-value']}>
-                    25/02/2025
-                  </span>
-                  <span className={styles['opport__detail-value']}>
-                    Donation
-                  </span>
-                  <span className={styles['opport__detail-value']}>
-                    On Rewiew
-                  </span>
-                  <button className={styles['opport__button-detail']}>
-                    Opportunity Information
-                  </button>
-                </div>
+                {loading ? (
+                  <div>Loading opportunities...</div>
+                ) : submittedOpportunities.length > 0 ? (
+                  submittedOpportunities.map((event, index) => (
+                    <div key={event.id ?? index} className={styles.opport__row}>
+                      <span>{event.title}</span>
+                      <span>
+                        {formatDate(event.startDate)}, {event.startHour}
+                        {event.startPeriod}
+                      </span>
+                      <span>{event.opportunityType}</span>
+                      <span
+                        className={cn(styles['opport__main-assist'], {
+                          [styles['opport__main-assist--progress']]:
+                            event.status === 'In progress',
+                          [styles['opport__main-assist--completed']]:
+                            event.status === 'Completed',
+                        })}
+                      >
+                        {event.opportunityType === 'WISHES'
+                          ? `${event.target} / ${event.currentProgress ?? 0} ₴ collected`
+                          : `${event.target} / ${event.currentProgress ?? 0} participants`}
+                      </span>
+                      <span className={styles.opport__status}>
+                        {event.status}
+                      </span>
+                      <Link
+                        to={`${event.opportunityType === 'WISHES' ? '/wishes' : '/volunteering'}/${event.id}`}
+                        className={styles['opport__button-detail']}
+                        aria-label={`View details for ${event.title}`}
+                      >
+                        Opportunity Information
+                      </Link>
+                    </div>
+                  ))
+                ) : (
+                  <div>No opportunities available.</div>
+                )}
               </div>
-              <div className={styles.opport__dropdown}>
-                <button
-                  className={styles['opport__dropdown-button']}
-                  onClick={e => {
-                    e.preventDefault();
-                  }}
-                >
-                  <span className={styles.opport__select}>Wish</span>
-                </button>
-                <div className={styles['opport__dropdown-img-container']}>
-                  <img
-                    className={styles['opport__dropdown-img']}
-                    src={openDropdown ? arrow_up : arrow_down}
-                    alt="Arrow Down"
-                  />
-                </div>
+              <div className={styles.opport__list} ref={parent}>
+                {submittedOpportunities.length > 0 ? (
+                  submittedOpportunities.map((event, index: number) => (
+                    <React.Fragment
+                      key={event.id ?? `fallback-${index}-${Math.random()}`}
+                    >
+                      <div className={styles.opport__dropdown}>
+                        <button
+                          className={styles['opport__dropdown-button']}
+                          onClick={e => {
+                            e.preventDefault();
+                            toggleOpen(event.id);
+                          }}
+                        >
+                          <span className={styles.opport__select}>
+                            {event.title}
+                          </span>
+                        </button>
+                        <div
+                          className={styles['opport__dropdown-img-container']}
+                        >
+                          <img
+                            className={styles['opport__dropdown-img']}
+                            src={
+                              openDropdown === event.id ? arrow_up : arrow_down
+                            }
+                            alt="Arrow Down"
+                          />
+                        </div>
+                      </div>
+                      <div className={styles.opport__line}></div>
+                      {openDropdown === event.id && (
+                        <div className={styles.opport__info}>
+                          <div>
+                            <span className={styles['opport__detail-name']}>
+                              Submission Date:
+                            </span>
+                            <span className={styles['opport__detail-value']}>
+                              {formatDate(event.startDate)}, {event.startHour}
+                              {event.startPeriod}
+                            </span>
+                          </div>
+                          <div>
+                            <span className={styles['opport__detail-name']}>
+                              Type:
+                            </span>
+                            <span className={styles['opport__detail-value']}>
+                              {event.opportunityType}
+                            </span>
+                          </div>
+                          <div>
+                            <span className={styles['opport__detail-name']}>
+                              Status:
+                            </span>
+                            <span
+                              className={cn(
+                                styles['opport__detail-value'],
+                                styles.opport__status,
+                                {
+                                  [styles['opport__status--progress']]:
+                                    event.status === 'In progress',
+                                  [styles['opport__status--completed']]:
+                                    event.status === 'Completed',
+                                },
+                              )}
+                            >
+                              {event.status}
+                            </span>
+                          </div>
+                          <Link
+                            to={`${event.opportunityType === 'WISHES' ? '/wishes' : '/volunteering'}/${event.id}`}
+                            className={styles['opport__button-detail']}
+                            aria-label={`View details for ${event.title}`}
+                          >
+                            Opportunity Information
+                          </Link>
+                        </div>
+                      )}
+                    </React.Fragment>
+                  ))
+                ) : (
+                  <p>No opportunities available</p>
+                )}
               </div>
-              <div className={styles.opport__line}></div>
-              {false && (
-                <>
-                  <div className={styles.opport__info}>
-                    <div>
-                      <span className={styles['opport__detail-name']}>
-                        Submission Date:
-                      </span>
-                      <span className={styles['opport__detail-value']}>
-                        25/02/2025
-                      </span>
-                    </div>
-                    <div>
-                      <span className={styles['opport__detail-name']}>
-                        Opportunity Type:
-                      </span>
-                      <span className={styles['opport__detail-value']}>
-                        Donation
-                      </span>
-                    </div>
-                    <div>
-                      <span className={styles['opport__detail-name']}>
-                        Status:
-                      </span>
-                      <span className={styles['opport__detail-value']}>
-                        On Rewiew
-                      </span>
-                    </div>
-                    <button className={styles['opport__button-detail']}>
-                      Opportunity Information
-                    </button>
-                  </div>
-                </>
-              )}
-
-              <div className={styles.opport__dropdown}>
-                <button
-                  className={styles['opport__dropdown-button']}
-                  onClick={e => {
-                    e.preventDefault();
-                  }}
-                >
-                  <span className={styles.opport__select}>Help Sasha</span>
-                </button>
-                <div className={styles['opport__dropdown-img-container']}>
-                  <img
-                    className={styles['opport__dropdown-img']}
-                    src={openDropdown ? arrow_up : arrow_down}
-                    alt="Arrow Down"
-                  />
-                </div>
-              </div>
-              <div className={styles.opport__line}></div>
-              {false && (
-                <>
-                  <div className={styles.opport__info}>
-                    <div>
-                      <span className={styles['opport__detail-name']}>
-                        Submission Date:
-                      </span>
-                      <span className={styles['opport__detail-value']}>
-                        25/02/2025
-                      </span>
-                    </div>
-                    <div>
-                      <span className={styles['opport__detail-name']}>
-                        Opportunity Type:
-                      </span>
-                      <span className={styles['opport__detail-value']}>
-                        Donation
-                      </span>
-                    </div>
-                    <div>
-                      <span className={styles['opport__detail-name']}>
-                        Status:
-                      </span>
-                      <span className={styles['opport__detail-value']}>
-                        On Rewiew
-                      </span>
-                    </div>
-                    <button className={styles['opport__button-detail']}>
-                      Opportunity Information
-                    </button>
-                  </div>
-                </>
-              )}
             </div>
           </div>
           <div className={styles.opport__block}>
