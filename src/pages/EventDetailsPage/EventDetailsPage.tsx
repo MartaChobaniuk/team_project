@@ -139,7 +139,7 @@ export const EventDetailsPage = () => {
       const dataToSend = { ...formData, eventId };
 
       const response = await fetch(
-        `https://dewvdtfd5m.execute-api.eu-north-1.amazonaws.com/dev/${eventId}/authJoin`,
+        `https://dewvdtfd5m.execute-api.eu-north-1.amazonaws.com/dev/authJoin`,
         {
           method: 'PUT',
           headers: {
