@@ -165,9 +165,6 @@ export const ProfileOpportunities = () => {
         const data = await response.json();
 
         const events = Array.isArray(data?.events) ? data.events : [];
-        const completedEvents = events.filter(
-          (event: NewOpportunityType) => event.status === 'Completed',
-        );
 
         if (!events.length) {
           setErrorSubmittedOpport(
@@ -177,7 +174,7 @@ export const ProfileOpportunities = () => {
           return;
         }
 
-        setSubmittedOpportunities(completedEvents);
+        setSubmittedOpportunities(events);
       } catch (errorMes) {
         setErrorSubmittedOpport('Network error. Please check your connection.');
       } finally {
