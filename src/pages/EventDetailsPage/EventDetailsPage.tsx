@@ -1,7 +1,7 @@
 /* eslint-disable prettier/prettier */
 /* eslint-disable max-len */
 /* eslint-disable no-console */
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import cn from 'classnames';
 import styles from './EventDetailsPage.module.scss';
@@ -17,7 +17,6 @@ import { categoryId } from '../../helpers/dropdownsInfo';
 import { DonationStepOne } from '../../components/DonationStepOne';
 import { DonationStepTwo } from '../../components/DonationStepTwo';
 import { DonationStepThree } from '../../components/DonationStepThree';
-import default_img from '../../images/wallpaper/bg_for_event.jpg';
 
 export const EventDetailsPage = () => {
   const { eventId } = useParams<{ eventId: string }>();
@@ -40,55 +39,29 @@ export const EventDetailsPage = () => {
   const [successSubmit, setSuccessSubmit] = useState(false);
   const [successMessage, setSuccessMessage] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
-  const [isLightText, setIsLightText] = useState(true);
+  const [isScrolled, setIsScrolled] = useState(false);
+  const bottomRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (event && event.coverImage) {
-      const img = new Image();
-
-      img.crossOrigin = 'Anonymous';
-      img.src = event.coverImage || default_img;
-      img.onload = () => {
-        const canvas = document.createElement('canvas');
-        const ctx = canvas.getContext('2d');
-
-        if (!ctx) {
-          return;
-        }
-
-        canvas.width = img.width;
-        canvas.height = img.height;
-        ctx.drawImage(img, 0, 0);
-        try {
-          const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-          const pixels = imageData.data;
-          let r = 0, g = 0, b = 0, count = 0;
-
-          for (let i = 0; i < pixels.length; i += 4 * 10) {
-            r += pixels[i];
-            g += pixels[i + 1];
-            b += pixels[i + 2];
-            count++;
-          }
-
-          r = Math.floor(r / count);
-          g = Math.floor(g / count);
-          b = Math.floor(b / count);
-          const brightness = 0.2126 * r + 0.7152 * g + 0.0722 * b;
-          // eslint-disable-next-line padding-line-between-statements
-          console.log('RGB:', r, g, b, 'Brightness:', brightness);
-          // Якщо яскравість більше 128 (тобто фон світлий), то текст має бути темним
-          setIsLightText(brightness < 128);
-        } catch (errorMes) {
-          console.error('Помилка читання даних з canvas (можливо, CORS):', errorMes);
-        }
-      };
-
-      img.onerror = (e) => {
-        console.error('Помилка завантаження зображення:', e);
-      };
+    const handleScroll = () => {
+      if (bottomRef.current) {
+        setIsScrolled(bottomRef.current.scrollTop > 50);
+      }
+    };
+  
+    const bottomDiv = bottomRef.current;
+  
+    if (bottomDiv) {
+      bottomDiv.addEventListener("scroll", handleScroll);
     }
-  }, [event]);
+  
+    return () => {
+      if (bottomDiv) {
+        bottomDiv.removeEventListener("scroll", handleScroll);
+      }
+    };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []); 
 
   useEffect(() => {
     try {
@@ -102,7 +75,6 @@ export const EventDetailsPage = () => {
       localStorage.removeItem('eventForm');
     }
   }, []);
-
 
   useEffect(() => {
     const fetchEventDetails = async () => {
@@ -171,6 +143,7 @@ export const EventDetailsPage = () => {
 
     try {
       const token = localStorage.getItem('accessToken');
+      const dataToSend = { ...formData, eventId };
 
       const response = await fetch(
         `https://dewvdtfd5m.execute-api.eu-north-1.amazonaws.com/dev/events/${eventId}/authJoin`,
@@ -180,7 +153,7 @@ export const EventDetailsPage = () => {
             'Content-Type': 'application/json',
             Authorization: `Bearer ${token}`,
           },
-          body: JSON.stringify(formData),
+          body: JSON.stringify(dataToSend),
         }
       );
 
@@ -362,8 +335,7 @@ export const EventDetailsPage = () => {
       <div
         className={cn(styles['event-details__content-top'], {
           [styles['event-details__content-top--visible']]: isVisible,
-          [styles['event-details__content-top--light-text']]: isLightText,
-          [styles['event-details__content-top--dark-text']]: !isLightText,
+          [styles['event-details__content-top--scrolled']]: isScrolled,
         })}
         style={{
           backgroundImage: event.coverImage
@@ -373,6 +345,7 @@ export const EventDetailsPage = () => {
           backgroundSize: 'cover',
         }}
       >
+        <div className={styles.overlay} />
         <div
           className={styles['event-details__block-back']}
           onClick={() => navigate(-1)}
@@ -389,7 +362,11 @@ export const EventDetailsPage = () => {
           <p className={styles['event-details__subtitle']}>
             {`${categoryId[event.categoryId] || 'Category'} / ${event.region} / ${formatDate(event.startingDate)} / ${event.startHour}.${event.startMinute} ${event.startPeriod}`}
           </p>
-          <div className={styles['event-details__shell']}>
+          <div
+            className={cn(styles['event-details__shell'], {
+              [styles['event-details__shell--scrolled']]: isScrolled,
+            })}
+          >
             <div className={styles['event-details__buttons']}>
               <button
                 className={styles['event-details__button-pr']}
@@ -415,8 +392,10 @@ export const EventDetailsPage = () => {
         </div>
       </div>
       <div
+        ref={bottomRef}
         className={cn(styles['event-details__content-bottom'], {
           [styles['event-details__content-bottom--visible']]: isVisible,
+          [styles['event-details__content-bottom--scrolled']]: isScrolled,
         })}
       >
         <div className={styles['event-details__block-left']}>
