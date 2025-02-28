@@ -141,7 +141,7 @@ export const EventDetailsPage = () => {
       const response = await fetch(
         `https://dewvdtfd5m.execute-api.eu-north-1.amazonaws.com/dev/authJoin`,
         {
-          method: 'PUT',
+          method: 'POST',
           headers: {
             'Content-Type': 'application/json',
             Authorization: `Bearer ${token}`,
