@@ -48,20 +48,13 @@ export const EventDetailsPage = () => {
         setIsScrolled(bottomRef.current.scrollTop > 50);
       }
     };
-  
+
     const bottomDiv = bottomRef.current;
-  
-    if (bottomDiv) {
-      bottomDiv.addEventListener("scroll", handleScroll);
-    }
-  
-    return () => {
-      if (bottomDiv) {
-        bottomDiv.removeEventListener("scroll", handleScroll);
-      }
-    };
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []); 
+
+    bottomDiv?.addEventListener('scroll', handleScroll);
+
+    return () => bottomDiv?.removeEventListener('scroll', handleScroll);
+  }, []);
 
   useEffect(() => {
     try {
@@ -146,7 +139,7 @@ export const EventDetailsPage = () => {
       const dataToSend = { ...formData, eventId };
 
       const response = await fetch(
-        `https://dewvdtfd5m.execute-api.eu-north-1.amazonaws.com/dev/events/${eventId}/authJoin`,
+        `https://dewvdtfd5m.execute-api.eu-north-1.amazonaws.com/dev/${eventId}/authJoin`,
         {
           method: 'PUT',
           headers: {
