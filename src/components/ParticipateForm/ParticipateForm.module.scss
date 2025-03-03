@@ -1,16 +1,23 @@
 @use "../../utils/mixins" as mixin;
 @use "../../utils/variables" as var;
 
-.donation-two {
+.transparent-input {
+  position: relative;
+  background-color: transparent;
+  color: var.$white;
+  height: 44px;
   width: 100%;
-  height: 100%;
-  display: flex;
-  justify-content: space-between;
-  flex-direction: column;
+  padding: 10px;
+  margin-left: 40px;
+  z-index: 20;
+  cursor: pointer;
+}
 
-  &__title {
-    @include mixin.body-text-desktop-tablet;
+.event-details {
+  &__part-title {
     color: var.$light-gray;
+    @include mixin.body-text-desktop-tablet;
+    text-align: left;
 
     @include mixin.on-mobile {
       margin-bottom: 40px;
@@ -29,65 +36,37 @@
     }
   }
 
-  &__input-block {
-    width: 100%;
-    display: flex;
-    flex-direction: row;
-    margin-bottom: 4px;
-  }
-
-  &__input {
+  &__part-input {
     width: 100%;
     height: 44px;
-    color: var.$light-gray;
-    @include mixin.button-text-desktop-tablet;
+    margin-bottom: 5px;
+    color: var.$white;
 
     &:placeholder-shown {
       color: var.$grey;
+      @include mixin.button-text-desktop-tablet;
     }
   }
 
-  &__line {
+  &__part-error {
+    color: var.$error;
+    @include mixin.small-text-desktop-tablet;
+  }
+
+  &__part-line {
     width: 100%;
     height: 1px;
-    background-color: var.$grey;
+    background-color: var.$light-gray;
   }
 
-  &__main-buttons {
-    margin-top: 20px;
-    display: flex;
-    flex-direction: row;
-  }
-
-  &__main-buttons {
-    margin-top: 20px;
-    display: flex;
-    flex-direction: row;
-  }
-
-  &__button-back {
-    position: relative;
+  &__part-buttons {
     width: 100%;
-    height: 44px;
-    line-height: 44px;
-    text-align: center;
-    text-transform: uppercase;
-    background-color: var.$black;
-    color: var.$white;
-    border: 0.5px solid var.$white;
-    border-radius: 12px;
-    cursor: pointer;
-
-    @include mixin.flex(flex, center, center, false);
-
-    &:hover {
-      background-color: var.$dark-gray;
-      color: var.$white;
-    }
+    display: flex;
+    flex-direction: row;
+    margin-top: 20px;
   }
 
-  &__button-next {
-    position: relative;
+  &__part-send {
     width: 100%;
     height: 44px;
     line-height: 44px;
@@ -107,7 +86,34 @@
     }
   }
 
+  &__part-cancel {
+    width: 100%;
+    height: 44px;
+    line-height: 44px;
+    text-align: center;
+    text-transform: uppercase;
+    background-color: var.$black;
+    color: var.$white;
+    border: 0.5px solid var.$white;
+    border-radius: 12px;
+    cursor: pointer;
+
+    @include mixin.flex(flex, center, center, false);
+
+    &:hover {
+      background-color: var.$dark-gray;
+      color: var.$white;
+    }
+  }
+
+  &__success {
+    width: 100%;
+    color: var.$success;
+    @include mixin.button-text-desktop-tablet;
+  }
+
   &__error {
+    width: 100%;
     color: var.$error;
     @include mixin.button-text-desktop-tablet;
   }

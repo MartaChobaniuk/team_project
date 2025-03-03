@@ -43,7 +43,7 @@ export const DonationStepTwo: React.FC<Props> = ({ onNext, onBack }) => {
   return (
     <div className={styles['donation-two']}>
       <p className={styles['donation-two__title']}>
-        Enter your full name and email for the donation confirmation.
+        Enter your full name and email for the donation
       </p>
       <div className={styles['donation-two__content-bottom']}>
         <div className={styles['donation-two__input-block']}>

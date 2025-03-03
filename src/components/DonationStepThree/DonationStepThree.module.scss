@@ -23,6 +23,22 @@
   &__title {
     @include mixin.body-text-desktop-tablet;
     color: var.$light-gray;
+
+    @include mixin.on-mobile {
+      margin-bottom: 40px;
+    }
+
+    @include mixin.on-tablet {
+      margin-bottom: 50px;
+    }
+
+    @include mixin.on-tablet-2 {
+      margin-bottom: 50px;
+    }
+
+    @include mixin.on-desktop {
+      margin-bottom: 20px;
+    }
   }
 
   &__input-block {
@@ -163,30 +179,23 @@
   &__errors {
     width: 100%;
     display: flex;
-    gap: 4%;
+    justify-content: space-between;
+    gap: 2%;
+  }
+
+  &__error-block {
+    opacity: 0;
+    width: 45%;
+
+    &--visible {
+      opacity: 1;
+    }
   }
 
   &__error-part {
-    visibility: hidden;
-    width: 50%;
+    width: 100%;
     color: var.$error;
     @include mixin.button-text-desktop-tablet;
-
-    &--visible {
-      visibility: visible;
-    }
-  }
-
-  &__error-part-right {
-    visibility: hidden;
-    width: 46%;
-    text-align: left;
-    color: var.$error;
-    @include mixin.button-text-desktop-tablet;
-
-    &--visible {
-      visibility: visible;
-    }
   }
 
   &__error {

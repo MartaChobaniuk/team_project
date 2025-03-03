@@ -17,6 +17,22 @@
   &__title {
     @include mixin.body-text-desktop-tablet;
     color: var.$light-gray;
+
+    @include mixin.on-mobile {
+      margin-bottom: 40px;
+    }
+
+    @include mixin.on-tablet {
+      margin-bottom: 50px;
+    }
+
+    @include mixin.on-tablet-2 {
+      margin-bottom: 50px;
+    }
+
+    @include mixin.on-desktop {
+      margin-bottom: 20px;
+    }
   }
 
   &__buttons {
@@ -61,7 +77,6 @@
   &__input {
     width: 75%;
     color: var.$light-gray;
-    margin-left: 15px;
     @include mixin.button-text-desktop-tablet;
 
     &:placeholder-shown {

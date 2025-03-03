@@ -46,8 +46,12 @@ export const DonationStepThree: React.FC<Props> = ({ onBack, onClose }) => {
   const validateFields = () => {
     const newErrors: Record<string, string> = {};
 
-    if (!cardType) {
-      newErrors.cardType = 'Card type is required';
+    if (!cardNumber) {
+      newErrors.cardNumber = 'Card number is required';
+    }
+
+    if (cardNumber.length < 16) {
+      newErrors.cardNumber_2 = 'Card number must be exactly 16 digits';
     }
 
     if (!cardNumber) {
@@ -55,7 +59,7 @@ export const DonationStepThree: React.FC<Props> = ({ onBack, onClose }) => {
     }
 
     if (!expiryDate) {
-      newErrors.expiryDate = 'Expiry card is required';
+      newErrors.expiryDate = 'Expiry card and CVV is required';
     }
 
     if (!cvv) {
@@ -101,6 +105,8 @@ export const DonationStepThree: React.FC<Props> = ({ onBack, onClose }) => {
         localStorage.removeItem('email');
         localStorage.removeItem('amount');
         localStorage.removeItem('paymentMethodId');
+
+        setTimeout(() => onClose(), 1500);
       } else {
         setSubmitError('Donation failed. Please try again.');
       }
@@ -122,9 +128,7 @@ export const DonationStepThree: React.FC<Props> = ({ onBack, onClose }) => {
 
   return (
     <div className={styles['donation-three']}>
-      <p className={styles['donation-three__title']}>
-        Enter your card details.
-      </p>
+      <p className={styles['donation-three__title']}>Enter your card details</p>
       <div className={styles['donation-three__content-bottom']}>
         <div className={styles['donation-three__buttons']}>
           <button
@@ -171,6 +175,11 @@ export const DonationStepThree: React.FC<Props> = ({ onBack, onClose }) => {
         {errors.cardNumber && !cardNumber && (
           <p className={styles['donation-three__error']}>{errors.cardNumber}</p>
         )}
+        {errors.cardNumber_2 && cardNumber.length < 16 && (
+          <p className={styles['donation-three__error']}>
+            {errors.cardNumber_2}
+          </p>
+        )}
         <div className={styles['donation-three__inputs-block']}>
           <input
             value={expiryDate}
@@ -190,25 +199,28 @@ export const DonationStepThree: React.FC<Props> = ({ onBack, onClose }) => {
           <div className={styles['donation-three__line-small']}></div>
         </div>
         <div className={styles['donation-three__errors']}>
-          {errors.expiryDate && !expiryDate && (
-            <p
-              className={cn(styles['donation-three__error-part'], {
-                [styles['donation-three__error-part--visible']]:
+          {errors.expiryDate && !expiryDate && !cvv && (
+            <div
+              className={cn(styles['donation-three__error-block'], {
+                [styles['donation-three__error-block--visible']]:
                   errors.expiryDate,
               })}
             >
-              {errors.expiryDate}
-            </p>
+              <p className={styles['donation-three__error-part']}>
+                {errors.expiryDate}
+              </p>
+            </div>
           )}
-          {errors.cvv && !cvv && (
-            <p
-              className={cn(styles['donation-three__error-part-right'], {
-                [styles['donation-three__error-part-right--visible']]:
-                  errors.cvv,
+          {errors.cvv && !cvv && expiryDate && (
+            <div
+              className={cn(styles['donation-three__error-block'], {
+                [styles['donation-three__error-block--visible']]: errors.cvv,
               })}
             >
-              {errors.cvv}
-            </p>
+              <p className={styles['donation-three__error-part']}>
+                {errors.cvv}
+              </p>
+            </div>
           )}
         </div>
         {submitSuccess && (

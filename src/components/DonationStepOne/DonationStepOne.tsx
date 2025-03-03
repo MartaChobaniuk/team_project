@@ -58,7 +58,7 @@ export const DonationStepOne: React.FC<Props> = ({ onNext, onCancel }) => {
     <div className={styles['donation-one']}>
       <p className={styles['donation-one__title']}>
         Please choose the amount of money you’d like to donate as well as the
-        frequency of the donation.
+        frequency of the donation
       </p>
       <div className={styles['donation-one__content-bottom']}>
         <div className={styles['donation-one__buttons']}>

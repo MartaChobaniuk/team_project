@@ -1,18 +1,6 @@
 @use "../../utils/mixins" as mixin;
 @use "../../utils/variables" as var;
 
-.transparent-input {
-  position: relative;
-  background-color: transparent;
-  color: var.$white;
-  height: 44px;
-  width: 100%;
-  padding: 10px;
-  margin-left: 40px;
-  z-index: 20;
-  cursor: pointer;
-}
-
 .error-block {
   width: 100%;
   height: 100vh;
@@ -67,75 +55,24 @@
       height: 100vh;
     }
     100% {
-      height: 300px;
-    }
-  }
-
-  @keyframes slideUpTablet {
-    0% {
-      height: 100vh;
-    }
-    100% {
-      height: 280px;
-    }
-  }
-
-  @keyframes slideUpMinTablet {
-    0% {
-      height: 100vh;
-    }
-    100% {
-      height: 230px;
+      height: 350px;
     }
   }
 
   &__content-top {
     position: relative;
+    width: 100%;
+    height: 100vh;
     z-index: 12;
     color: var.$light-gray;
-    @include mixin.sizes(100%, 100vh);
     @include mixin.flex(flex, false, space-between, column);
+    animation: slideUp 0.5s ease-in-out 4s forwards;
+    padding: 86px 20px 24px;
 
-    @include mixin.on-mobile {
+    &--visible {
       position: sticky;
       top: 0;
-      min-height: 340px;
-      padding: 86px 20px 24px;
-      animation: slideUpMinTablet 0.5s ease-in-out 4s forwards;
-
-      &--scrolled {
-        min-height: 230px;
-      }
-    }
-
-    @include mixin.on-tablet {
-      position: sticky;
-      top: 0;
-      height: 340px;
-      padding: 86px 20px 24px;
-      animation: slideUpMinTablet 0.5s ease-in-out 4s forwards;
-
-      &--scrolled {
-        height: 230px;
-      }
-    }
-
-    @include mixin.on-tablet-2 {
-      position: sticky;
-      top: 0;
-      width: 100%;
-      height: 280px;
-      padding: 86px 24px 20px;
-      animation: slideUpTablet 0.5s ease-in-out 4s forwards;
-
-      &--scrolled {
-        height: 280px;
-      }
-    }
-
-    @include mixin.on-desktop {
-      padding: 86px 24px 20px;
-      animation: slideUp 0.5s ease-in-out 4s forwards;
+      max-height: 350px;
     }
   }
 
@@ -167,25 +104,30 @@
   }
 
   &__content-bottom {
-    flex: 1 1 auto;
-    width: 100%;
-    overflow-y: auto;
-    scrollbar-width: none;
+    display: none;
 
-    @include mixin.on-mobile {
-      @include mixin.flex(flex, false, false, column);
-    }
+    &--visible {
+      position: relative;
+      flex: 1 1 auto;
+      overflow: auto;
+      scrollbar-width: none;
 
-    @include mixin.on-tablet {
-      @include mixin.flex(flex, false, false, column);
-    }
+      @include mixin.on-mobile {
+        @include mixin.flex(flex, false, false, column-reverse);
+      }
 
-    @include mixin.on-tablet-2 {
-      @include mixin.flex(flex, false, false, column);
-    }
+      @include mixin.on-tablet {
+        @include mixin.flex(flex, false, false, column-reverse);
+      }
 
-    @include mixin.on-desktop {
-      @include mixin.flex(flex, false, false, row);
+      @include mixin.on-tablet-2 {
+        @include mixin.flex(flex, false, false, column-reverse);
+      }
+
+      @include mixin.on-desktop {
+        height: 50vh;
+        @include mixin.flex(flex, false, false, row);
+      }
     }
   }
 
@@ -306,33 +248,25 @@
   &__shell {
     @include mixin.on-mobile {
       @include mixin.flex(flex, center, space-between, column);
-      opacity: 1;
-      transition: opacity 0.3s ease;
 
       &--scrolled {
-        opacity: 0;
-        transition: opacity 0.3s ease;
+        display: none;
       }
     }
 
     @include mixin.on-tablet {
       @include mixin.flex(flex, center, space-between, column);
-      opacity: 1;
-      transition: opacity 0.3s ease;
 
       &--scrolled {
-        opacity: 0;
-        transition: opacity 0.3s ease;
+        display: none;
       }
     }
 
     @include mixin.on-tablet-2 {
-      opacity: 1;
       @include mixin.flex(flex, center, space-between, row);
     }
 
     @include mixin.on-desktop {
-      opacity: 1;
       @include mixin.flex(flex, center, space-between, row);
     }
   }
@@ -355,8 +289,6 @@
   }
 
   &__block-left {
-    background-color: var.$white;
-
     @include mixin.on-mobile {
       @include mixin.sizes(100%, 100%);
       @include mixin.flex(flex, false, space-between, column);
@@ -377,7 +309,7 @@
 
     @include mixin.on-desktop {
       @include mixin.sizes(60%, 100%);
-      @include mixin.flex(flex, false, space-between, column);
+      @include mixin.flex(flex, false, start, column);
       padding: 24px;
     }
   }
@@ -388,18 +320,21 @@
     @include mixin.on-mobile {
       @include mixin.sizes(100%, 100%);
       @include mixin.flex(flex, false, space-between, column);
+      border-radius: 0 0 20px 20px;
       padding: 20px;
     }
 
     @include mixin.on-tablet {
       @include mixin.sizes(100%, 100%);
       @include mixin.flex(flex, false, space-between, column);
+      border-radius: 0 0 20px 20px;
       padding: 24px;
     }
 
     @include mixin.on-tablet-2 {
       @include mixin.sizes(100%, 100%);
       @include mixin.flex(flex, false, space-between, column);
+      border-radius: 0 0 20px 20px;
       padding: 24px;
     }
 
@@ -411,18 +346,28 @@
   }
 
   &__block-participants {
-    display: flex;
-    flex-direction: row;
-    justify-content: start;
-    align-items: center;
+    width: 100%;
+
+    @include mixin.on-mobile {
+      @include mixin.flex(flex, start, center, column);
+    }
+
+    @include mixin.on-tablet {
+      @include mixin.flex(flex, center, start, row);
+    }
+
+    @include mixin.on-tablet-2 {
+      @include mixin.flex(flex, center, start, row);
+    }
+
+    @include mixin.on-desktop {
+      @include mixin.flex(flex, center, start, row);
+    }
   }
 
   &__participants-info {
-    margin-left: 25%;
     height: 44px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    @include mixin.flex(flex, center, center, false);
   }
 
   &__participants-text {
@@ -432,6 +377,7 @@
   }
 
   &__participants {
+    width: 30%;
     height: 44px;
     display: flex;
     position: relative;
@@ -479,11 +425,26 @@
   }
 
   &__donate-block {
-    display: flex;
-    justify-content: start;
-    align-items: center;
-    height: 44px;
     gap: 10%;
+    @include mixin.on-mobile {
+      @include mixin.sizes(100%, 44px);
+      @include mixin.flex(flex, start, center, column);
+    }
+
+    @include mixin.on-tablet {
+      @include mixin.sizes(100%, 44px);
+      @include mixin.flex(flex, center, start, row);
+    }
+
+    @include mixin.on-tablet-2 {
+      @include mixin.sizes(100%, 44px);
+      @include mixin.flex(flex, center, start, row);
+    }
+
+    @include mixin.on-desktop {
+      @include mixin.sizes(80%, 44px);
+      @include mixin.flex(flex, center, start, row);
+    }
   }
 
   &__donate-text {
@@ -493,9 +454,24 @@
   }
 
   &__description {
-    width: 80%;
-    margin-top: 20px;
-    margin-bottom: 20px;
+    margin-top: 15px;
+    margin-bottom: 15px;
+
+    @include mixin.on-mobile {
+      width: 100%;
+    }
+
+    @include mixin.on-tablet {
+      width: 100%;
+    }
+
+    @include mixin.on-tablet-2 {
+      width: 100%;
+    }
+
+    @include mixin.on-desktop {
+      width: 80%;
+    }
   }
 
   &__text-description {
@@ -507,7 +483,22 @@
   &__details {
     display: flex;
     flex-direction: column;
-    width: 80%;
+
+    @include mixin.on-mobile {
+      width: 100%;
+    }
+
+    @include mixin.on-tablet {
+      width: 100%;
+    }
+
+    @include mixin.on-tablet-2 {
+      width: 100%;
+    }
+
+    @include mixin.on-desktop {
+      width: 80%;
+    }
   }
 
   &__title-details {
@@ -529,23 +520,91 @@
     color: var.$dark-gray;
   }
 
-  &__organizer-block {
-    width: 100%;
+  &__organizer-mobile {
+    position: relative;
 
     @include mixin.on-mobile {
+      background-color: var.$black;
+      color: var.$white;
+      @include mixin.sizes(100%, 70px);
+      @include mixin.flex(flex, center, center, column);
+    }
+
+    @include mixin.on-tablet {
+      background-color: var.$black;
+      color: var.$white;
+      @include mixin.sizes(100%, 70px);
+      @include mixin.flex(flex, center, center, column);
+    }
+
+    @include mixin.on-tablet-2 {
+      background-color: var.$black;
+      color: var.$white;
+      @include mixin.sizes(100%, 70px);
+      @include mixin.flex(flex, center, center, column);
+    }
+
+    @include mixin.on-desktop {
+      display: none;
+    }
+  }
+
+  &__organizer-mob-title {
+    @include mixin.button-text-desktop-tablet;
+    color: var.$white;
+    text-transform: uppercase;
+  }
+
+  &__collaps-line {
+    @include mixin.sizes(200px, 2px);
+    display: block;
+    background: var.$white;
+    margin: 0 auto;
+    border-radius: 5px;
+    position: absolute;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    cursor: pointer;
+  }
+
+  &__mob-organizer-block {
+    @include mixin.on-mobile {
+      width: 100%;
       @include mixin.flex(flex, center, space-between, column);
       gap: 10px;
     }
 
     @include mixin.on-tablet {
+      width: 100%;
       @include mixin.flex(flex, false, space-between, row);
     }
 
     @include mixin.on-tablet-2 {
+      width: 100%;
       @include mixin.flex(flex, false, space-between, row);
     }
 
     @include mixin.on-desktop {
+      display: none;
+    }
+  }
+
+  &__organizer-block {
+    @include mixin.on-mobile {
+      display: none;
+    }
+
+    @include mixin.on-tablet {
+      display: none;
+    }
+
+    @include mixin.on-tablet-2 {
+      display: none;
+    }
+
+    @include mixin.on-desktop {
+      width: 100%;
       @include mixin.flex(flex, false, space-between, row);
     }
   }
@@ -622,27 +681,47 @@
     color: var.$light-gray;
   }
 
-  &__organizer-buttons {
-    width: 100%;
-
+  &__mob-organizer-buttons {
     @include mixin.on-mobile {
-      @include mixin.flex(flex, false, false, column);
+      width: 100%;
       margin-top: 15px;
+      @include mixin.flex(flex, false, false, column);
     }
 
     @include mixin.on-tablet {
-      @include mixin.flex(flex, false, false, column);
+      width: 100%;
       margin-top: 15px;
+      @include mixin.flex(flex, false, false, column);
     }
 
     @include mixin.on-tablet-2 {
-      @include mixin.flex(flex, false, false, row);
+      width: 100%;
       margin-top: 15px;
+      @include mixin.flex(flex, false, false, row);
     }
 
     @include mixin.on-desktop {
-      @include mixin.flex(flex, false, false, row);
+      display: none;
+    }
+  }
+
+  &__organizer-buttons {
+    @include mixin.on-mobile {
+      display: none;
+    }
+
+    @include mixin.on-tablet {
+      display: none;
+    }
+
+    @include mixin.on-tablet-2 {
+      display: none;
+    }
+
+    @include mixin.on-desktop {
+      width: 100%;
       margin-top: 0;
+      @include mixin.flex(flex, false, false, row);
     }
   }
 
@@ -664,92 +743,5 @@
       background-color: var.$light-gray;
       color: var.$black;
     }
-  }
-
-  &__part-title {
-    color: var.$light-gray;
-    @include mixin.body-text-desktop-tablet;
-    text-align: center;
-  }
-
-  &__part-input {
-    width: 100%;
-    height: 44px;
-    margin-bottom: 5px;
-    color: var.$white;
-
-    &:placeholder-shown {
-      color: var.$grey;
-      @include mixin.button-text-desktop-tablet;
-    }
-  }
-
-  &__part-error {
-    color: var.$error;
-    @include mixin.small-text-desktop-tablet;
-  }
-
-  &__part-line {
-    width: 100%;
-    height: 1px;
-    background-color: var.$light-gray;
-  }
-
-  &__part-buttons {
-    width: 100%;
-    display: flex;
-    flex-direction: row;
-  }
-
-  &__part-send {
-    width: 100%;
-    height: 44px;
-    line-height: 44px;
-    text-align: center;
-    text-transform: uppercase;
-    background-color: var.$grey;
-    color: var.$black;
-    border: 0.5px solid var.$black;
-    border-radius: 12px;
-    cursor: pointer;
-
-    @include mixin.flex(flex, center, center, false);
-
-    &:hover {
-      background-color: var.$light-gray;
-      color: var.$black;
-    }
-  }
-
-  &__part-cancel {
-    width: 100%;
-    height: 44px;
-    line-height: 44px;
-    text-align: center;
-    text-transform: uppercase;
-    background-color: var.$black;
-    color: var.$white;
-    border: 0.5px solid var.$white;
-    border-radius: 12px;
-    cursor: pointer;
-
-    @include mixin.flex(flex, center, center, false);
-
-    &:hover {
-      background-color: var.$dark-gray;
-      color: var.$white;
-    }
-  }
-
-  &__success {
-    width: 100%;
-    color: var.$success;
-    @include mixin.button-text-desktop-tablet;
-  }
-
-  &__error {
-    width: 100%;
-    color: var.$error;
-    @include mixin.button-text-desktop-tablet;
   }
 }

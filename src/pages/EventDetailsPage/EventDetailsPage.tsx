@@ -1,7 +1,7 @@
 /* eslint-disable prettier/prettier */
 /* eslint-disable max-len */
 /* eslint-disable no-console */
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import cn from 'classnames';
 import styles from './EventDetailsPage.module.scss';
@@ -11,62 +11,34 @@ import { Loader } from '../../components/Loader';
 import arrow from '../../images/icons/arrow_wht_back.svg';
 import report from '../../images/icons/report.svg';
 import avatar from '../../images/icons/account_white.svg';
-import { useAuth } from 'react-oidc-context';
-import PhoneInput from 'react-phone-input-2';
 import { categoryId } from '../../helpers/dropdownsInfo';
 import { DonationStepOne } from '../../components/DonationStepOne';
 import { DonationStepTwo } from '../../components/DonationStepTwo';
 import { DonationStepThree } from '../../components/DonationStepThree';
+import { ParticipateForm } from '../../components/ParticipateForm';
 
 export const EventDetailsPage = () => {
   const { eventId } = useParams<{ eventId: string }>();
   const navigate = useNavigate();
-  const auth = useAuth();
-  const isAuthenticated = auth?.user;
   const [event, setEvent] = useState<EventType | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [isVisible, setIsVisible] = useState(false);
   const [activeForm, setActiveForm] = useState<'volunteering' | 'donation' | null>(null);
   const [stepDonation, setStepDonation] = useState(1);
-  const [formData, setFormData] = useState({
-    name: '',
-    phone: '',
-    email: '',
-  });
-  const [errors, setErrors] = useState<Record<string, string>>({});
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [successSubmit, setSuccessSubmit] = useState(false);
-  const [successMessage, setSuccessMessage] = useState('');
-  const [errorMessage, setErrorMessage] = useState('');
+  const [isOrganizerVisible, setOrganizerVisible] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
-  const bottomRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const handleScroll = () => {
-      if (bottomRef.current) {
-        setIsScrolled(bottomRef.current.scrollTop > 50);
-      }
+      setIsScrolled(window.scrollY > 80);
     };
 
-    const bottomDiv = bottomRef.current;
+    window.addEventListener('scroll', handleScroll);
 
-    bottomDiv?.addEventListener('scroll', handleScroll);
-
-    return () => bottomDiv?.removeEventListener('scroll', handleScroll);
-  }, []);
-
-  useEffect(() => {
-    try {
-      const storedData = localStorage.getItem('eventForm');
-
-      if (storedData) {
-        setFormData(JSON.parse(storedData));
-      }
-    } catch (errorMes) {
-      console.error('Failed to load form data:', errorMes);
-      localStorage.removeItem('eventForm');
-    }
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
   }, []);
 
   useEffect(() => {
@@ -101,71 +73,6 @@ export const EventDetailsPage = () => {
     return () => clearTimeout(timer);
   }, []);
 
-  const validateFields = () => {
-    const newErrors: Record<string, string> = {};
-
-    if (!formData.name.trim()) {
-      newErrors.name = 'Full name is required';
-    }
-
-    if (!formData.email.trim()) {
-      newErrors.email = 'Email is required';
-    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
-      newErrors.email = 'Invalid email format';
-    }
-
-    if (!formData.phone.trim()) {
-      newErrors.phone = 'Phone number is required';
-    } else if (!/^\d{10,15}$/.test(formData.phone)) {
-      newErrors.phone = 'Invalid phone number format';
-    }
-
-    setErrors(newErrors);
-
-    return Object.keys(newErrors).length === 0;
-  };
-
-  const handleSubmitAuth = async () => {
-    setIsSubmitting(true);
-
-    if (!validateFields()) {
-      setIsSubmitting(false);
-
-      return;
-    }
-
-    try {
-      const token = localStorage.getItem('accessToken');
-      const dataToSend = { ...formData, eventId };
-
-      const response = await fetch(
-        `https://dewvdtfd5m.execute-api.eu-north-1.amazonaws.com/dev/authJoin`,
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify(dataToSend),
-        }
-      );
-
-      if (response.ok) {
-        setSuccessSubmit(true);
-        setSuccessMessage('Data is send');
-        localStorage.removeItem('eventForm');
-        setFormData({ name: '', phone: '', email: '' });
-      } else {
-        setErrorMessage('Data sent failed');
-      }
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } catch (errorMes: any) {
-      setErrorMessage(errorMes);
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
-
   const handleClick = () => {
     if (!event) {
       return;
@@ -175,10 +82,6 @@ export const EventDetailsPage = () => {
 
     if (assistanceType === 'VOLUNTEERING') {
       setActiveForm('volunteering');
-
-      if (isAuthenticated) {
-        handleSubmitAuth();
-      }
     } else if (assistanceType === 'DONATION') {
       setActiveForm('donation');
       setStepDonation(1);
@@ -196,70 +99,8 @@ export const EventDetailsPage = () => {
     return date.toLocaleDateString('en-US', options);
   };
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-
-    setFormData((prev) => {
-      const updatedForm = { ...prev, [name]: value };
-
-      localStorage.setItem('eventForm', JSON.stringify(updatedForm));
-
-      return updatedForm;
-    });
-  };
-
-  const handlePhoneChange = (value: string) => {
-    setFormData((prev) => {
-      const updatedForm = { ...prev, phone: value };
-
-      localStorage.setItem('eventForm', JSON.stringify(updatedForm));
-
-      return updatedForm;
-    });
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-
-    setIsSubmitting(true);
-
-    if (!validateFields()) {
-      setIsSubmitting(false);
-
-      return;
-    }
-
-    try {
-      const dataToSend = { ...formData, eventId };
-
-      const response = await fetch(
-        `https://dewvdtfd5m.execute-api.eu-north-1.amazonaws.com/dev/events/${eventId}/join`,
-        {
-          method: 'PUT',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(dataToSend),
-        });
-
-      if (response.ok) {
-        setSuccessSubmit(true);
-        setSuccessMessage('Data is send');
-        localStorage.removeItem('eventForm');
-        setFormData({ name: '', phone: '', email: '' });
-      } else {
-        setErrorMessage('Data sent failed');
-      }
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } catch (errorMes: any) {
-      setErrorMessage(errorMes);
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
-
-  const handleCancel = (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
-    localStorage.removeItem('eventForm');
-    setFormData({ name: '', phone: '', email: '' });
+  const toggleOrganizerInfo = () => {
+    setOrganizerVisible((prev) => !prev);
   };
 
   const handleCancelDonation = () => {
@@ -328,7 +169,6 @@ export const EventDetailsPage = () => {
       <div
         className={cn(styles['event-details__content-top'], {
           [styles['event-details__content-top--visible']]: isVisible,
-          [styles['event-details__content-top--scrolled']]: isScrolled,
         })}
         style={{
           backgroundImage: event.coverImage
@@ -385,10 +225,8 @@ export const EventDetailsPage = () => {
         </div>
       </div>
       <div
-        ref={bottomRef}
         className={cn(styles['event-details__content-bottom'], {
           [styles['event-details__content-bottom--visible']]: isVisible,
-          [styles['event-details__content-bottom--scrolled']]: isScrolled,
         })}
       >
         <div className={styles['event-details__block-left']}>
@@ -521,100 +359,53 @@ export const EventDetailsPage = () => {
               </div>
             </>
           )}
-          {activeForm === 'volunteering' && (
+
+          {!activeForm && (
+            <div className={styles['event-details__organizer-mobile']} onClick={toggleOrganizerInfo}>
+              <p className={styles['event-details__organizer-mob-title']}>About the organizer</p>
+              <div className={styles['event-details__collaps-line']}></div>
+            </div>
+          )}
+          {!activeForm && isOrganizerVisible && (
             <>
-              <p className={styles['event-details__part-title']}>
-                Leave us your contact information and we’ll get in touch.
-              </p>
-              <form onSubmit={handleSubmit} className={styles['event-details__part-form']}>
-                <input
-                  value={formData.name}
-                  onChange={handleChange}
-                  className={styles['event-details__part-input']}
-                  type="text"
-                  name="name"
-                  placeholder="Your full name"
-                  required
-                />
-                <div className={styles['event-details__part-line']}></div>
-                {errors.name && !formData.name && (
-                  <p className={styles['event-details__part-error']}>
-                    {errors.name}
+              <div className={styles['event-details__mob-organizer-block']}>
+                <div className={styles['event-details__img-container']}>
+                  <img
+                    src={event.organizerPhoto}
+                    alt="logo"
+                    className={styles['event-details__organizer-logo']}
+                  />
+                </div>
+                <div className={styles['event-details__organizer-details']}>
+                  <p className={styles['event-details__organizer-title']}>
+                    {event.organizerType === 'Individual' ? 'Organizer person' : 'Organization'}
                   </p>
-                )}
-                <PhoneInput
-                  country={'ua'}
-                  value={formData.phone}
-                  onChange={handlePhoneChange}
-                  inputProps={{
-                    required: true,
-                    className: styles['transparent-input'],
-                  }}
-                  buttonStyle={{
-                    background: 'transparent',
-                    border: 'none',
-                  }}
-                  containerStyle={{ background: 'transparent' }}
-                  dropdownStyle={{
-                    background: 'black',
-                    color: 'white',
-                    zIndex: '15',
-                  }}
-                />
-                <div className={styles['event-details__part-line']}></div>
-                {errors.phone && !formData.phone && (
-                  <p className={styles['event-details__part-error']}>
-                    {errors.phone}
+                  <p className={styles['event-details__organizer-name']}>
+                    {event.organizerName}
                   </p>
-                )}
-                <input
-                  value={formData.email}
-                  onChange={handleChange}
-                  className={styles['event-details__part-input']}
-                  type="email"
-                  name="email"
-                  placeholder="Email address"
-                />
-                <div className={styles['event-details__part-line']}></div>
-                {errors.email && !formData.email && (
-                  <p className={styles['event-details__part-error']}>
-                    {errors.email}
+                  <p className={styles['event-details__organizer-phone']}>
+                    {event.phone}
                   </p>
-                )}
-              </form>
-              {successMessage && (
-                <p className={styles['event-details__success']}>Data sent successfully!</p>
-              )}
-              {errorMessage && (
-                <p className={styles['event-details__error']}>Data sent failed. Please try again.</p>
-              )}
-              <div className={styles['event-details__part-buttons']}>
-                <button
-                  type="submit"
-                  className={styles['event-details__part-send']}
-                  onClick={handleSubmit}
-                >
-                  {isSubmitting ? 'Sending' : 'Send'}
+                  <p className={styles['event-details__organizer-email']}>
+                    {event.organizerEmail}
+                  </p>
+                  <p className={styles['event-details__organizer-link']}>
+                    {event.link}
+                  </p>
+                </div>
+              </div>
+              <div className={styles['event-details__mob-organizer-buttons']}>
+                <button className={styles['event-details__organizer-button']}>
+                  Feedback
                 </button>
-                {successSubmit ? (
-                  <button
-                    type="button"
-                    onClick={() => setActiveForm(null)}
-                    className={styles['event-details__part-cancel']}
-                  >
-                    Close
-                  </button>
-                ) : (
-                  <button
-                    type="button"
-                    onClick={handleCancel}
-                    className={styles['event-details__part-cancel']}
-                  >
-                    Cancel
-                  </button>
-                )}
+                <button className={styles['event-details__organizer-button']}>
+                  Success Stories
+                </button>
               </div>
             </>
+          )}
+          {activeForm === 'volunteering' && (
+            <ParticipateForm onClose={handleClose} />
           )}
 
           {activeForm === 'donation' && stepDonation === 1 && (
