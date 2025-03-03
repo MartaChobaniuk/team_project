@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import { useEffect, useState } from 'react';
 import styles from './ParticipateForm.module.scss';
 import { useParams } from 'react-router-dom';
@@ -114,6 +115,7 @@ export const ParticipateForm: React.FC<Props> = ({ onClose }) => {
         setSuccessMessage('Data is send');
         localStorage.removeItem('eventForm');
         setFormData({ name: '', phone: '', email: '' });
+        console.log('not auth');
         setTimeout(() => onClose(), 1500);
       } else {
         setErrorMessage('Data sent failed');
@@ -154,6 +156,7 @@ export const ParticipateForm: React.FC<Props> = ({ onClose }) => {
       if (response.ok) {
         setSuccessMessage('Data is send');
         localStorage.removeItem('eventForm');
+        console.log('auth');
         setFormData({ name: '', phone: '', email: '' });
         setTimeout(() => onClose(), 1500);
       } else {
