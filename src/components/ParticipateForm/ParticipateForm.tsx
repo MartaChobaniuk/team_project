@@ -131,7 +131,8 @@ export const ParticipateForm: React.FC<Props> = ({ onClose }) => {
     }
   };
 
-  const handleSubmitAuth = async () => {
+  const handleSubmitAuth = async (e: React.FormEvent) => {
+    e.preventDefault();
     setIsSubmitting(true);
 
     if (!validateFields()) {
@@ -181,7 +182,14 @@ export const ParticipateForm: React.FC<Props> = ({ onClose }) => {
         Leave us your contact information and we’ll get in touch.
       </p>
       <form
-        onSubmit={isAuthenticated ? handleSubmitAuth : handleSubmit}
+        onSubmit={e => {
+          console.log('Form submitted, isAuthenticated:', isAuthenticated);
+          if (isAuthenticated) {
+            handleSubmitAuth(e);
+          } else {
+            handleSubmit(e);
+          }
+        }}
         className={styles['event-details__part-form']}
       >
         <input
