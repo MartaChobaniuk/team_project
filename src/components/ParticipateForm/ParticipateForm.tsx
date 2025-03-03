@@ -23,6 +23,9 @@ export const ParticipateForm: React.FC<Props> = ({ onClose }) => {
   const [successMessage, setSuccessMessage] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
 
+  console.log('Auth state:', auth);
+  console.log('Is authenticated:', auth.isAuthenticated);
+
   useEffect(() => {
     try {
       const storedData = localStorage.getItem('eventForm');
@@ -157,6 +160,8 @@ export const ParticipateForm: React.FC<Props> = ({ onClose }) => {
         setSuccessMessage('Data is send');
         localStorage.removeItem('eventForm');
         console.log('auth');
+        console.log('Auth state:', auth);
+        console.log('Is authenticated:', auth.isAuthenticated);
         setFormData({ name: '', phone: '', email: '' });
         setTimeout(() => onClose(), 1500);
       } else {
