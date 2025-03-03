@@ -12,7 +12,7 @@ type Props = {
 export const ParticipateForm: React.FC<Props> = ({ onClose }) => {
   const { eventId } = useParams<{ eventId: string }>();
   const auth = useAuth();
-  const isAuthenticated = auth?.user;
+  const isAuthenticated = auth?.isAuthenticated ?? true;
   const [formData, setFormData] = useState({
     name: '',
     phone: '',
@@ -23,8 +23,7 @@ export const ParticipateForm: React.FC<Props> = ({ onClose }) => {
   const [successMessage, setSuccessMessage] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
 
-  console.log('Auth state:', auth);
-  console.log('Is authenticated:', auth.isAuthenticated);
+  console.log('Rendering form, isAuthenticated:', isAuthenticated);
 
   useEffect(() => {
     try {
