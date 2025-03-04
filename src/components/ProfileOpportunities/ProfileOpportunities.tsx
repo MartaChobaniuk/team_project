@@ -291,8 +291,8 @@ export const ProfileOpportunities = () => {
                 {loading ? (
                   <div>Loading opportunities...</div>
                 ) : submittedOpportunities.length > 0 ? (
-                  submittedOpportunities.map((event, index) => (
-                    <div key={event.id ?? index} className={styles.opport__row}>
+                  submittedOpportunities.map(event => (
+                    <div key={event.eventId} className={styles.opport__row}>
                       <span>{event.title}</span>
                       <span>{event.registeredAt}</span>
                       <span>{event.opportunityType}</span>
@@ -300,7 +300,7 @@ export const ProfileOpportunities = () => {
                         {event.submittedStatus}
                       </span>
                       <Link
-                        to={`${event.opportunityType === 'WISHES' ? '/wishes' : '/volunteering'}/${event.id}`}
+                        to={`${event.opportunityType === 'WISHES' ? '/wishes' : '/volunteering'}/${event.eventId}`}
                         className={styles['opport__button-detail']}
                         aria-label={`View details for ${event.title}`}
                       >
@@ -314,16 +314,14 @@ export const ProfileOpportunities = () => {
               </div>
               <div className={styles.opport__list} ref={parent}>
                 {submittedOpportunities.length > 0 ? (
-                  submittedOpportunities.map((event, index: number) => (
-                    <React.Fragment
-                      key={event.id ?? `fallback-${index}-${Math.random()}`}
-                    >
+                  submittedOpportunities.map(event => (
+                    <React.Fragment key={event.eventId}>
                       <div className={styles.opport__dropdown}>
                         <button
                           className={styles['opport__dropdown-button']}
                           onClick={e => {
                             e.preventDefault();
-                            toggleOpen(event.id);
+                            toggleOpen(event.eventId);
                           }}
                         >
                           <span className={styles.opport__select}>
@@ -336,14 +334,16 @@ export const ProfileOpportunities = () => {
                           <img
                             className={styles['opport__dropdown-img']}
                             src={
-                              openDropdown === event.id ? arrow_up : arrow_down
+                              openDropdown === event.eventId
+                                ? arrow_up
+                                : arrow_down
                             }
                             alt="Arrow Down"
                           />
                         </div>
                       </div>
                       <div className={styles.opport__line}></div>
-                      {openDropdown === event.id && (
+                      {openDropdown === event.eventId && (
                         <div className={styles.opport__info}>
                           <div>
                             <span className={styles['opport__detail-name']}>
@@ -371,9 +371,9 @@ export const ProfileOpportunities = () => {
                                 styles.opport__status,
                                 {
                                   [styles['opport__status--progress']]:
-                                    event.submittedStatus === 'In progress',
+                                    event.submittedStatus === 'SUBMITTED',
                                   [styles['opport__status--completed']]:
-                                    event.submittedStatus === 'Completed',
+                                    event.submittedStatus === 'APPROVED',
                                 },
                               )}
                             >
@@ -381,7 +381,7 @@ export const ProfileOpportunities = () => {
                             </span>
                           </div>
                           <Link
-                            to={`${event.opportunityType === 'WISHES' ? '/wishes' : '/volunteering'}/${event.id}`}
+                            to={`${event.opportunityType === 'WISHES' ? '/wishes' : '/volunteering'}/${event.eventId}`}
                             className={styles['opport__button-detail']}
                             aria-label={`View details for ${event.title}`}
                           >

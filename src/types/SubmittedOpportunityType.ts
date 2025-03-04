@@ -1,5 +1,5 @@
 export type SubmittedOpportunityType = {
-  id: string;
+  eventId: string;
   title: string;
   type: string;
   opportunityType: string | number;
