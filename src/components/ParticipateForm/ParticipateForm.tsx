@@ -6,10 +6,16 @@ import PhoneInput from 'react-phone-input-2';
 import { useAuth } from 'react-oidc-context';
 
 type Props = {
+  title: string;
+  opportunityType: string;
   onClose: () => void;
 };
 
-export const ParticipateForm: React.FC<Props> = ({ onClose }) => {
+export const ParticipateForm: React.FC<Props> = ({
+  onClose,
+  title,
+  opportunityType,
+}) => {
   const { eventId } = useParams<{ eventId: string }>();
   const auth = useAuth();
   const isAuthenticated = auth?.isAuthenticated ?? true;
@@ -100,7 +106,7 @@ export const ParticipateForm: React.FC<Props> = ({ onClose }) => {
     }
 
     try {
-      const dataToSend = { ...formData, eventId };
+      const dataToSend = { ...formData, eventId, title, opportunityType };
 
       const response = await fetch(
         `https://dewvdtfd5m.execute-api.eu-north-1.amazonaws.com/dev/events/${eventId}/join`,
@@ -139,7 +145,7 @@ export const ParticipateForm: React.FC<Props> = ({ onClose }) => {
 
     try {
       const token = localStorage.getItem('accessToken');
-      const dataToSend = { ...formData, eventId };
+      const dataToSend = { ...formData, title, opportunityType, eventId };
 
       const response = await fetch(
         `https://dewvdtfd5m.execute-api.eu-north-1.amazonaws.com/dev/authJoin`,

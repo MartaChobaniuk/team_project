@@ -416,8 +416,12 @@ export const EventDetailsPage = () => {
               </div>
             </>
           )}
-          {activeForm === 'volunteering' && (
-            <ParticipateForm onClose={handleClose} />
+          {activeForm === 'volunteering' && event && (
+            <ParticipateForm
+              title={event.title}
+              opportunityType={event.opportunityType}
+              onClose={handleClose}
+            />
           )}
 
           {activeForm === 'donation' && stepDonation === 1 && (
