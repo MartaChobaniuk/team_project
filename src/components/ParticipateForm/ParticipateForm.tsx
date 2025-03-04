@@ -117,7 +117,7 @@ export const ParticipateForm: React.FC<Props> = ({ onClose }) => {
         setSuccessMessage('Data is send');
         localStorage.removeItem('eventForm');
         setFormData({ name: '', phone: '', email: '' });
-        console.log('not auth');
+        console.log('user is not auth');
         setTimeout(() => onClose(), 1500);
       } else {
         setErrorMessage('Data sent failed');
@@ -254,7 +254,7 @@ export const ParticipateForm: React.FC<Props> = ({ onClose }) => {
         <button
           type="submit"
           className={styles['event-details__part-send']}
-          onClick={handleSubmit}
+          onClick={isAuthenticated ? handleSubmitAuth : handleSubmit}
         >
           {isSubmitting ? 'Sending' : 'Send'}
         </button>
