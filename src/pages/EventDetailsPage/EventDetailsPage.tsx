@@ -88,6 +88,11 @@ export const EventDetailsPage = () => {
     }
   };
 
+  const handleClickProvideAssistance = () => {
+    setActiveForm('donation');
+    setStepDonation(1);
+  };
+
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
     const options: Intl.DateTimeFormatOptions = {
@@ -105,6 +110,9 @@ export const EventDetailsPage = () => {
 
   const handleCancelDonation = () => {
     localStorage.removeItem('amount');
+    localStorage.removeItem('email');
+    localStorage.removeItem('name');
+    localStorage.removeItem('paymentMethodId');
     setActiveForm(null);
   };
 
@@ -209,7 +217,11 @@ export const EventDetailsPage = () => {
                   ? 'Participate'
                   : 'Donate'}
               </button>
-              <button className={styles['event-details__button-sec']}>
+              <button
+                type="button"
+                onClick={handleClickProvideAssistance}
+                className={styles['event-details__button-sec']}
+              >
                 Provide Another Assistance
               </button>
             </div>

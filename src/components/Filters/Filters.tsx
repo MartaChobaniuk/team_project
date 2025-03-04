@@ -539,7 +539,7 @@ export const Filters: React.FC<FiltersProps> = ({
           </div>
           {dropdownStates.timeDemands && (
             <ul className={styles['filters__dropdown-list']}>
-              {timeDemands.map(demands => (
+              {Object.keys(timeDemands).map(demands => (
                 <li
                   key={demands}
                   onClick={() => selectOption('timeDemands', demands)}

@@ -1,6 +1,7 @@
 /* eslint-disable no-console */
 import { EventType } from '../types/EventType';
 import { FilterSelection } from '../types/FilterType';
+import { timeDemands } from './dropdownsInfo';
 
 export const filteredEv = (
   events: EventType[],
@@ -91,6 +92,20 @@ export const filteredEv = (
           eventDate.getTime() < startOfDay.setDate(startOfDay.getDate() + 1)
         );
       }
+    });
+  }
+
+  if (filters.timeDemands) {
+    // eslint-disable-next-line max-len
+    const [minHours, maxHours] = timeDemands[filters.timeDemands] || [
+      0,
+      Infinity,
+    ];
+
+    filteredEvents = filteredEvents.filter(event => {
+      const eventTimeDemands = Number(event.timeDemands);
+
+      return eventTimeDemands >= minHours && eventTimeDemands <= maxHours;
     });
   }
 

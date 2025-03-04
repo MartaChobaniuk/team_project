@@ -12,6 +12,7 @@ import { Loader } from '../Loader';
 import { NewOpportunityType } from '../../types/NewOpportunityType';
 import { Link } from 'react-router-dom';
 import { useAutoAnimate } from '@formkit/auto-animate/react';
+import { SubmittedOpportunityType } from '../../types/SubmittedOpportunityType';
 
 export const ProfileOpportunities = () => {
   const { pathname } = useLocation();
@@ -26,7 +27,7 @@ export const ProfileOpportunities = () => {
   // eslint-disable-next-line max-len, prettier/prettier
   const [postedOpportunities, setPostedOpportunities] = useState<NewOpportunityType[]>([]);
   // eslint-disable-next-line max-len, prettier/prettier
-  const [submittedOpportunities, setSubmittedOpportunities] = useState<NewOpportunityType[]>([]);
+  const [submittedOpportunities, setSubmittedOpportunities] = useState<SubmittedOpportunityType[]>([]);
   const [error, setError] = useState<string | null>(null);
   // eslint-disable-next-line max-len, prettier/prettier
   const [errorSubmittedOpport, setErrorSubmittedOpport] = useState<string | null>(null);
@@ -293,10 +294,10 @@ export const ProfileOpportunities = () => {
                   submittedOpportunities.map((event, index) => (
                     <div key={event.id ?? index} className={styles.opport__row}>
                       <span>{event.title}</span>
-                      <span>{event.startDate}</span>
+                      <span>{event.registeredAt}</span>
                       <span>{event.opportunityType}</span>
                       <span className={styles.opport__status}>
-                        {event.status}
+                        {event.submittedStatus}
                       </span>
                       <Link
                         to={`${event.opportunityType === 'WISHES' ? '/wishes' : '/volunteering'}/${event.id}`}
@@ -349,7 +350,7 @@ export const ProfileOpportunities = () => {
                               Submission Date:
                             </span>
                             <span className={styles['opport__detail-value']}>
-                              {event.startDate}
+                              {event.registeredAt}
                             </span>
                           </div>
                           <div>
@@ -370,13 +371,13 @@ export const ProfileOpportunities = () => {
                                 styles.opport__status,
                                 {
                                   [styles['opport__status--progress']]:
-                                    event.status === 'In progress',
+                                    event.submittedStatus === 'In progress',
                                   [styles['opport__status--completed']]:
-                                    event.status === 'Completed',
+                                    event.submittedStatus === 'Completed',
                                 },
                               )}
                             >
-                              {event.status}
+                              {event.submittedStatus}
                             </span>
                           </div>
                           <Link

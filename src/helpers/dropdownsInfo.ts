@@ -43,13 +43,14 @@ export const region = [
   'Sumy',
 ];
 
-export const timeDemands = [
-  'Up to 1 hour',
-  '1-6 hours',
-  'Up to a day',
-  'Up to a week',
-  'Up to a month',
-  '1 - 3 months',
-  '3 - 6 months',
-  'Up to a year ',
-];
+export const timeDemands: Record<string, [number, number]> = {
+  'Up to 1 hour': [0, 1],
+  '1-6 hours': [1, 6],
+  'Up to a day': [7, 24],
+  'Up to a week': [25, 144],
+  'Up to a month': [145, 744],
+  '1 - 3 months': [745, 2232],
+  '3 - 6 months': [2233, 4464],
+  'Up to a year': [4465, 8950],
+  'More than a year': [8951, Infinity],
+};
