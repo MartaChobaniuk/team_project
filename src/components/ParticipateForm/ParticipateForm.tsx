@@ -106,7 +106,14 @@ export const ParticipateForm: React.FC<Props> = ({
     }
 
     try {
-      const dataToSend = { ...formData, eventId, title, opportunityType };
+      const currentTime = new Date().toISOString();
+      const dataToSend = {
+        ...formData,
+        title: title,
+        opportunityType: opportunityType,
+        eventId,
+        currentTime: currentTime,
+      };
 
       const response = await fetch(
         `https://dewvdtfd5m.execute-api.eu-north-1.amazonaws.com/dev/events/${eventId}/join`,
@@ -144,8 +151,15 @@ export const ParticipateForm: React.FC<Props> = ({
     }
 
     try {
+      const currentTime = new Date().toISOString();
       const token = localStorage.getItem('accessToken');
-      const dataToSend = { ...formData, title, opportunityType, eventId };
+      const dataToSend = {
+        ...formData,
+        title: title,
+        opportunityType: opportunityType,
+        eventId,
+        currentTime: currentTime,
+      };
 
       const response = await fetch(
         `https://dewvdtfd5m.execute-api.eu-north-1.amazonaws.com/dev/authJoin`,

@@ -96,17 +96,33 @@ export const filteredEv = (
   }
 
   if (filters.timeDemands) {
+    console.log('filters.timeDemands:', filters.timeDemands);
+
     // eslint-disable-next-line max-len
     const [minHours, maxHours] = timeDemands[filters.timeDemands] || [
       0,
       Infinity,
     ];
 
+    console.log('minHours:', minHours, 'maxHours:', maxHours);
+
     filteredEvents = filteredEvents.filter(event => {
-      const eventTimeDemands = Number(event.timeDemands);
+      console.log('Checking event:', event);
+
+      const eventTimeDemands = parseFloat(event.timeDemands);
+
+      console.log('Parsed eventTimeDemands:', eventTimeDemands);
+
+      if (isNaN(eventTimeDemands)) {
+        console.warn('Invalid event timeDemands:', event.timeDemands);
+
+        return false;
+      }
 
       return eventTimeDemands >= minHours && eventTimeDemands <= maxHours;
     });
+
+    console.log('filteredEvents after filtering:', filteredEvents);
   }
 
   return filteredEvents;
