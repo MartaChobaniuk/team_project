@@ -71,19 +71,19 @@ export const StepTwo = () => {
   }, [stepTwoData]);
 
   const getTimeDemandsText = (hours: number): string => {
-    if (hours >= 0 && hours <= 12) {
+    if (hours <= 12) {
       return '1-12 hours';
-    } else if (hours >= 13 && hours <= 24) {
+    } else if (hours <= 24) {
       return 'Up to a day';
-    } else if (hours >= 25 && hours <= 144) {
+    } else if (hours <= 144) {
       return 'Up to a week';
-    } else if (hours >= 145 && hours <= 744) {
+    } else if (hours <= 744) {
       return 'Up to a month';
-    } else if (hours >= 745 && hours <= 2232) {
+    } else if (hours <= 2232) {
       return '1 - 3 months';
-    } else if (hours >= 2233 && hours <= 4464) {
+    } else if (hours <= 4464) {
       return '3 - 6 months';
-    } else if (hours >= 4465 && hours <= 8950) {
+    } else if (hours <= 8950) {
       return 'Up to a year';
     } else {
       return 'More than a year';
@@ -105,27 +105,29 @@ export const StepTwo = () => {
       !isNaN(endDate.getTime())
     ) {
       const diffInMs = endDate.getTime() - startDate.getTime();
-      const diffInHours = diffInMs / (1000 * 60 * 60);
+      const diffInHours = Math.floor(diffInMs / (1000 * 60 * 60));
+      const timeDemandsText = getTimeDemandsText(diffInHours);
 
       setStepTwoData(prevState => ({
         ...prevState,
-        timeDemands: diffInHours.toString(),
+        timeDemands: timeDemandsText,
       }));
 
-      return getTimeDemandsText(diffInHours);
+      return timeDemandsText;
     }
 
     return '0 hours';
-  };
+};
 
-  useEffect(() => {
+useEffect(() => {
     const timeDemandsText = calculateTimeDemands();
 
     setStepTwoData(prevState => ({
       ...prevState,
-      timeDemandsText: timeDemandsText,
+      timeDemands: timeDemandsText,
     }));
-  }, [stepTwoData.startingDate, stepTwoData.endingDate]);
+}, [stepTwoData.startingDate, stepTwoData.endingDate]);
+
 
   const toggleStartPeriod = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
@@ -905,8 +907,9 @@ export const StepTwo = () => {
                 )}
               <input
                 type="text"
+                name="timeDemands"
                 className={styles.two__input}
-                value={stepTwoData.timeDemandsText || ''}
+                value={stepTwoData.timeDemands || ''}
                 readOnly
               />
               <div className={styles.two__line}></div>

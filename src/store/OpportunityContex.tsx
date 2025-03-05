@@ -31,7 +31,6 @@ interface StepTwoData {
   startPeriod: string;
   endPeriod: string;
   timeDemands: string;
-  timeDemandsText: string;
   skills: string;
 }
 
@@ -91,7 +90,6 @@ const initialStepTwoData: StepTwoData = {
   startPeriod: 'AM',
   endPeriod: 'AM',
   timeDemands: '',
-  timeDemandsText: '',
   skills: '',
 };
 

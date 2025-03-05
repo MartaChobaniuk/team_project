@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 /* eslint-disable no-console */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useEffect, useRef, useState } from 'react';
@@ -294,7 +295,7 @@ export const ProfileOpportunities = () => {
                   submittedOpportunities.map(event => (
                     <div key={event.eventId} className={styles.opport__row}>
                       <span>{event.title}</span>
-                      <span>{event.currentTime}</span>
+                      <span> {event.currentTime.toLocaleString()}</span>
                       <span>{event.opportunityType}</span>
                       <span className={styles.opport__status}>
                         {event.submittedStatus}
@@ -350,7 +351,7 @@ export const ProfileOpportunities = () => {
                               Submission Date:
                             </span>
                             <span className={styles['opport__detail-value']}>
-                              {event.currentTime}
+                              {event.currentTime.toLocaleString()}
                             </span>
                           </div>
                           <div>
@@ -371,9 +372,12 @@ export const ProfileOpportunities = () => {
                                 styles.opport__status,
                                 {
                                   [styles['opport__status--progress']]:
-                                    event.submittedStatus === 'SUBMITTED',
+                                    // eslint-disable-next-line prettier/prettier
+                                    event.submittedStatus === 'Information requested' ||
+                                    event.submittedStatus === 'Denied',
                                   [styles['opport__status--completed']]:
-                                    event.submittedStatus === 'APPROVED',
+                                    event.submittedStatus === 'Submitted' ||
+                                    event.submittedStatus === 'On Review',
                                 },
                               )}
                             >

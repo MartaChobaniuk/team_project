@@ -1,7 +1,6 @@
 /* eslint-disable no-console */
 import { EventType } from '../types/EventType';
 import { FilterSelection } from '../types/FilterType';
-import { timeDemands } from './dropdownsInfo';
 
 export const filteredEv = (
   events: EventType[],
@@ -96,33 +95,14 @@ export const filteredEv = (
   }
 
   if (filters.timeDemands) {
-    console.log('filters.timeDemands:', filters.timeDemands);
-
-    // eslint-disable-next-line max-len
-    const [minHours, maxHours] = timeDemands[filters.timeDemands] || [
-      0,
-      Infinity,
-    ];
-
-    console.log('minHours:', minHours, 'maxHours:', maxHours);
-
     filteredEvents = filteredEvents.filter(event => {
-      console.log('Checking event:', event);
-
-      const eventTimeDemands = parseFloat(event.timeDemands);
-
-      console.log('Parsed eventTimeDemands:', eventTimeDemands);
-
-      if (isNaN(eventTimeDemands)) {
-        console.warn('Invalid event timeDemands:', event.timeDemands);
-
+      if (!event.timeDemands) {
         return false;
       }
 
-      return eventTimeDemands >= minHours && eventTimeDemands <= maxHours;
+      // eslint-disable-next-line max-len, prettier/prettier
+      return event.timeDemands.toLowerCase() ===  (filters.timeDemands ?? '').toLowerCase();
     });
-
-    console.log('filteredEvents after filtering:', filteredEvents);
   }
 
   return filteredEvents;

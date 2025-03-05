@@ -89,8 +89,7 @@ export const EventDetailsPage = () => {
   };
 
   const handleClickProvideAssistance = () => {
-    setActiveForm('donation');
-    setStepDonation(1);
+    setActiveForm('volunteering');
   };
 
   const formatDate = (dateString: string) => {
