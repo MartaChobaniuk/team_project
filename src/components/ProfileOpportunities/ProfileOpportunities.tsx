@@ -294,7 +294,7 @@ export const ProfileOpportunities = () => {
                   submittedOpportunities.map(event => (
                     <div key={event.eventId} className={styles.opport__row}>
                       <span>{event.title}</span>
-                      <span>{event.registeredAt}</span>
+                      <span>{event.currentTime}</span>
                       <span>{event.opportunityType}</span>
                       <span className={styles.opport__status}>
                         {event.submittedStatus}
@@ -350,7 +350,7 @@ export const ProfileOpportunities = () => {
                               Submission Date:
                             </span>
                             <span className={styles['opport__detail-value']}>
-                              {event.registeredAt}
+                              {event.currentTime}
                             </span>
                           </div>
                           <div>
