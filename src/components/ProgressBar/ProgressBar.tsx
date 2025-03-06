@@ -5,14 +5,12 @@ import cn from 'classnames';
 type Props = {
   target: number | string;
   currentProgress: number | string;
-  opportunityType: string;
   assistanceType: string;
 };
 
 export const ProgressBar: React.FC<Props> = ({
   target,
   currentProgress,
-  opportunityType,
   assistanceType,
 }) => {
   const percentage = (Number(currentProgress) / Number(target)) * 100;
@@ -31,7 +29,7 @@ export const ProgressBar: React.FC<Props> = ({
         ></div>
       </div>
       <p className={styles['progress-bar__text']}>
-        {opportunityType === 'WISHES'
+        {assistanceType === 'DONATION'
           ? `${currentProgress} ₴ collected`
           : `${currentProgress} participants`}
       </p>

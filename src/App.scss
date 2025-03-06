@@ -19,29 +19,6 @@
     flex: 1;
   }
 
-  &__overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0, 0, 0, 1);
-    z-index: 13;
-    transition: background 0.3s;
-
-    @include mixin.on-mobile {
-      height: 70px;
-    }
-
-    @include mixin.on-tablet {
-      height: 86px;
-    }
-
-    @include mixin.on-desktop {
-      height: 86px;
-    }
-  }
-
   &__header {
     position: fixed;
     top: 0;

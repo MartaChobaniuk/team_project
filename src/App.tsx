@@ -24,7 +24,7 @@ export const App: React.FC = () => {
 
   useEffect(() => {
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 100);
+      setIsScrolled(window.scrollY > 120);
     };
 
     window.addEventListener('scroll', handleScroll);

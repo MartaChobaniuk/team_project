@@ -55,7 +55,6 @@ export const EventCard: React.FC<Props> = ({ event }) => {
       <ProgressBar
         target={event.target}
         currentProgress={event.currentProgress}
-        opportunityType={event.opportunityType}
         assistanceType={event.assistanceType}
       />
       <div className={styles.event__types}>
