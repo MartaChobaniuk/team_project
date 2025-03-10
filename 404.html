@@ -2,7 +2,12 @@
 <html>
     <head>
     <title>The I Change</title>
-    <meta http-equiv="refresh" content="0; url=https://martachobaniuk.github.io/team_project/" />
+    <script>
+        (function () {
+        let currentPath = window.location.pathname + window.location.search;
+        window.location.href = "https://martachobaniuk.github.io/team_project" + currentPath;
+        })();
+    </script>
     </head>
     <body></body>
 </html>
