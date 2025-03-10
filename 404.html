@@ -3,9 +3,12 @@
     <head>
     <title>The I Change</title>
     <script>
-        (function () {
-        let currentPath = window.location.pathname + window.location.search;
-        window.location.href = "https://martachobaniuk.github.io/team_project" + currentPath;
+        (function() {
+            let path = window.location.pathname + window.location.search;
+
+            if (!path.startsWith("/team_project")) {
+                window.location.replace("https://martachobaniuk.github.io/team_project" + path);
+            }
         })();
     </script>
     </head>
