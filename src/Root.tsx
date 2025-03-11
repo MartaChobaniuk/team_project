@@ -37,6 +37,8 @@ function RedirectHandler() {
     const redirectPath = sessionStorage.getItem('redirectPath');
 
     if (redirectPath) {
+      // eslint-disable-next-line no-console
+      console.log('Перенаправлення на:', redirectPath);
       sessionStorage.removeItem('redirectPath');
       navigate(redirectPath, { replace: true });
     }
