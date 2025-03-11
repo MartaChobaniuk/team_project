@@ -1,4 +1,5 @@
 import {
+  Navigate,
   Route,
   BrowserRouter as Router,
   Routes,
@@ -10,7 +11,6 @@ import { StoriesPage } from './pages/StoriesPage';
 import { AboutUsPage } from './pages/AboutUsPage';
 import { ContactPage } from './pages/ContactPage';
 import { Path } from './utils/constants';
-import { NotFoundPage } from './pages/NotFoundPage';
 import { HomeAIPage } from './pages/HomeAIPage';
 import { MenuPage } from './pages/MenuPage';
 import { LogInPage } from './pages/LogInPage';
@@ -48,7 +48,7 @@ function RedirectHandler() {
 }
 
 export const Root = () => (
-  <Router basename="/team_project">
+  <Router basename={process.env.PUBLIC_URL}>
     <RedirectHandler />
     <Routes>
       <Route path={Path.Home} element={<App />}>
@@ -102,7 +102,7 @@ export const Root = () => (
 
         <Route path={Path.Menu} element={<MenuPage />} />
 
-        <Route path="*" element={<NotFoundPage />} />
+        <Route path="*" element={<Navigate to="/404.html" replace />} />
       </Route>
     </Routes>
   </Router>
