@@ -4,15 +4,17 @@
     <title>The I Change</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script>
-        (function () {
-        var path = window.location.pathname + window.location.search;
-
-        console.log("Збережений шлях:", path);
-
-        sessionStorage.setItem("redirectPath", path);
-
-        window.location.replace("https://martachobaniuk.github.io/team_project/");
-        })();
+        window.onload = function() {
+            (function () {
+                var path = window.location.pathname + window.location.search;
+                console.log("Збережений шлях:", path);
+                localStorage.setItem("redirectPath", path);
+                if (!path.includes("/team_project")) {
+                    path = "/team_project" + path;
+                }
+                window.location.replace("https://martachobaniuk.github.io" + path);
+            })();
+        }
     </script>
     </head>
     <body></body>
