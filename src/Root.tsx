@@ -1,4 +1,9 @@
-import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
+import {
+  Route,
+  BrowserRouter as Router,
+  Routes,
+  useNavigate,
+} from 'react-router-dom';
 import { App } from './App';
 import { HomePage } from './pages/HomePage';
 import { StoriesPage } from './pages/StoriesPage';
@@ -23,9 +28,26 @@ import { VolunteeringPage } from './pages/VolunteeringPage';
 import { WishesPage } from './pages/WishesPage';
 import { DonatePage } from './pages/DonatePage';
 import { SuccessSubmitPage } from './pages/SuccessSubmit';
+import { useEffect } from 'react';
+
+function RedirectHandler() {
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const redirectPath = sessionStorage.getItem('redirectPath');
+
+    if (redirectPath) {
+      sessionStorage.removeItem('redirectPath');
+      navigate(redirectPath, { replace: true });
+    }
+  }, [navigate]);
+
+  return null;
+}
 
 export const Root = () => (
   <Router basename="/team_project">
+    <RedirectHandler />
     <Routes>
       <Route path={Path.Home} element={<App />}>
         <Route index element={<HomePage />} />
