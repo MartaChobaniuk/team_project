@@ -1,4 +1,5 @@
-import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
+// eslint-disable-next-line max-len, prettier/prettier
+import { Route, BrowserRouter as Router, Routes, useNavigate } from 'react-router-dom';
 import { App } from './App';
 import { HomePage } from './pages/HomePage';
 import { StoriesPage } from './pages/StoriesPage';
@@ -23,9 +24,28 @@ import { WishesPage } from './pages/WishesPage';
 import { DonatePage } from './pages/DonatePage';
 import { SuccessSubmitPage } from './pages/SuccessSubmit';
 import { NotFoundPage } from './pages/NotFoundPage';
+import { useEffect } from 'react';
+
+function RedirectHandler() {
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const redirectPath = localStorage.getItem('redirectPath');
+
+    if (redirectPath) {
+      // eslint-disable-next-line no-console
+      console.log('Перенаправлення на:', redirectPath);
+      localStorage.removeItem('redirectPath');
+      navigate(redirectPath, { replace: true });
+    }
+  }, [navigate]);
+
+  return null;
+}
 
 export const Root = () => (
   <Router basename="/team_project">
+    <RedirectHandler />
     <Routes>
       <Route path={Path.Home} element={<App />}>
         <Route index element={<HomePage />} />
