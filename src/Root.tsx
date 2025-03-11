@@ -27,20 +27,20 @@ import { NotFoundPage } from './pages/NotFoundPage';
 import { useEffect } from 'react';
 
 function RedirectHandler() {
-  const navigate = useNavigate();
+  const navigate = useNavigate(); // хук для навігації
 
   useEffect(() => {
-    const redirectPath = localStorage.getItem('redirectPath');
+    const redirectPath = localStorage.getItem('redirectPath'); // отримуємо шлях з localStorage
 
     if (redirectPath) {
       // eslint-disable-next-line no-console
-      console.log('Перенаправлення на:', redirectPath);
-      localStorage.removeItem('redirectPath');
-      navigate(redirectPath, { replace: true });
+      console.log('Перенаправлення на:', redirectPath); // виводимо шлях в консоль
+      localStorage.removeItem('redirectPath'); // очищуємо збережений шлях в localStorage
+      navigate(redirectPath, { replace: true }); // виконуємо перенаправлення
     }
-  }, [navigate]);
+  }, [navigate]); // залежність від navigate
 
-  return null;
+  return null; // компонент не рендерить нічого
 }
 
 export const Root = () => (
