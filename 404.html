@@ -5,14 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script>
         (function () {
-        let path = window.location.pathname + window.location.search;
+        var path = window.location.pathname + window.location.search;
 
-            if (!path.startsWith('/team_project')) {
-            sessionStorage.setItem('redirectPath', path);
-            window.location.replace('https://martachobaniuk.github.io/team_project');
-        }
+        console.log("Збережений шлях:", path);
+
+        sessionStorage.setItem("redirectPath", path);
+
+        window.location.replace("https://martachobaniuk.github.io/team_project/");
         })();
-        </script>
+    </script>
     </head>
     <body></body>
 </html>
